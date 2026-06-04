@@ -1,0 +1,24 @@
+# --- Master Intelligence Hub Guard ---
+
+# Backend Secrets & Cache
+backend/.env
+backend/.env.local
+backend/.venv/
+backend/venv/
+backend/env/
+backend/__pycache__/
+backend/data/
+backend/*.json
+
+# Frontend Build & Secrets
+frontend/.next/
+frontend/node_modules/
+frontend/.env
+frontend/.env.local
+frontend/build/
+frontend/out/
+
+# System
+.DS_Store
+Thumbs.db
+*.log

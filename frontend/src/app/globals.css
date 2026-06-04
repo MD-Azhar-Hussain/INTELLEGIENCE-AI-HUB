@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+@theme {
+  --font-plus-jakarta: "Plus Jakarta Sans", sans-serif;
+  --font-instrument: "Instrument Sans", sans-serif;
+
+  --color-primary: #2563eb;
+  --color-paper: #fbfbfc;
+  --color-ink: #111827;
+
+  --radius-luxury: 24px;
+}
+
+@layer base {
+  :root {
+    --bg-primary: #fbfbfc;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --accent-color: #2563eb;
+    --card-bg: #ffffff;
+    --border-color: rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme='dark'] {
+    --bg-primary: #0a0a0b;
+    --text-primary: #f9fafb;
+    --text-secondary: #9ca3af;
+    --accent-color: #3b82f6;
+    --card-bg: #111112;
+    --border-color: rgba(255, 255, 255, 0.08);
+  }
+
+  body {
+    @apply bg-[var(--bg-primary)] text-[var(--text-primary)] transition-all duration-300 antialiased;
+    font-family: var(--font-plus-jakarta);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-instrument);
+    @apply tracking-tight;
+  }
+}
+
+@layer components {
+  .glass-navbar {
+    @apply fixed top-0 left-0 right-0 z-50 h-20 border-b border-[var(--border-color)] backdrop-blur-xl bg-[var(--bg-primary)]/80;
+  }
+
+  .luxury-card {
+    @apply bg-[var(--card-bg)] border border-[var(--border-color)] rounded-[var(--radius-luxury)] shadow-sm transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:border-blue-500/20;
+  }
+
+  .badge-pill {
+    @apply px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-white/40;
+  }
+
+  .badge-pill-primary {
+    @apply bg-blue-50 text-blue-600 border border-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20;
+  }
+
+  .main-btn {
+    @apply px-8 py-4 bg-gray-900 text-white rounded-2xl font-bold transition-all shadow-xl shadow-gray-900/10 hover:bg-gray-800 active:scale-95 flex items-center justify-center gap-2 dark:bg-blue-600 dark:hover:bg-blue-500 dark:shadow-blue-500/20;
+  }
+
+  .secondary-btn {
+    @apply px-8 py-4 border-2 border-gray-200 text-gray-600 rounded-2xl font-bold hover:bg-gray-50 transition-all dark:border-white/10 dark:text-white/60 dark:hover:bg-white/5;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e5e7eb;
+  border-radius: 10px;
+}
+
+[data-theme='dark'] ::-webkit-scrollbar-thumb {
+  background: #1f2937;
+}
