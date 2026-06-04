@@ -1,9 +1,11 @@
 fastapi
-uvicorn[standard]
-pymupdf
-google-genai
+uvicorn
 python-multipart
-pydantic
+google-genai
+pymupdf
+trafilatura
+bcrypt
 python-dotenv
+supabase
 trafilatura
 httpx
