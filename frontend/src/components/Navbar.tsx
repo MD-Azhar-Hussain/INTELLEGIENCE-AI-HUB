@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import { motion } from "framer-motion";
 
-export default function Navbar() {
+export default function Navbar({ onMethodologyClick }: { onMethodologyClick?: () => void }) {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -15,7 +15,7 @@ export default function Navbar() {
           <div className="w-10 h-10 md:w-12 md:h-12 bg-blue-600 text-white rounded-xl md:rounded-[1rem] flex items-center justify-center shadow-xl shadow-blue-600/20 group-hover:rotate-12 transition-transform">
             <Shield size={20} className="md:w-6 md:h-6" fill="currentColor" />
           </div>
-          <div className="flex flex-col">
+          <div className="flex flex-col text-[var(--text-primary)]">
             <span className="font-bold text-lg md:text-xl leading-none tracking-tight">Intelligence</span>
             <span className="text-[9px] md:text-[10px] font-black tracking-[0.3em] uppercase opacity-40 mt-1">UPSC Hub</span>
           </div>
@@ -24,7 +24,12 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 lg:gap-12">
           <NavLink href="/">Dashboard</NavLink>
           <NavLink href="/import">Import News</NavLink>
-          <NavLink href="#">Methodology</NavLink>
+          <button 
+            onClick={onMethodologyClick}
+            className="text-[13px] font-bold text-gray-400 hover:text-blue-600 transition-colors tracking-wide uppercase"
+          >
+            Methodology
+          </button>
         </div>
 
         <div className="flex items-center gap-4 md:gap-6">
