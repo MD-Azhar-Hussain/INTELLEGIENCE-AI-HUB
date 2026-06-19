@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTheme } from "./ThemeProvider";
 import { motion } from "framer-motion";
 
-export default function Navbar() {
+export default function Navbar({ onMethodologyClick }: { onMethodologyClick?: () => void }) {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -24,7 +24,12 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-8 lg:gap-12">
           <NavLink href="/">Dashboard</NavLink>
           <NavLink href="/import">Import News</NavLink>
-          <NavLink href="#">Methodology</NavLink>
+          <button 
+            onClick={onMethodologyClick}
+            className="text-[13px] font-bold text-gray-400 hover:text-blue-600 transition-colors tracking-wide uppercase"
+          >
+            Methodology
+          </button>
         </div>
 
         <div className="flex items-center gap-4 md:gap-6">
