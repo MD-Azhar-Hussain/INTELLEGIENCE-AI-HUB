@@ -5,7 +5,7 @@ import Navbar from "@/components/Navbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe, ArrowRight, Loader2, BookOpen, Calendar, User, CheckCircle2 } from "lucide-react";
 import axios from "axios";
-import { addArticles, generateId } from "@/lib/store";
+import { addArticles, generateId, getUser } from "@/lib/store";
 import { useRouter } from "next/navigation";
 
 export default function ImportNewsPage() {
@@ -25,7 +25,11 @@ export default function ImportNewsPage() {
     setArticle(null);
 
     try {
-      const response = await axios.post("http://localhost:8000/import-news", { url });
+      const user = getUser();
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8005";
+      const response = await axios.post(`${apiUrl}/import-news`, { url }, {
+        headers: { "X-Officer-Email": user?.email || "" }
+      });
       setArticle({ ...response.data, url }); // Store the URL as well
     } catch (err: any) {
       setError(err.response?.data?.detail || "Failed to fetch article. Please check the URL.");
@@ -33,7 +37,6 @@ export default function ImportNewsPage() {
       setIsLoading(false);
     }
   };
-
   const handleAnalyze = async () => {
     if (!article) return;
 
@@ -41,15 +44,36 @@ export default function ImportNewsPage() {
     setError("");
 
     try {
-      const response = await axios.post("http://localhost:8000/analyze-text", {
+      const user = getUser();
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8005";
+      
+      // If the article is ALREADY analyzed (came from import-news fully processed), just save it
+      if (article.summary && Array.isArray(article.summary) && article.summary.length > 0) {
+        addArticles([article]);
+        router.push("/");
+        return;
+      }
+
+      const response = await axios.post(`${apiUrl}/analyze-text`, {
         text: article.content,
         title: article.title
+      }, {
+        headers: { "X-Officer-Email": user?.email || "" }
       });
 
-      const newArticles = response.data.articles.map((a: any) => ({
+      const analysis = response.data.articles;
+      
+      // If the AI returned an error object
+      if (analysis && analysis.error) {
+        throw new Error(analysis.error);
+      }
+
+      const list = Array.isArray(analysis) ? analysis : [analysis];
+
+      const newArticles = list.map((a: any) => ({
         ...a,
-        id: generateId(),
-        ingested_at: new Date().toISOString(),
+        id: a.id || generateId(),
+        ingested_at: a.ingested_at || new Date().toISOString(),
         filename: new URL(article.url).hostname
       }));
 
@@ -58,7 +82,8 @@ export default function ImportNewsPage() {
       // Redirect to dashboard to see the new articles
       router.push("/");
     } catch (err: any) {
-      setError(err.response?.data?.detail || "AI analysis failed. Please try again.");
+      const msg = err.response?.data?.detail || err.message || "AI analysis failed. Please try again.";
+      setError(msg);
     } finally {
       setIsAnalyzing(false);
     }
@@ -154,13 +179,18 @@ export default function ImportNewsPage() {
               </h2>
 
               <div className="space-y-6 md:space-y-8">
-                {article.content.split('\n').map((para: string, i: number) => (
+                {typeof article.content === 'string' && article.content.split('\n').map((para: string, i: number) => (
                   para.trim() && (
                     <p key={i} className="text-lg md:text-xl leading-[1.7] md:leading-[1.8] text-[var(--text-secondary)] font-medium">
                       {para}
                     </p>
                   )
                 ))}
+                {!article.content && (
+                   <p className="text-red-500 font-bold uppercase text-xs tracking-widest bg-red-500/10 p-4 rounded-xl">
+                      WARNING: No readable content extracted from this URL.
+                   </p>
+                )}
               </div>
 
               <div className="mt-12 md:mt-20 pt-8 md:pt-12 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8">
@@ -177,6 +207,11 @@ export default function ImportNewsPage() {
                     <>
                       Analyzing Intelligence...
                       <Loader2 className="animate-spin" size={20} />
+                    </>
+                  ) : article.summary ? (
+                    <>
+                      Save to Dashboard
+                      <ArrowRight size={20} />
                     </>
                   ) : (
                     <>
