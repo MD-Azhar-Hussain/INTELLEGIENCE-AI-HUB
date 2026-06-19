@@ -78,7 +78,7 @@ export default function Home() {
     setUser(null);
   };
 
-  const availableCategories = ["All", ...Array.from(new Set((Array.isArray(articles) ? articles : []).map(a => a.category)))];
+  const availableCategories = ["All", ...Array.from(new Set((Array.isArray(articles) ? articles : []).map(a => a.category).filter(Boolean)))];
 
   const sortedArticles = (Array.isArray(articles) ? [...articles] : [])
     .filter(a => filterCategory === "All" || a.category === filterCategory)
@@ -531,7 +531,9 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
         </h3>
         
         <p className="reading-text text-[var(--text-secondary)] line-clamp-3 mb-12">
-          {Array.isArray(article.summary) ? article.summary[0] : (article.summary || article.content?.substring(0, 150) || "No summary available for this asset. Proceed to Insight for full details.")}
+          {Array.isArray(article.summary) && article.summary.length > 0 
+            ? article.summary[0] 
+            : (typeof article.summary === 'string' ? article.summary : (article.content?.substring(0, 150) || "No summary available for this asset. Proceed to Insight for full details."))}
         </p>
         
         <div className="mt-auto flex items-center justify-between pt-10 border-t border-gray-100 dark:border-white/5">
