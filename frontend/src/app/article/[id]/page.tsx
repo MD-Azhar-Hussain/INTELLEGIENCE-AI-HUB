@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Article, getArticleById } from "@/lib/store";
+import { Article, getArticleById, getUser } from "@/lib/store";
 import Navbar from "@/components/Navbar";
 import { 
   ArrowLeft, BookOpen, Clock, Target, Users, 

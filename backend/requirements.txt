@@ -7,3 +7,8 @@ pydantic
 python-dotenv
 trafilatura
 httpx
+supabase
+bcrypt
+beautifulsoup4
+requests
+lxml
