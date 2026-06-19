@@ -28,6 +28,8 @@ export interface Article {
   id: string;
   title: string;
   source?: string;
+  url?: string;
+  content?: string;
   category: string;
   gs_paper: string;
   relevance_score: number;

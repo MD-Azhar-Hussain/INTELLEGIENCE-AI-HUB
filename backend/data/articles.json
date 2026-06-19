@@ -1,7 +1,807 @@
 [
   {
-    "id": "mpz4ak8ld7a7w51u26",
-    "title": "Israel-Lebanon Ceasefire Agreement: Geopolitical Implications and the Road to Peace in West Asia",
+    "id": "art_1781879116_330",
+    "title": "US-Iran Peace Framework and Its Implications on Global Energy Security and India",
+    "source": "www.livemint.com",
+    "category": "International Relations",
+    "gs_paper": "GS-II",
+    "relevance_score": 88,
+    "keywords": [
+      "US-Iran Peace Agreement",
+      "Crude Oil Prices",
+      "Energy Security",
+      "Geopolitics",
+      "India Oil Imports"
+    ],
+    "primary_keyword": "Strait of Hormuz",
+    "summary": [
+      "A peace agreement framework between the US and Iran has led to a drop in global crude oil prices near three-month lows, easing supply disruption fears.",
+      "The agreement aims to reopen the strategic Strait of Hormuz, which handles approximately 20% of global oil and gas trade, though disputes remain over transit fees versus maritime service fees.",
+      "India stands to benefit significantly as 60-70% of its crude imports historically transit through the Strait of Hormuz, and lower oil prices aid its import-dependent economy."
+    ],
+    "issue_overview": "The core issue revolves around the geopolitical breakthrough of a US-Iran peace framework agreement and its potential to stabilize global energy markets by reopening the Strait of Hormuz. While the agreement has cooled down crude oil prices, friction points persist regarding the interpretation of transit charges (tolls vs. maritime service fees) and security concerns raised by regional stakeholders like Israel, questioning the long-term durability of the peace deal.",
+    "background": "The Strait of Hormuz is a vital chokepoint between the Persian Gulf and the Gulf of Oman, critical for global energy transit. Relations between the US and Iran have been highly strained since the US unilateral withdrawal from the JCPOA (Joint Comprehensive Plan of Action) in 2018, leading to sanctions, regional conflicts, and disruptions to maritime trade. Recent diplomatic efforts have culminated in this draft memorandum of understanding to de-escalate tensions and restore maritime stability.",
+    "stakeholders": [
+      "United States",
+      "Iran",
+      "India",
+      "Oman",
+      "Israel",
+      "Global Energy Markets"
+    ],
+    "arguments_for": [
+      "Reduces geopolitical risk premiums in global oil markets, leading to lower and more stable energy prices.",
+      "Reopening the Strait of Hormuz ensures uninterrupted flow of 20% of global oil and gas, boosting global economic recovery.",
+      "Prevents nuclear proliferation by securing commitments from Iran to not pursue nuclear weapons."
+    ],
+    "arguments_against": [
+      "Israel and other regional allies argue the deal does not adequately address their core security concerns regarding Iran's regional influence.",
+      "Ambiguities in the agreement, such as Iran's plan to levy 'maritime service fees', could be used as leverage to disrupt shipping under a different pretext."
+    ],
+    "challenges": [
+      "Resolving the differing interpretations of transit terms between the US (no tolls) and Iran (charging maritime service fees).",
+      "Managing opposition from regional powers like Israel, which could jeopardize the agreement's implementation.",
+      "Ensuring long-term compliance and trust between Washington and Tehran given their history of broken agreements."
+    ],
+    "way_forward": [
+      "Establish a clear, internationally monitored framework for transit through the Strait of Hormuz to prevent unilateral fee impositions.",
+      "Engage regional stakeholders, including Israel and Gulf nations, in broader security dialogues to address peripheral security concerns.",
+      "India should continue diversifying its energy import sources and strategic petroleum reserves to cushion against potential future disruptions if the deal falters."
+    ],
+    "mcqs": [
+      {
+        "answer": "Persian Gulf and the Gulf of Oman",
+        "options": [
+          "Persian Gulf and the Gulf of Oman",
+          "Red Sea and the Gulf of Aden",
+          "Persian Gulf and the Arabian Sea",
+          "Red Sea and the Mediterranean Sea"
+        ],
+        "question": "The Strait of Hormuz, a strategically important waterway handling nearly 20% of global oil trade, connects which of the following water bodies?",
+        "explanation": "The Strait of Hormuz is a chokepoint between the Persian Gulf and the Gulf of Oman, serving as the only sea passage from the Persian Gulf to the open ocean."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-II",
+        "question": "The stability of the Strait of Hormuz is critical to India's energy security. In light of the recent US-Iran peace framework, analyze the geopolitical and economic implications of this development for India.",
+        "model_answer": {
+          "body": "For India, the economic implications are highly positive. As India imports nearly 90% of its crude oil, a drop in global oil prices directly reduces its current account deficit (CAD), curbs imported inflation, and eases fiscal strain. Geopolitically, the reopening of the Strait of Hormuz ensures safe passage for Indian vessels, reducing high insurance premiums and freight costs. However, challenges remain. The durability of the peace deal is threatened by Israeli security concerns and differing interpretations of transit fees between the US and Iran. Any collapse of the deal could trigger sudden price shocks.",
+          "conclusion": "While the peace framework is a welcome step, India must remain cautious. It should leverage this period of lower prices to fill its Strategic Petroleum Reserves (SPRs) and continue diversifying its energy basket toward renewable energy and alternative geographical suppliers to build long-term resilience.",
+          "introduction": "The Strait of Hormuz is one of the world's most critical energy chokepoints, through which 60-70% of India's crude oil imports historically pass. The recent US-Iran peace framework agreement represents a significant geopolitical shift aimed at restoring maritime stability and easing global energy supply concerns.",
+          "value_addition": "India's annual crude oil imports passing through the Strait of Hormuz are valued at approximately $123 billion, highlighting the extreme vulnerability of India's macroeconomic stability to disruptions in this narrow waterway."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-19T14:25:16.104263+00:00"
+  },
+  {
+    "id": "art_1781876075_246",
+    "title": "India Faces Significant Monsoon Deficit Amidst Super El Niño Warning",
+    "source": "www.thehindu.com",
+    "category": "Geography, Environment, Economy",
+    "gs_paper": "GS-I, GS-III",
+    "relevance_score": 90,
+    "keywords": [
+      "Southwest Monsoon",
+      "El Niño",
+      "Rainfall",
+      "Agriculture",
+      "Climate Change",
+      "IMD",
+      "Weather Patterns",
+      "North Bengal Floods"
+    ],
+    "primary_keyword": "Monsoon Deficit",
+    "summary": [
+      "Heavy overnight monsoon rains caused inundation in parts of North and South Bengal, with rivers like Teesta and Balason flowing close to danger levels due to rainfall in neighboring Bhutan and Sikkim.",
+      "India is experiencing a significant nationwide rainfall deficit of 41% between June 4 and June 18, receiving only 42.6 mm against a normal of 72.2 mm.",
+      "The southwest monsoon has stalled over southern Maharashtra due to the absence of favourable large-scale meteorological conditions.",
+      "This rainfall deficit is particularly concerning as global forecasters have warned of a likely 'Super El Niño' year, which typically impacts monsoon performance."
+    ],
+    "issue_overview": "India is currently grappling with a substantial deficit in its southwest monsoon rainfall, with the monsoon's advance stalled over parts of Maharashtra. This situation has led to localized flooding in some regions like Bengal due to intense but uneven rainfall, while the national average shows a significant shortfall. The primary concern is the potential exacerbation of this deficit by a predicted 'Super El Niño' event, which historically impacts monsoon performance and has severe implications for India's agriculture-dependent economy and water security.",
+    "background": "The Indian monsoon is a crucial weather phenomenon, delivering about 70% of the country's annual rainfall and significantly influencing its agricultural output and economy. El Niño, a climate pattern characterized by the unusual warming of surface waters in the eastern tropical Pacific Ocean, is known to often correlate with weaker monsoons in India. A 'Super El Niño' implies an even stronger warming event, potentially leading to more severe impacts. The India Meteorological Department (IMD) regularly monitors monsoon progress and issues forecasts.",
+    "stakeholders": [
+      "Indian Farmers",
+      "Government of India (Agriculture Ministry, IMD, Disaster Management Authorities)",
+      "General Public",
+      "Water Management Authorities",
+      "Economists",
+      "Global Climate Scientists"
+    ],
+    "arguments_for": [],
+    "arguments_against": [],
+    "challenges": [
+      "Impact on agricultural output and food security due to insufficient rainfall, particularly for rain-fed crops.",
+      "Water scarcity for drinking, irrigation, and industrial use, leading to potential droughts.",
+      "Economic slowdown due to reduced agricultural income, rural demand, and potential inflation in food prices.",
+      "Managing localized floods in some areas while simultaneously facing an overall rainfall deficit.",
+      "Forecasting accuracy and preparedness for extreme weather events exacerbated by 'Super El Niño'."
+    ],
+    "way_forward": [
+      "Implement drought-resistant crop varieties and promote alternative irrigation methods like micro-irrigation.",
+      "Strengthen water conservation and rainwater harvesting initiatives at community and individual levels.",
+      "Improve early warning systems and disaster preparedness for both floods and droughts, disseminating timely advisories to farmers.",
+      "Diversify agricultural practices to reduce over-reliance on monsoon rainfall and promote climate-resilient agriculture.",
+      "Provide financial aid, crop insurance schemes (e.g., PMFBY), and rural employment generation programs (e.g., MGNREGA) to support affected farmers.",
+      "Invest in climate-resilient infrastructure and research into climate science and adaptation strategies."
+    ],
+    "mcqs": [
+      {
+        "answer": "B",
+        "options": [
+          "(A) 1 and 2 only",
+          "(B) 2 and 3 only",
+          "(C) 1 and 3 only",
+          "(D) 1, 2 and 3"
+        ],
+        "question": "Which of the following statements regarding the current monsoon situation in India, as per the provided text, is/are correct?\n1. The southwest monsoon has stalled over northern Maharashtra.\n2. India is facing a nationwide rainfall deficit of 41% between June 4 and June 18.\n3. The current year is globally forecasted to be a 'Super El Niño' year.",
+        "explanation": "Statement 1 is incorrect; the text states the monsoon stalled over *southern* Maharashtra. Statements 2 and 3 are directly mentioned in the text."
+      },
+      {
+        "answer": "B",
+        "options": [
+          "(A) Unusually cold surface waters in the eastern tropical Pacific Ocean.",
+          "(B) Unusually warm surface waters in the eastern tropical Pacific Ocean.",
+          "(C) Stronger than normal trade winds across the Pacific.",
+          "(D) Increased rainfall in Southeast Asia."
+        ],
+        "question": "El Niño is a climate pattern primarily associated with:",
+        "explanation": "El Niño is characterized by the warming of surface waters in the eastern tropical Pacific Ocean, which often leads to altered weather patterns globally, including weaker monsoons in India."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-I, GS-III",
+        "question": "\"The stalling of the southwest monsoon and the looming threat of a 'Super El Niño' pose significant challenges to India's agricultural sector and overall economy.\" Discuss the potential impacts and suggest comprehensive measures to enhance India's resilience to such climatic events.",
+        "model_answer": {
+          "body": "Potential Impacts:\n*   **Agricultural Sector**: Reduced crop yields (especially rain-fed crops like rice, pulses, oilseeds), increased input costs for irrigation, farmer distress, potential for drought conditions.\n*   **Economic Impact**: Inflation due to food price hikes, reduced rural demand, impact on GDP growth, increased government expenditure on relief measures.\n*   **Water Scarcity**: Depletion of reservoirs, groundwater, and surface water sources, affecting drinking water supply, industrial use, and hydropower generation.\n*   **Environmental Impact**: Increased forest fires, stress on biodiversity, changes in ecosystem services.\n*   **Social Impact**: Migration from drought-affected areas, health issues due to water scarcity and heat stress.\n\nChallenges:\n*   Unpredictability of monsoon patterns and extreme weather events.\n*   Limited irrigation coverage and over-reliance on rain-fed agriculture.\n*   Inadequate disaster preparedness and early warning systems.\n*   Climate change exacerbating the frequency and intensity of extreme weather events.\n\nComprehensive Measures for Resilience:\n*   **Agricultural Reforms**: Promote climate-resilient agriculture (drought-resistant crops, precision farming), expand irrigation infrastructure (micro-irrigation), crop diversification, robust crop insurance schemes (e.g., PMFBY).\n*   **Water Management**: Implement integrated water resource management, promote rainwater harvesting, groundwater recharge, efficient use of water in agriculture and industry.\n*   **Early Warning and Preparedness**: Strengthen IMD's forecasting capabilities, disseminate timely advisories to farmers, develop district-level drought/flood contingency plans, invest in disaster-resilient infrastructure.\n*   **Economic Safeguards**: Maintain buffer stock for essential commodities, provide targeted financial support for farmers, strengthen rural employment generation schemes (e.g., MGNREGA).\n*   **Research and Development**: Invest in climate science research, development of new technologies for water conservation and agricultural productivity.\n*   **Policy and Governance**: Strengthen inter-state cooperation on water sharing, effective implementation of environmental regulations, public awareness campaigns.",
+          "conclusion": "Addressing the dual threat of monsoon deficit and El Niño requires a multi-pronged, proactive, and integrated approach. By investing in climate resilience, sustainable resource management, and robust policy frameworks, India can mitigate the adverse impacts and ensure long-term food and water security for its growing population.",
+          "introduction": "The Indian monsoon is the lifeline of the country's economy, particularly its agriculture. The current stalling of the southwest monsoon, coupled with the global forecast of a 'Super El Niño', presents a formidable challenge, threatening food security, water availability, and economic stability.",
+          "value_addition": "Mention specific government schemes like Pradhan Mantri Krishi Sinchayee Yojana (PMKSY), Mahatma Gandhi National Rural Employment Guarantee Act (MGNREGA), and Pradhan Mantri Fasal Bima Yojana (PMFBY). Refer to the National Action Plan on Climate Change (NAPCC) and its missions. Discuss the role of remote sensing and GIS in water management and drought monitoring."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-19T13:34:35.371342+00:00"
+  },
+  {
+    "id": "art_1781879863_423",
+    "title": "India-U.K. Social Security Agreement and CETA: Implications for Bilateral Trade and Labor Mobility",
+    "source": "www.thehindu.com",
+    "category": "International Relations",
+    "gs_paper": "GS-II",
+    "relevance_score": 88,
+    "keywords": [
+      "CETA",
+      "Social Security Agreement",
+      "India-UK Trade",
+      "Double Taxation",
+      "Steel Tariffs"
+    ],
+    "primary_keyword": "Double Contribution Convention",
+    "summary": [
+      "India and the U.K. have finalized the Double Contribution Convention (DCC) alongside the Comprehensive Economic and Trade Agreement (CETA), effective July 15.",
+      "The agreement extends the social security exemption for temporary Indian workers in the U.K. from three to five years, saving Indian businesses approximately $500 million.",
+      "It resolves the issue of double social security contributions where workers paid into both systems without receiving U.K. benefits, which require 10 years of contributions.",
+      "Bilateral hurdles regarding the U.K.'s recent steel tariffs have been resolved through country-specific quotas and authorized-use schemes, restoring market access for Indian steel."
+    ],
+    "issue_overview": "The core issue revolves around the implementation of the India-U.K. Comprehensive Economic and Trade Agreement (CETA) and the Double Contribution Convention (DCC). Historically, temporary Indian workers in the U.K. faced double taxation on social security without receiving benefits due to a 10-year minimum contribution rule. Additionally, unilateral steel tariffs by the U.K. threatened to derail the trade pact. The newly finalized agreement addresses both issues by extending social security exemptions to five years and resolving the steel tariff dispute through quotas, thereby boosting bilateral economic cooperation.",
+    "background": "Negotiations for an India-U.K. free trade agreement and social security pact have been ongoing to enhance economic ties post-Brexit. The original DCC was signed in July 2025 but faced delays. Temporary Indian IT and professional workers often stay in the U.K. for less than five years, making U.K. social security contributions a sunk cost. Simultaneously, global trade tensions and protective steel tariffs by the U.K. created friction, necessitating diplomatic and economic workarounds to prevent the collapse of the broader CETA.",
+    "stakeholders": [
+      "Indian Ministry of Commerce and Industry",
+      "U.K. Government",
+      "Indian temporary workers and IT professionals in the U.K.",
+      "Indian companies operating in the U.K.",
+      "Indian steel exporters"
+    ],
+    "arguments_for": [
+      "Prevents double taxation of temporary Indian professionals, enhancing the competitiveness of Indian firms in the U.K.",
+      "Saves Indian businesses over $500 million, which can be reinvested into economic growth.",
+      "Secures market access for Indian steel exports despite protective U.K. tariffs.",
+      "Strengthens post-Brexit bilateral trade relations between India and the U.K."
+    ],
+    "arguments_against": [
+      "The agreement only provides temporary relief (up to 5 years), leaving long-term workers still subject to potential double contributions if they stay longer without reaching the 10-year threshold.",
+      "Concessions on steel tariffs are complex (quotas and authorized-use schemes) and may still limit unlimited market access compared to a complete tariff waiver."
+    ],
+    "challenges": [
+      "Ensuring smooth administrative issuance of social security certificates by the Indian government.",
+      "Managing the complex quota systems for steel exports to prevent administrative delays.",
+      "Navigating future regulatory changes in the U.K. that might unilaterally impact other sectors of the CETA."
+    ],
+    "way_forward": [
+      "Establish a digital, streamlined mechanism for issuing social security exemption certificates to Indian workers.",
+      "Monitor the implementation of steel quotas to ensure Indian exporters maximize their allocated limits.",
+      "Leverage this momentum to finalize broader services and investment protection chapters under the bilateral framework."
+    ],
+    "mcqs": [
+      {
+        "answer": "Both 1 and 2",
+        "options": [
+          "1 only",
+          "2 only",
+          "Both 1 and 2",
+          "Neither 1 nor 2"
+        ],
+        "question": "With reference to the Double Contribution Convention (DCC) recently in the news between India and the United Kingdom, consider the following statements:\n1. It exempts temporary Indian workers in the U.K. from paying social security if they contribute in India.\n2. The exemption period has been extended to five years under the revised agreement.\nWhich of the statements given above is/are correct?",
+        "explanation": "The DCC exempts temporary Indian workers from paying social security in the U.K. provided they pay it in India. The revised agreement has extended this exemption limit from three to five years, covering 90-95% of temporary Indian workers."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-II",
+        "question": "Analyze the significance of the Double Contribution Convention (DCC) and the Comprehensive Economic and Trade Agreement (CETA) in strengthening India-U.K. economic relations. What are the key challenges that need to be addressed for their smooth implementation?",
+        "model_answer": {
+          "body": "The significance of these agreements lies in three major areas: First, economic savings; the DCC is projected to save Indian companies and temporary workers approximately $500 million by extending social security exemptions to five years, which covers nearly 95% of temporary Indian professionals. Second, it enhances the competitiveness of Indian IT and service sectors operating in the U.K. by eliminating redundant compliance costs. Third, the resolution of the steel tariff dispute through country-specific quotas preserves market access for Indian steel exporters, demonstrating robust dispute-resolution mechanisms within bilateral frameworks.\n\nHowever, challenges remain. These include the administrative burden of certifying social security payments in India, navigating the complex quota and authorized-use schemes for steel, and ensuring that future unilateral regulatory shifts by either country do not disrupt the established trade equilibrium.",
+          "conclusion": "To maximize the benefits of the CETA and DCC, both nations must institutionalize fast-track administrative processes and maintain open channels for regulatory alignment, setting a precedent for India's future trade agreements with other Western nations.",
+          "introduction": "The operationalization of the Double Contribution Convention (DCC) alongside the Comprehensive Economic and Trade Agreement (CETA) marks a watershed moment in India-U.K. bilateral relations. By addressing long-standing issues of double taxation on social security and resolving trade disputes like steel tariffs, both nations have signaled a strong commitment to post-Brexit economic integration.",
+          "value_addition": "The U.K. hosts over 900 Indian companies and 75,000 Indian workers. The DCC directly addresses the structural mismatch where U.K. social security benefits require 10 years of contributions, whereas most Indian temporary workers stay for less than 5 years."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-19T14:37:43.45212+00:00"
+  },
+  {
+    "id": "mpzowh93fyvpydvp26n",
+    "title": "The Indus Waters Treaty Dispute: Water Weaponisation Claims and Regional Stability",
+    "source": "The Hindu",
+    "category": "International Relations",
+    "gs_paper": "GS-II",
+    "relevance_score": 88,
+    "keywords": [
+      "Indus Waters Treaty",
+      "Chenab River",
+      "Water Diplomacy",
+      "India-Pakistan Relations",
+      "Court of Arbitration"
+    ],
+    "primary_keyword": "Indus Waters Treaty",
+    "summary": [
+      "Pakistan has accused India of attempting to 'weaponise' water through two proposed river projects on the Chenab River, claiming they violate the 1960 Indus Waters Treaty (IWT).",
+      "India maintains its right to proceed with run-of-the-river and sediment removal projects on the waters under its control, having previously suspended its involvement in the treaty following bilateral escalations.",
+      "The dispute centers on a proposed tunnel project to transfer water from the Chenab River to the Beas basin and sediment removal activities at the Salal Power Station.",
+      "Pakistan argues that the 1960 treaty remains binding on both nations, asserting that unilateral withdrawal is not legally permissible and that water diversion threatens its food and economic security.",
+      "The geopolitical standoff is further complicated by climate change, population growth, and India's rejection of the Hague-based Court of Arbitration's jurisdiction over the dispute."
+    ],
+    "issue_overview": "The core issue is the escalating dispute between India and Pakistan over the interpretation, implementation, and survival of the 1960 Indus Waters Treaty (IWT). India has initiated infrastructure projects on the Chenab River (a Western River allocated to Pakistan for unrestricted use, subject to specific Indian run-of-the-river uses) and suspended treaty operations following cross-border tensions. Pakistan views these actions as unilateral treaty violations and an existential threat to its agricultural economy, accusing India of using water as a strategic weapon. The dispute has moved to international legal forums, with India rejecting the jurisdiction of the Court of Arbitration in The Hague, leading to a diplomatic and legal deadlock.",
+    "background": "Signed in 1960 and brokered by the World Bank, the Indus Waters Treaty (IWT) distributes the waters of the Indus river system between India and Pakistan. Under the treaty, India has exclusive rights over the three Eastern Rivers (Sutlej, Beas, and Ravi), while Pakistan has rights over the three Western Rivers (Indus, Jhelum, and Chenab). India is permitted to use the Western Rivers for domestic, non-consumptive, and specific agricultural and hydroelectric power generation (run-of-the-river projects) uses, subject to strict design criteria. Despite surviving three major wars, the treaty has faced severe strain in recent years due to cross-border terrorism, leading India to demand modifications and suspend bilateral meetings.",
+    "stakeholders": [
+      "Government of India (Ministry of External Affairs, Ministry of Jal Shakti)",
+      "Government of Pakistan (Ministry of Water Resources, Foreign Ministry)",
+      "The World Bank (as a signatory and mediator of the treaty)",
+      "Millions of farmers and citizens in the Indus basin in both India and Pakistan",
+      "The Permanent Indus Commission and the Court of Arbitration at The Hague"
+    ],
+    "arguments_for": [
+      "India is within its sovereign rights under the IWT to construct run-of-the-river hydroelectric projects and perform essential maintenance like sediment removal at Salal.",
+      "Cross-border terrorism and hostile actions from Pakistan justify India's reassessment of its bilateral commitments, including the suspension of non-essential treaty engagements.",
+      "Optimizing water usage on the Western Rivers is crucial for meeting the energy and agricultural demands of Jammu & Kashmir."
+    ],
+    "arguments_against": [
+      "Unilateral suspension or modification of the treaty by India violates international law and the pact's explicit provisions, which do not allow unilateral exit.",
+      "Altering the natural flow of the Western Rivers directly threatens the food, water, and economic security of Pakistan's 250 million people.",
+      "Bypassing established dispute resolution mechanisms (like the Permanent Indus Commission) undermines regional stability and international law."
+    ],
+    "challenges": [
+      "Absence of trust and formal bilateral dialogue channels between India and Pakistan.",
+      "Parallel dispute resolution tracks (Neutral Expert vs. Court of Arbitration) creating conflicting legal interpretations.",
+      "Climate change and melting glaciers in the Himalayas altering the seasonal flow patterns of the Indus basin, making the rigid 1960 allocations ecologically outdated."
+    ],
+    "way_forward": [
+      "Re-engage in bilateral dialogue through the Permanent Indus Commission to address technical objections constructively.",
+      "Negotiate amendments to the IWT to incorporate modern environmental concerns, climate change resilience, and joint water-flow monitoring.",
+      "Establish a single, mutually agreed-upon dispute resolution pathway to avoid conflicting legal jurisdictions."
+    ],
+    "mcqs": [
+      {
+        "answer": "(b) 1 and 3 only",
+        "options": [
+          "(a) 1 and 2 only",
+          "(b) 1 and 3 only",
+          "(c) 2 and 3 only",
+          "(d) 1, 2 and 3"
+        ],
+        "question": "With reference to the Indus Waters Treaty (IWT) signed in 1960, consider the following statements:\n1. India has unrestricted use of the waters of the Sutlej, Beas, and Ravi rivers.\n2. Pakistan has exclusive rights over the Western Rivers, and India is completely prohibited from constructing any hydroelectric projects on them.\n3. The World Bank is a signatory to the treaty.\nWhich of the statements given above are correct?",
+        "explanation": "Statement 1 is correct: India has exclusive rights over the Eastern Rivers (Sutlej, Beas, Ravi). Statement 2 is incorrect: India is permitted to construct run-of-the-river hydroelectric projects on the Western Rivers (Indus, Jhelum, Chenab) subject to specific design criteria outlined in the treaty. Statement 3 is correct: The World Bank is a signatory to the treaty as a mediator."
+      },
+      {
+        "answer": "(b) Chenab",
+        "options": [
+          "(a) Jhelum",
+          "(b) Chenab",
+          "(c) Indus",
+          "(d) Ravi"
+        ],
+        "question": "The Salal Hydroelectric Power Station, recently in the news, is built on which of the following rivers?",
+        "explanation": "The Salal Power Station is a run-of-the-river hydropower project located on the Chenab River in the Reasi district of Jammu and Kashmir."
+      },
+      {
+        "answer": "(a) Permanent Indus Commission -> Neutral Expert -> Court of Arbitration",
+        "options": [
+          "(a) Permanent Indus Commission -> Neutral Expert -> Court of Arbitration",
+          "(b) Court of Arbitration -> Neutral Expert -> World Bank Mediation",
+          "(c) Permanent Indus Commission -> International Court of Justice -> World Bank",
+          "(d) Neutral Expert -> Permanent Indus Commission -> Court of Arbitration"
+        ],
+        "question": "Under the dispute resolution mechanism of the Indus Waters Treaty, which of the following is the correct hierarchy/sequence of steps for resolving differences?",
+        "explanation": "The treaty outlines a three-step dispute resolution process: first, questions are examined by the Permanent Indus Commission; if unresolved, they become 'differences' to be decided by a Neutral Expert; if they involve treaty interpretation, they become 'disputes' referred to a Court of Arbitration."
+      },
+      {
+        "answer": "(d) 1, 2 and 3",
+        "options": [
+          "(a) 1 and 2 only",
+          "(b) 2 and 3 only",
+          "(c) 1 and 3 only",
+          "(d) 1, 2 and 3"
+        ],
+        "question": "Consider the following statements regarding the Chenab River:\n1. It originates near the Bara Lacha Pass in the Lahaul-Spiti part of the Zanskar Range.\n2. It is formed by the confluence of two rivers, the Chandra and the Bhaga.\n3. It flows through Himachal Pradesh, Jammu & Kashmir, and Pakistan.\nWhich of the statements given above are correct?",
+        "explanation": "All three statements are correct. The Chenab originates near the Bara Lacha Pass as two streams, Chandra and Bhaga, which meet at Tandi to form the Chenab. It flows through Himachal Pradesh and Jammu & Kashmir before entering Pakistan."
+      },
+      {
+        "answer": "(b) Vienna Convention on the Law of Treaties (VCLT)",
+        "options": [
+          "(a) Geneva Convention",
+          "(b) Vienna Convention on the Law of Treaties (VCLT)",
+          "(c) Helsinki Rules on the Uses of the Waters of International Rivers",
+          "(d) UN Watercourses Convention"
+        ],
+        "question": "Which of the following international conventions governs the law of treaties and is often cited in disputes regarding unilateral withdrawal from bilateral pacts like the Indus Waters Treaty?",
+        "explanation": "The Vienna Convention on the Law of Treaties (VCLT) is the international agreement regulating treaties between states, including rules on treaty interpretation, amendment, suspension, and termination."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-II",
+        "question": "The Indus Waters Treaty (IWT) has survived multiple armed conflicts, yet it faces unprecedented strain in the contemporary geopolitical and ecological landscape. Analyze the key challenges threatening the treaty and suggest measures to modernize it.",
+        "model_answer": {
+          "body": "Key Challenges:\n1. Geopolitical Strain & Trust Deficit: India's stance of linking water cooperation with Pakistan's cessation of cross-border terrorism ('blood and water cannot flow together') has led to the suspension of bilateral talks.\n2. Dispute Resolution Deadlock: The parallel activation of the Neutral Expert mechanism (favored by India) and the Court of Arbitration (favored by Pakistan) has created a legal impasse.\n3. Climate Change & Ecological Shifts: The 1960 treaty does not account for climate change, glacier depletion, or altering river hydrology, which affect water availability.\n4. Run-of-the-River Projects: India's legitimate construction of run-of-the-river projects (e.g., Kishenganga, Ratle, Salal) is consistently contested by Pakistan, delaying projects and escalating costs.",
+          "conclusion": "To prevent the treaty from collapsing, both nations must move beyond zero-sum hydro-politics. Modernizing the IWT is not just a diplomatic necessity but an ecological imperative to ensure water security for over 300 million people in the Indus basin.",
+          "introduction": "The Indus Waters Treaty (IWT), signed in 1960, is widely regarded as one of the most successful transboundary water-sharing agreements globally, having survived three major wars between India and Pakistan. However, growing geopolitical hostility, cross-border terrorism, and ecological shifts have pushed the treaty to a critical breaking point.",
+          "value_addition": "Include a map sketch of the Indus River system showing the division of Eastern and Western rivers to gain extra marks."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "Examine the concept of 'water weaponisation' in the context of transboundary river disputes in South Asia, with special reference to the recent escalations between India and Pakistan over the Chenab River projects.",
+        "model_answer": {
+          "body": "Context of Chenab River Projects:\n1. Pakistan's Accusations: Pakistan fears that India's proposed tunnel project (transferring Chenab water to the Beas basin) and sediment removal at Salal could allow India to manipulate river flows, causing artificial droughts or flash floods.\n2. India's Counter-Perspective: India argues that its actions are compliant with the IWT, which permits non-consumptive uses, run-of-the-river power generation, and necessary maintenance like desiltation.\n3. Strategic Leverage: For India, optimizing its treaty-permissible water usage serves as a peaceful strategic counterweight to Pakistan's proxy warfare, signaling that cooperative treaties require mutual goodwill.",
+          "conclusion": "While water can be a tool of strategic leverage, actual 'weaponisation' of transboundary rivers risks severe humanitarian and ecological catastrophes. Adhering to international water law principles, such as 'no harm' and 'equitable utilization,' is vital for regional peace.",
+          "introduction": "'Water weaponisation' refers to the strategic use of water resources, flow control, or hydraulic infrastructure as an instrument of coercion or leverage during geopolitical conflicts. The recent accusations by Pakistan regarding India's Chenab River projects highlight how transboundary water is increasingly viewed through a national security lens.",
+          "value_addition": "Cite the 'Helsinki Rules' and the 'UN Watercourses Convention' as international frameworks emphasizing equitable and reasonable utilization of shared water resources."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "Evaluate the role of international arbitration in resolving transboundary water disputes. Why has the dispute resolution mechanism under the Indus Waters Treaty run into a deadlock?",
+        "model_answer": {
+          "body": "Reasons for the Deadlock:\n1. Overlapping Jurisdictions: The IWT provides for a Neutral Expert for technical differences and a Court of Arbitration (CoA) for legal disputes. Pakistan bypassed the Neutral Expert to approach the CoA, while India insisted on the Neutral Expert, leading to parallel, conflicting proceedings.\n2. Rejection of Jurisdiction: India has boycotted the Court of Arbitration at The Hague, calling it 'illegally constituted,' thereby undermining the enforceability of any arbitral award.\n3. Politicization of Technical Issues: Technical design parameters of dams (like pondage and spillway gates) are treated as sovereignty issues rather than engineering problems, limiting the scope for compromise.",
+          "conclusion": "The deadlock demonstrates that international arbitration cannot substitute for bilateral political will. A sustainable solution requires India and Pakistan to negotiate a joint, consensus-based mechanism to streamline dispute resolution as originally intended by the treaty.",
+          "introduction": "International arbitration serves as a neutral, rule-based forum to resolve complex transboundary resource disputes. However, its efficacy depends on the mutual consent of the disputing states and the clarity of the treaty's institutional framework, both of which are currently lacking in the IWT dispute.",
+          "value_addition": "Mention the Kishenganga arbitration case (2013) as a historical precedent where the Court of Arbitration successfully delivered a partial award, contrasting it with the current institutional breakdown."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-04T16:08:30.807+00:00"
+  },
+  {
+    "id": "mpzp1z9xcpkikuojdjv",
+    "title": "India's Domestic Military Drone Procurement Push: A Strategic Shift in Defence Acquisition",
+    "source": "Reuters",
+    "category": "Security",
+    "gs_paper": "GS-III",
+    "relevance_score": 88,
+    "keywords": [
+      "Military Drones",
+      "Defence Acquisition Procedure",
+      "iDEX",
+      "Atmanirbhar Bharat",
+      "Indigenisation of Defence",
+      "Unmanned Aerial Vehicles"
+    ],
+    "primary_keyword": "Military Drones",
+    "summary": [
+      "India is planning to order over $2 billion (approx. 200 billion rupees) worth of military drones from domestic manufacturers to boost its defence capabilities.",
+      "The procurement will likely follow a fast-track route designed to meet urgent operational needs, with deliveries expected within 18 to 24 months.",
+      "This massive push is driven by lessons from recent global conflicts (such as Ukraine and Iran) and regional border clashes, which highlighted the offensive potential of low-cost drones.",
+      "The Indian government has overhauled its slow defence procurement process, utilizing emergency powers and expanding schemes like Innovations for Defence Excellence (iDEX) to support startups.",
+      "India's domestic drone ecosystem has grown to over 600 firms, with more than 100 focused on defence applications, ranging from large conglomerates to agile startups."
+    ],
+    "issue_overview": "India is rapidly shifting its defence procurement strategy towards domestic manufacturing of unmanned aerial vehicles (UAVs) or drones. Historically reliant on imports for high-end military hardware, the government is now leveraging emergency procurement powers and fast-track procedures to acquire tactical, reconnaissance, logistics, and precision-strike drones from home-grown companies. This transition aims to address critical gaps in border surveillance and asymmetric warfare capabilities while fostering a robust domestic defence industrial base.",
+    "background": "The utility of low-cost, high-impact drones has been vividly demonstrated in recent global conflicts, including the Russia-Ukraine war and Middle East tensions. For India, localized clashes and border standoffs highlighted the immediate need for persistent surveillance and tactical strike capabilities along its mountainous borders. Historically, Indian defence procurement has been plagued by bureaucratic delays. To counter this, the Ministry of Defence introduced the Defence Acquisition Procedure (DAP) and emergency financial powers, enabling the armed forces to bypass lengthy trials for urgent operational requirements.",
+    "stakeholders": [
+      "Indian Armed Forces (Army, Navy, Air Force)",
+      "Ministry of Defence (MoD)",
+      "Domestic Defence Manufacturers and Startups (e.g., ideaForge, Tata Advanced Systems, L&T)",
+      "Drone Federation of India (DFI)",
+      "Strategic adversaries along India's borders"
+    ],
+    "arguments_for": [
+      "Enhances national security by deploying cost-effective force multipliers along sensitive borders.",
+      "Promotes 'Atmanirbhar Bharat' (self-reliance) and reduces vulnerability to global supply chain disruptions.",
+      "Nurtures a vibrant domestic aerospace and defence startup ecosystem, driving innovation and job creation.",
+      "Fast-track procurement compresses acquisition timelines from years to months, addressing critical operational gaps swiftly.",
+      "Reduces the long-term lifecycle cost of maintaining and upgrading military hardware through local support."
+    ],
+    "arguments_against": [
+      "Fast-track emergency procurement might bypass rigorous, long-term environmental and ruggedness testing, potentially leading to reliability issues in extreme terrains like Ladakh.",
+      "Over-reliance on domestic startups that may lack the scale to deliver massive orders within tight timelines.",
+      "Initial high costs of domestic research and development compared to off-the-shelf global acquisitions."
+    ],
+    "challenges": [
+      "Critical Component Dependency: India still relies heavily on imports for high-end sensors, microchips, engines, and communication modules.",
+      "Scaling Production: Transitioning from prototype development to mass manufacturing within 18-24 months is a significant hurdle for startups.",
+      "Airspace Integration: Managing a high density of military UAVs alongside civil aviation and existing air defence systems requires sophisticated command and control networks."
+    ],
+    "way_forward": [
+      "Strengthen the local component ecosystem by incentivizing the domestic manufacturing of semiconductor chips, motors, and advanced sensors.",
+      "Establish dedicated testing corridors and joint testing infrastructure to speed up certification without compromising quality.",
+      "Foster deeper public-private partnerships where large defence conglomerates handhold startups to scale up production.",
+      "Develop robust anti-drone and electronic warfare capabilities alongside offensive drone procurement to ensure comprehensive airspace security."
+    ],
+    "mcqs": [
+      {
+        "answer": "(a) 1 only",
+        "options": [
+          "(a) 1 only",
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
+        ],
+        "question": "With reference to the 'Innovations for Defence Excellence' (iDEX) initiative, consider the following statements:\n1. It was launched to foster innovation and technology development in Defence and Aerospace by engaging industries including MSMEs and startups.\n2. It is funded and managed by the Defence Research and Development Organisation (DRDO) exclusively.\nWhich of the statements given above is/are correct?",
+        "explanation": "Statement 1 is correct. iDEX aims to foster innovation and technology development in Defence and Aerospace by engaging R&D institutes, academia, industries, startups, and individual innovators. Statement 2 is incorrect. iDEX is funded and managed by the 'Defence Innovation Organisation' (DIO), which is a not-for-profit company formed under Section 8 of the Companies Act 2013 by two Defence Public Sector Undertakings (DPSUs) - HAL and BEL, not exclusively by DRDO."
+      },
+      {
+        "answer": "(b) A category of weapon systems in which the munition loiters around the target area for some time and attacks once a target is located.",
+        "options": [
+          "(a) Heavy transport aircraft used for high-altitude supply drops.",
+          "(b) A category of weapon systems in which the munition loiters around the target area for some time and attacks once a target is located.",
+          "(c) Underwater unmanned vehicles used for detecting submarine movements.",
+          "(d) Ground-based radar systems designed to jam enemy communications."
+        ],
+        "question": "Which of the following best describes the term 'Loitering Munitions', frequently seen in the context of modern military technology?",
+        "explanation": "Loitering munitions, also known as suicide drones or kamikaze drones, are weapon systems that loiter (wait passively) around a target area, search for targets, and strike once a target is located, combining the characteristics of a drone and a missile."
+      },
+      {
+        "answer": "(a) 1 only",
+        "options": [
+          "(a) 1 only",
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
+        ],
+        "question": "Consider the following statements regarding the Defence Acquisition Procedure (DAP) of India:\n1. It prioritizes procurement from domestic manufacturers under categories like 'Buy (Indian-IDDM)'.\n2. It completely bars the private sector from participating in strategic partnership models.\nWhich of the statements given above is/are correct?",
+        "explanation": "Statement 1 is correct. DAP prioritizes domestic design, development, and manufacturing, with 'Buy (Indian-IDDM)' (Indigenously Designed, Developed and Manufactured) being the highest priority category. Statement 2 is incorrect. The Strategic Partnership (SP) model in DAP specifically aims to encourage the participation of private sector players in manufacturing major defence platforms like submarines, fighter aircraft, and helicopters in India."
+      },
+      {
+        "answer": "(c) Small drone",
+        "options": [
+          "(a) Nano drone",
+          "(b) Micro drone",
+          "(c) Small drone",
+          "(d) Medium drone"
+        ],
+        "question": "The 'Drone Rules, 2021' in India categorize drones based on their maximum take-off weight. Under these rules, a drone weighing between 2 kg and 25 kg falls under which category?",
+        "explanation": "According to the Drone Rules, 2021, the classification is as follows: Nano (less than or equal to 250g), Micro (250g to 2kg), Small (2kg to 25kg), Medium (25kg to 150kg), and Large (greater than 150kg)."
+      },
+      {
+        "answer": "(a) Production Linked Incentive (PLI) Scheme",
+        "options": [
+          "(a) Production Linked Incentive (PLI) Scheme",
+          "(b) SAMARTH Udyog Bharat 4.0",
+          "(c) SATAT Initiative",
+          "(d) PM-DevINE Scheme"
+        ],
+        "question": "Which of the following initiatives has been launched by the Government of India to boost the domestic manufacturing of drones and drone components?",
+        "explanation": "The Government of India introduced a Production Linked Incentive (PLI) scheme for drones and drone components to incentivize domestic manufacturing, make Indian manufacturers globally competitive, and attract investments."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-III",
+        "question": "The nature of modern warfare is undergoing a paradigm shift with the proliferation of Unmanned Aerial Vehicles (UAVs). In this context, discuss the strategic significance of indigenizing drone technology for India's national security.",
+        "model_answer": {
+          "body": "### Strategic Significance of Indigenization:\n1. **Asymmetric Warfare Capabilities:** Drones democratize airpower. Indigenously developed loitering munitions and tactical drones allow India to counter asymmetric threats along the Line of Control (LoC) and Line of Actual Control (LAC) cost-effectively.\n2. **Strategic Autonomy:** Relying on foreign suppliers (like Israel or the US) for critical military hardware exposes India to supply chain disruptions and diplomatic leverage during crises. Local manufacturing ensures uninterrupted supply.\n3. **Customization for Extreme Terrains:** India's borders span from high-altitude Himalayan regions to hot deserts. Domestic R&D allows for the customization of UAVs to operate efficiently in low-oxygen, sub-zero temperatures and high-wind environments.\n4. **Economic Spillover:** A robust domestic drone industry boosts the aerospace ecosystem, encourages private sector investment, generates high-skilled employment, and positions India as a potential exporter of defence systems.\n5. **Data Security:** Military drones gather sensitive surveillance data. Using domestic software and secure communication links prevents data leaks to hostile foreign actors.",
+          "conclusion": "Indigenizing drone technology is central to achieving 'Atmanirbharata' in defence. By combining policy support, fast-track procurement, and domestic talent, India can secure its borders while building a resilient defence industrial base.",
+          "introduction": "The contemporary security landscape, highlighted by conflicts in Ukraine and West Asia, demonstrates that low-cost, high-tech Unmanned Aerial Vehicles (UAVs) have emerged as decisive force multipliers. For India, with its vast and contested borders, indigenizing drone technology is no longer an option but a strategic imperative.",
+          "value_addition": "Mentioning the 'Buy (Indian-IDDM)' category under the Defence Acquisition Procedure (DAP) and the role of the iDEX initiative in funding cutting-edge drone prototypes."
+        }
+      },
+      {
+        "gs_paper": "GS-III",
+        "question": "While India's push for domestic military drone procurement is commendable, several structural bottlenecks hinder the rapid scaling of its defence-industrial base. Analyze these challenges and suggest a suitable way forward.",
+        "model_answer": {
+          "body": "### Key Challenges:\n1. **Critical Component Dependency:** Despite domestic assembly, India remains heavily reliant on imports for core components such as high-performance propulsion systems, advanced optical sensors, secure communication modules, and semiconductor chips.\n2. **Testing and Certification Delays:** The absence of streamlined, accessible testing ranges for private players and startups delays the certification process, slowing down the induction of new systems.\n3. **Scale and Capital Constraints:** Most Indian drone firms are MSMEs or startups. They face capital crunches when scaling up production to meet large-scale military orders within tight timelines (e.g., 18-24 months).\n4. **Bureaucratic Procurement Cycles:** Despite fast-track provisions, the traditional defence acquisition mindset often struggles to adapt to the rapid, iterative lifecycle of software-defined drone technologies.\n\n### Way Forward:\n1. **Component Localization:** The government should expand the PLI scheme specifically targeting critical drone components like brushless DC motors, flight controllers, and carbon fiber composites.\n2. **Public-Private Partnerships (PPP):** Establish consortia where large defence public sector undertakings (DPSUs) collaborate with agile startups, combining the financial/manufacturing muscle of the former with the innovation of the latter.\n3. **Dedicated Testing Corridors:** Create specialized, simplified testing zones with single-window clearances to expedite military-grade certifications.\n4. **Sustained R&D Funding:** Increase the allocation under the iDEX and Technology Development Fund (TDF) to support long-term research in swarm drone technologies and counter-UAS systems.",
+          "conclusion": "Addressing these structural bottlenecks will transform India from a mere assembler of drones into a global hub for advanced unmanned systems, securing both national defense and economic growth.",
+          "introduction": "India's plan to procure over $2 billion worth of military drones from domestic firms marks a significant milestone. However, transitioning from a design-heavy startup ecosystem to mass-scale defence manufacturing presents several structural bottlenecks.",
+          "value_addition": "A brief schematic diagram or mention of the 'Drone Federation of India' (DFI) acting as a bridge between the government and over 550 domestic companies to streamline policy bottlenecks."
+        }
+      },
+      {
+        "gs_paper": "GS-III",
+        "question": "Examine how the integration of artificial intelligence (AI) with unmanned aerial vehicles (UAVs) is reshaping modern battlefield tactics, and discuss India's preparedness in this domain.",
+        "model_answer": {
+          "body": "### Reshaping Battlefield Tactics:\n1. **Autonomous Swarm Technology:** AI enables hundreds of drones to communicate with each other, coordinate attacks, and overwhelm enemy air defences without individual human pilots.\n2. **Target Recognition and Intelligence:** Machine learning algorithms can analyze real-time video feeds to identify concealed military assets, distinguishing them from civilian infrastructure with high precision.\n3. **GPS-Denied Navigation:** AI-driven optical navigation allows drones to operate in electronic warfare environments where GPS signals are jammed, using terrain mapping to find targets.\n4. **Predictive Maintenance:** AI monitors drone health in real-time, predicting component failures before they occur, thereby maximizing operational availability.\n\n### India's Preparedness:\n1. **Policy and Institutional Framework:** The creation of the Defence AI Council (DAIC) and the Defence AI Project Agency (DAIPA) highlights India's institutional focus on AI in warfare.\n2. **Technological Milestones:** Indian startups and institutions (like DRDO) have demonstrated swarm drone capabilities during Army Day parades, showcasing local algorithms for coordinated flight.\n3. **Gaps in Preparedness:** India still lags in high-end computing hardware (GPUs) and semiconductor manufacturing, which are essential for running complex AI models on-board small UAVs. There is also a shortage of specialized AI talent within the defence services.",
+          "conclusion": "To maintain a strategic edge, India must aggressively invest in AI-UAV integration. This requires not only hardware indigenization but also developing robust ethical frameworks and operational doctrines for autonomous weapon systems.",
+          "introduction": "The integration of Artificial Intelligence (AI) with Unmanned Aerial Vehicles (UAVs) is transforming military doctrines globally. AI elevates drones from remotely piloted surveillance tools to autonomous decision-making combat systems, redefining the speed and scale of military operations.",
+          "value_addition": "Citing the successful demonstration of a 75-drone autonomous swarm by the Indian Army in 2021 as a proof of concept for domestic AI-UAV integration."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-04T16:12:47.445+00:00"
+  },
+  {
+    "id": "mpzk2dq6yfp4lcl3cf",
+    "title": "Escalating US-Iran Conflict and its Geopolitical Implications on Global Energy Security",
+    "source": "Telangana Today",
+    "category": "International Relations",
+    "gs_paper": "GS-II",
+    "relevance_score": 82,
+    "keywords": [],
+    "primary_keyword": null,
+    "summary": [
+      "The United States carried out targeted airstrikes on radar and drone sites in Iran following the shootdown of an American MQ-1 drone.",
+      "Iran retaliated by targeting US military positions in Kuwait with missiles, which were intercepted by US air defenses.",
+      "Despite ongoing back-and-forth military strikes, both nations are nominally attempting to negotiate a ceasefire/deal, though risks of derailment remain high.",
+      "Iran continues to maintain a strategic chokehold on the Strait of Hormuz, disrupting global energy supplies and driving up fuel prices.",
+      "The conflict is further complicated by escalating clashes between Israel and Hezbollah in Lebanon, threatening a wider regional war."
+    ],
+    "issue_overview": "The escalating military friction between the US and Iran, coupled with proxy conflicts in Lebanon and Yemen, threatens maritime security in the Persian Gulf. The primary choke point, the Strait of Hormuz, is vital for global oil transit, making any disruption a direct threat to global energy security and economic stability.",
+    "background": "US-Iran relations have been highly volatile since the US withdrawal from the Joint Comprehensive Plan of Action (JCPOA) in 2018. The region has seen repeated 'shadow wars', drone strikes, tanker seizures, and proxy conflicts involving groups like Hezbollah and the Houthis, which directly impact international shipping lanes.",
+    "stakeholders": [
+      "United States",
+      "Iran",
+      "Gulf Cooperation Council (GCC) states",
+      "Israel",
+      "Global energy consumers (including India)",
+      "International shipping industries"
+    ],
+    "arguments_for": [
+      "Deterring state-sponsored maritime piracy and ensuring freedom of navigation in international waters.",
+      "Protecting regional allies (like Israel and GCC states) from drone and missile threats."
+    ],
+    "arguments_against": [
+      "Military strikes risk triggering an all-out regional war that could devastate global supply chains.",
+      "Sanctions and military pressure have failed to stop Iran's nuclear enrichment or regional proxy activities, highlighting the need for diplomatic engagement."
+    ],
+    "challenges": [
+      "High risk of miscalculation leading to unintended full-scale conflict.",
+      "Vulnerability of global oil supply chains to asymmetric warfare (drones, sea mines).",
+      "Lack of a robust, inclusive regional security architecture in West Asia."
+    ],
+    "way_forward": [
+      "Revive diplomatic channels to establish a stable security framework or a successor to the JCPOA.",
+      "Enhance international maritime coalitions to secure transit through the Strait of Hormuz.",
+      "India must diversify its energy imports and strengthen strategic ties with both West Asian nations and Western partners to safeguard its interests."
+    ],
+    "mcqs": [
+      {
+        "answer": "(b) Persian Gulf and Gulf of Oman",
+        "options": [
+          "(a) Red Sea and Gulf of Aden",
+          "(b) Persian Gulf and Gulf of Oman",
+          "(c) Caspian Sea and Black Sea",
+          "(d) Mediterranean Sea and Red Sea"
+        ],
+        "question": "The Strait of Hormuz, a vital global oil transit choke point, connects which of the following water bodies?",
+        "explanation": "The Strait of Hormuz is a strategically important strait between the Persian Gulf and the Gulf of Oman. It provides the only sea passage from the Persian Gulf to the open ocean and is one of the world's most strategically important choke points."
+      },
+      {
+        "answer": "(d) Kuwait",
+        "options": [
+          "(a) Iraq",
+          "(b) Afghanistan",
+          "(c) Turkey",
+          "(d) Kuwait"
+        ],
+        "question": "Which of the following countries does NOT share a land border with Iran?",
+        "explanation": "Iran shares land borders with Iraq, Turkey, Armenia, Azerbaijan, Turkmenistan, Afghanistan, and Pakistan. Kuwait is separated from Iran by the Persian Gulf and does not share a land border with it."
+      },
+      {
+        "answer": "(c) Both 1 and 2",
+        "options": [
+          "(a) 1 only",
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
+        ],
+        "question": "With reference to the Joint Comprehensive Plan of Action (JCPOA), consider the following statements:\n1. It is an agreement on the nuclear program of Iran reached in 2015.\n2. The P5+1 countries are the signatories to this agreement along with Iran.\nWhich of the statements given above is/are correct?",
+        "explanation": "The JCPOA (Iran Nuclear Deal) was signed in 2015 between Iran and the P5+1 (the five permanent members of the UN Security Council—China, France, Russia, United Kingdom, United States—plus Germany) and the European Union."
+      },
+      {
+        "answer": "(b) Qeshm Island",
+        "options": [
+          "(a) Socotra Island",
+          "(b) Qeshm Island",
+          "(c) Dahlak Archipelago",
+          "(d) Masirah Island"
+        ],
+        "question": "Which of the following islands, often in the news due to geopolitical tensions in the Persian Gulf, is controlled by Iran?",
+        "explanation": "Qeshm Island is an Iranian island in the Strait of Hormuz, strategically located to control maritime traffic in the Persian Gulf. Socotra belongs to Yemen, Dahlak to Eritrea, and Masirah to Oman."
+      },
+      {
+        "answer": "(b) Indian Navy's maritime security operations in the Gulf Region to ensure safe passage of Indian flagged vessels.",
+        "options": [
+          "(a) India's evacuation mission from Ukraine.",
+          "(b) Indian Navy's maritime security operations in the Gulf Region to ensure safe passage of Indian flagged vessels.",
+          "(c) ISRO's joint space mission with France.",
+          "(d) Indian Army's counter-insurgency operation in Jammu and Kashmir."
+        ],
+        "question": "What is 'Operation Sankalp', sometimes seen in the news?",
+        "explanation": "Operation Sankalp was launched by the Indian Navy in June 2019 in the Gulf region (Strait of Hormuz/Gulf of Oman) to ensure the security of Indian vessels transiting through the region following maritime security incidents."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-II",
+        "question": "The geopolitical instability in West Asia poses a direct threat to India's energy security and economic interests. Discuss the statement in light of the escalating US-Iran conflict.",
+        "model_answer": {
+          "body": "1. Explain the impact of US-Iran tensions on oil prices, inflation, and India's fiscal deficit.\n2. Discuss the threat to maritime trade routes, specifically the Strait of Hormuz, through which a major portion of India's energy imports pass.\n3. Analyze the impact on Indian investments in the region, such as the Chabahar Port, and the safety of the large Indian diaspora in the Gulf.",
+          "conclusion": "Conclude by suggesting that India must adopt a balanced, strategic autonomy approach, engaging with all regional stakeholders while accelerating its domestic energy transition and strategic petroleum reserves.",
+          "introduction": "Introduce India's heavy dependence on West Asia for crude oil and LNG imports, and the strategic importance of the region for remittances and trade.",
+          "value_addition": "Mention 'Strategic Petroleum Reserves (SPR)' and 'Operation Sankalp' as India's proactive measures."
+        }
+      },
+      {
+        "gs_paper": "GS-I",
+        "question": "Examine the strategic significance of maritime choke points in global trade, with special reference to the Strait of Hormuz. How does asymmetric warfare threaten these choke points?",
+        "model_answer": {
+          "body": "1. Discuss the geographic and economic significance of the Strait of Hormuz (carrying over 20% of global petroleum liquids consumption).\n2. Explain how asymmetric warfare (use of low-cost drones, sea mines, fast attack crafts, and cyberattacks on shipping) by state or non-state actors can easily disrupt these narrow channels.\n3. Analyze the global economic shockwaves of a prolonged closure of the Strait (skyrocketing energy prices, supply chain disruptions).",
+          "conclusion": "Conclude by emphasizing the need for a rules-based international maritime order and joint patrolling mechanisms to secure global commons.",
+          "introduction": "Define maritime choke points as narrow channels along widely used global sea routes. Highlight the Strait of Hormuz as the world's most critical oil transit choke point.",
+          "value_addition": "Include a brief mental map description of the Persian Gulf, Strait of Hormuz, and Gulf of Oman."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "Evaluate the effectiveness of economic sanctions as a tool of foreign policy, particularly in the context of the US-Iran conflict. Do they achieve their intended outcomes or lead to regional instability?",
+        "model_answer": {
+          "body": "1. Arguments for Sanctions: Non-violent tool to pressure regimes, degrade military capabilities, and bring states to the negotiating table (as seen initially with the JCPOA).\n2. Arguments Against/Failures: Often lead to humanitarian crises, push the targeted nation to adopt aggressive posturing, encourage illicit trade networks, and drive targeted nations closer to rival blocs (e.g., Iran-Russia-China axis).\n3. Impact on third-party nations like India (e.g., stopping oil imports from Iran under CAATSA pressure).",
+          "conclusion": "Conclude that unilateral sanctions often fail to achieve long-term behavioral change and can exacerbate regional instability, highlighting the superiority of multilateral, UN-led diplomatic frameworks.",
+          "introduction": "Define economic sanctions as coercive measures used by states to influence the behavior of other nations without resorting to military force. Mention the extensive sanctions regime imposed on Iran.",
+          "value_addition": "Use terms like 'Secondary Sanctions' and 'Strategic Autonomy' to enrich the answer."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-04T13:53:08.094+00:00"
+  },
+  {
+    "id": "mpzk2dq6votc7ivvh2e",
+    "title": "State Borrowings Outpace Revenue: Analyzing Telangana's Fiscal Health and State Debt Management",
+    "source": "Telangana Today",
+    "category": "Economy",
+    "gs_paper": "GS-III",
+    "relevance_score": 85,
+    "keywords": [],
+    "primary_keyword": null,
+    "summary": [
+      "Telangana's market borrowings in April 2026 reached Rs 11,413.93 crore, exceeding its total revenue receipts of Rs 10,974.73 crore.",
+      "The state borrowed approximately Rs 108 for every Rs 100 earned through taxes, highlighting an acute reliance on debt in the opening month of the fiscal year.",
+      "A significant revenue deficit of Rs 8,526.59 crore was recorded in April, indicating that revenue receipts fell short of meeting operational revenue expenditure.",
+      "The fiscal deficit for the single month equaled the entire borrowing amount, which is unprecedented for the first month of a financial year.",
+      "High committed expenditures like salaries, pensions, interest payments, and subsidies continue to crowd out capital expenditure, which stood at just Rs 1,970 crore."
+    ],
+    "issue_overview": "The core issue is the structural fiscal imbalance in state finances, where debt-funded spending is increasingly used to meet recurring revenue expenditures (salaries, subsidies, pensions) rather than asset-creating capital expenditure. This raises concerns about long-term debt sustainability, fiscal discipline, and compliance with fiscal responsibility frameworks.",
+    "background": "Under the Fiscal Responsibility and Budget Management (FRBM) Act, states are expected to maintain their fiscal deficits within 3% of their Gross State Domestic Product (GSDP) and eliminate revenue deficits. However, post-pandemic recovery, populist welfare schemes, and stagnant tax revenues have pushed several Indian states into high debt-to-GSDP ratios, drawing scrutiny from the Comptroller and Auditor General (CAG) and the Finance Commission.",
+    "stakeholders": [
+      "State Government of Telangana",
+      "Taxpayers and Citizens of the State",
+      "Comptroller and Auditor General (CAG)",
+      "Union Finance Ministry",
+      "Reserve Bank of India (as debt manager)"
+    ],
+    "arguments_for": [
+      "Welfare spending and subsidies provide a crucial safety net for vulnerable populations and stimulate local demand.",
+      "Initial months of a financial year often show skewed ratios due to delayed tax devolution and front-loaded borrowing by states."
+    ],
+    "arguments_against": [
+      "Borrowing to fund revenue expenditure (consumption) rather than capital expenditure (investment) does not generate future revenue streams, leading to a potential debt trap.",
+      "High interest payments crowd out essential spending on health, education, and infrastructure, hampering long-term growth."
+    ],
+    "challenges": [
+      "Balancing political commitments (welfare schemes) with fiscal prudence.",
+      "Low growth in state's own tax revenues (SOTR) relative to rising committed expenditures.",
+      "Strict borrowing limits imposed by the Centre under Article 293(3) of the Constitution."
+    ],
+    "way_forward": [
+      "Rationalize revenue expenditure by targeting subsidies more efficiently.",
+      "Enhance tax administration and compliance to boost State's Own Tax Revenue (SOTR).",
+      "Prioritize capital expenditure to build productive assets that yield long-term economic returns.",
+      "Adhere to the recommendations of the Finance Commission on fiscal consolidation."
+    ],
+    "mcqs": [
+      {
+        "answer": "(b) Under Article 293 of the Constitution, a State cannot raise any loan without the consent of the Centre if there is still outstanding any part of a loan made to the State by the Centre.",
+        "options": [
+          "(a) States can borrow from abroad directly without any consent from the Union Government.",
+          "(b) Under Article 293 of the Constitution, a State cannot raise any loan without the consent of the Centre if there is still outstanding any part of a loan made to the State by the Centre.",
+          "(c) The Reserve Bank of India solely decides the borrowing limits of all states independently.",
+          "(d) States do not require the Centre's consent under any circumstances for domestic market borrowings."
+        ],
+        "question": "Which of the following statements is/are correct regarding the borrowing powers of States in India?",
+        "explanation": "Article 293(3) of the Constitution of India states that a State may not without the consent of the Government of India raise any loan if there is still outstanding any part of a loan which has been made to the State by the Government of India or by its predecessor Government, or in respect of which a guarantee has been given by the Government of India or by its predecessor Government."
+      },
+      {
+        "answer": "(c) Both 1 and 2",
+        "options": [
+          "(a) 1 only",
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
+        ],
+        "question": "Consider the following statements regarding 'Revenue Deficit':\n1. It refers to the excess of revenue expenditure over revenue receipts.\n2. A high revenue deficit indicates that the government is borrowing to meet its daily consumption needs.\nWhich of the statements given above is/are correct?",
+        "explanation": "Revenue deficit is the excess of total revenue expenditure over total revenue receipts. A high revenue deficit means the government is using borrowed funds to meet its regular, non-asset-creating operational expenses (like salaries, pensions, subsidies), which is considered fiscally unhealthy."
+      },
+      {
+        "answer": "(b) The Governor of the State",
+        "options": [
+          "(a) The President of India",
+          "(b) The Governor of the State",
+          "(c) The Speaker of the State Legislative Assembly",
+          "(d) The Union Finance Minister"
+        ],
+        "question": "The Comptroller and Auditor General (CAG) of India submits audit reports related to the accounts of a State to which of the following authorities?",
+        "explanation": "Under Article 151(2) of the Constitution of India, the reports of the Comptroller and Auditor General of India relating to the accounts of a State shall be submitted to the Governor of the State, who shall cause them to be laid before the Legislature of the State."
+      },
+      {
+        "answer": "(c) Construction of a new irrigation canal system",
+        "options": [
+          "(a) Payment of interest on market borrowings",
+          "(b) Disbursement of agricultural subsidies",
+          "(c) Construction of a new irrigation canal system",
+          "(d) Payment of salaries to government employees"
+        ],
+        "question": "Which of the following is classified under 'Capital Expenditure' of a state government?",
+        "explanation": "Capital expenditure is the money spent on acquiring, maintaining, or improving fixed assets, such as land, buildings, or equipment (e.g., irrigation canals). Salaries, subsidies, and interest payments are classified as Revenue Expenditure."
+      },
+      {
+        "answer": "(a) Total Expenditure minus Total Receipts excluding borrowings",
+        "options": [
+          "(a) Total Expenditure minus Total Receipts excluding borrowings",
+          "(b) Revenue Expenditure minus Revenue Receipts",
+          "(c) Capital Expenditure minus Capital Receipts",
+          "(d) Total Revenue Receipts minus Interest Payments"
+        ],
+        "question": "With reference to the Fiscal Responsibility and Budget Management (FRBM) Act, the term 'Fiscal Deficit' represents:",
+        "explanation": "Fiscal Deficit is the difference between the government's total expenditure and its total receipts (excluding borrowings). It indicates the total borrowing requirements of the government."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-III",
+        "question": "Analyze the structural challenges in state finances in India, with special reference to the growing reliance on debt-driven spending to fund revenue expenditure. Suggest measures for long-term fiscal consolidation.",
+        "model_answer": {
+          "body": "1. Discuss the structural issues: rising committed expenditures (salaries, pensions, interest payments), populist welfare schemes, and stagnant State's Own Tax Revenue (SOTR).\n2. Explain the consequences: crowding out of capital expenditure, rising debt-to-GSDP ratios, and violation of FRBM targets.\n3. Highlight the distinction between productive debt (capital creation) and unproductive debt (consumption/revenue expenditure).",
+          "conclusion": "Conclude by emphasizing that while welfare spending is essential for inclusive growth, it must be balanced with fiscal prudence. States must focus on revenue mobilization and expenditure rationalization to ensure sustainable development.",
+          "introduction": "Introduce the concept of fiscal health of states, highlighting the recent trends where states' borrowings are outpacing their revenue receipts, as observed in CAG reports. Mention the constitutional framework (Article 293) governing state borrowings.",
+          "value_addition": "Cite data from the 15th Finance Commission recommendations on fiscal consolidation roadmaps for states."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "The Comptroller and Auditor General (CAG) plays a pivotal role in maintaining fiscal discipline and accountability in India's federal structure. Discuss.",
+        "model_answer": {
+          "body": "1. Explain how CAG audits state accounts, highlights fiscal slippages, revenue deficits, and off-budget borrowings.\n2. Discuss the role of CAG reports in assisting the Public Accounts Committee (PAC) and State Legislatures in scrutinizing executive spending.\n3. Analyze the challenges faced by CAG, such as delayed access to records and the advisory nature of its recommendations.",
+          "conclusion": "Conclude by stating that strengthening the CAG's oversight mechanism is vital for transparent governance and robust public financial management in India.",
+          "introduction": "Define the role of the CAG as the guardian of the public purse under Article 148 of the Constitution, ensuring financial accountability of both the Union and State governments.",
+          "value_addition": "Mention the concept of 'Performance Audit' and 'Social Audit' as modern tools used by the CAG to assess the effectiveness of government schemes."
+        }
+      },
+      {
+        "gs_paper": "GS-III",
+        "question": "Examine the debate between 'Welfare Populism' and 'Fiscal Prudence' in the context of Indian states. How can states achieve a balance between social security and economic sustainability?",
+        "model_answer": {
+          "body": "1. Arguments for Welfare: Reduces inequality, supports vulnerable sections, boosts rural demand, and improves human development indicators.\n2. Arguments for Fiscal Prudence: High deficits lead to inflation, high interest burdens, and lower credit ratings, which deter private investment.\n3. Strategies for Balance: Outcome-budgeting, direct benefit transfer (DBT) to eliminate leakages, and prioritizing capital expenditure in health and education which have high multiplier effects.",
+          "conclusion": "Conclude that welfare and fiscal responsibility are not mutually exclusive; sustainable welfare is only possible through a fiscally strong state.",
+          "introduction": "Define the tension between welfare spending (social security, subsidies) and fiscal prudence (deficit control, debt sustainability) in a developing economy like India.",
+          "value_addition": "Use the term 'Merit vs. Non-merit subsidies' to distinguish between productive welfare and unproductive populism."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-04T13:53:08.094+00:00"
+  },
+  {
+    "id": "mpzi1q2ste8rwrkf3qk",
+    "title": "Israel-Lebanon Ceasefire Deal: Geopolitical Implications and Internal Dissent in Israel",
     "source": "The Hindu",
     "category": "International Relations",
     "gs_paper": "GS-II",
@@ -9,136 +809,420 @@
     "keywords": [],
     "primary_keyword": null,
     "summary": [
-      "Israel and Lebanon have agreed to a ceasefire framework requiring a complete cessation of fire by the Iran-backed militant group Hezbollah.",
-      "The agreement proposes the creation of 'pilot zones' in southern Lebanon, where the Lebanese Armed Forces (LAF) will exercise exclusive territorial control, excluding non-state actors.",
-      "The ceasefire remains highly fragile and contingent upon the complete evacuation of Hezbollah operatives from areas south of the Litani River.",
-      "While the United States, under President Trump, seeks to decouple the Lebanon conflict from the broader Israel-Iran confrontation, Iran insists that these conflicts are intrinsically linked.",
-      "The announcement of the ceasefire framework has led to a temporary easing of global crude oil prices, highlighting the economic sensitivity of West Asian stability."
+      "Israel and Lebanon agreed to a US-brokered ceasefire on June 3, 2026, requiring a complete cessation of fire by Hezbollah.",
+      "Israel's far-right National Security Minister, Itamar Ben Gvir, strongly criticized the deal, calling it a 'serious mistake'.",
+      "Critics within Israel argue that the deal cannot be effectively enforced and that the Lebanese Army lacks the capacity to evacuate Hezbollah south of the Litani River.",
+      "The deal highlights the tension between Israel's domestic political factions and its reliance on US diplomatic and military backing.",
+      "The ceasefire's long-term viability remains highly contested, with concerns that Hezbollah may use the truce to regroup and strengthen its positions."
     ],
-    "issue_overview": "The core issue is the establishment of a sustainable peace framework between Israel and Lebanon, two nations without formal diplomatic relations. The conflict is heavily driven by the presence of Hezbollah, a powerful non-state armed actor backed by Iran, operating in southern Lebanon. The proposed ceasefire seeks to restore Lebanese state sovereignty over its southern territory through 'pilot zones' controlled by the Lebanese Armed Forces (LAF), but faces severe implementation challenges due to the geopolitical rivalry between Israel, Iran, and the United States.",
-    "background": "The conflict between Israel and Lebanon has deep historical roots, notably the 1982 Lebanon War and the 2006 conflict, which ended with UN Security Council Resolution 1701. Resolution 1701 called for the disarmament of all armed groups in Lebanon and the deployment of the Lebanese Army and UNIFIL in the south. However, Hezbollah retained its armed presence and political dominance. The current escalation is part of the wider regional spillover of the post-October 7, 2023, Israel-Hamas war, with Hezbollah launching cross-border attacks in solidarity with Gaza, leading to intense Israeli counter-offensives.",
+    "issue_overview": "The core issue is the sustainability and enforceability of the US-brokered ceasefire between Israel and Lebanon (specifically targeting Hezbollah). While aimed at de-escalating the West Asian conflict, internal political divisions within Israel's ruling coalition highlight deep skepticism regarding Hezbollah's compliance and the Lebanese state's enforcement capabilities.",
+    "background": "The conflict between Israel and Hezbollah has deep historical roots, notably the 2006 Lebanon War and UN Resolution 1701, which mandated that Hezbollah withdraw north of the Litani River. Despite this, sporadic clashes and full-scale escalations have continued, exacerbated by the broader regional proxy dynamics involving Iran and the United States.",
     "stakeholders": [
-      "State of Israel (seeking security for its northern border)",
-      "Republic of Lebanon (seeking territorial integrity and sovereignty)",
-      "Hezbollah (Iran-backed non-state armed group in Lebanon)",
-      "Islamic Republic of Iran (Hezbollah's primary state sponsor)",
-      "United States of America (primary mediator and security guarantor for Israel)",
-      "Lebanese Armed Forces (LAF) (designated to take control of pilot zones)",
-      "Global Energy Markets (affected by supply disruptions in West Asia)"
+      "Israel (Government and Citizens)",
+      "Lebanon (Government and Citizens)",
+      "Hezbollah",
+      "United States (as mediator)",
+      "Iran (as Hezbollah's backer)",
+      "United Nations (UNIFIL)",
+      "India (due to diaspora and energy security in West Asia)"
     ],
     "arguments_for": [
-      "Restores the sovereignty of the Lebanese state by empowering the official Lebanese Armed Forces (LAF) over non-state militias.",
-      "Provides immediate humanitarian relief to displaced civilians on both sides of the Israel-Lebanon border.",
-      "Reduces the risk of a catastrophic regional war involving direct, sustained conflict between Israel and Iran.",
-      "Stabilizes global energy markets and prevents inflationary pressures caused by fluctuating crude oil prices."
+      "De-escalation of a devastating conflict, preventing further civilian casualties and economic damage.",
+      "Provides a diplomatic pathway to address long-standing border disputes.",
+      "Relieves military pressure on the Israel Defense Forces (IDF) allowing focus on other strategic fronts.",
+      "Strengthens the role of international mediation and diplomatic alliances, particularly with the US."
     ],
     "arguments_against": [
-      "The ceasefire is highly asymmetric, placing the burden of compliance almost entirely on Hezbollah's voluntary withdrawal.",
-      "The Lebanese Armed Forces (LAF) currently lack the military capacity, resources, and political backing to forcefully disarm or displace Hezbollah.",
-      "Decoupling the Lebanon conflict from the Gaza conflict, as desired by the US, is unrealistic given Iran's strategic posture.",
-      "It fails to address the core political grievances and structural instability within Lebanon's confessional political system."
+      "Skepticism over Hezbollah's willingness to comply with disarmament and withdrawal terms.",
+      "Weakness of the Lebanese state and military to enforce the terms of the agreement.",
+      "Perceived capitulation to external (US) pressure, potentially compromising Israel's sovereign security decisions.",
+      "Risk of Hezbollah using the ceasefire period to re-arm, regroup, and launch more potent future attacks."
     ],
     "challenges": [
-      "Enforcement Mechanism: Lack of a robust, neutral international enforcement agency to monitor the 'pilot zones' and ensure Hezbollah's compliance.",
-      "Asymmetry of Power: The Lebanese Armed Forces are weaker than Hezbollah, making physical eviction of the militia highly improbable without civil conflict.",
-      "Iranian Influence: Iran's strategic leverage over Hezbollah allows it to veto or disrupt any peace process that does not align with Tehran's broader regional interests.",
-      "Political Vacuum in Lebanon: The prolonged presidential vacancy and economic collapse in Lebanon weaken the state's capacity to implement international agreements."
+      "Enforcement mechanism: Lack of a robust, neutral third-party force to guarantee Hezbollah's withdrawal south of the Litani River.",
+      "Political instability within Israel's coalition government, threatening the longevity of the agreement.",
+      "Lebanese state's fragile political structure and its inability to act independently of Hezbollah's influence.",
+      "Geopolitical proxy dynamics, with Iran continuing its material and financial support to Hezbollah."
     ],
     "way_forward": [
-      "Empower the Lebanese Armed Forces (LAF) through international financial, logistical, and military aid to enable effective territorial control.",
-      "Revitalize and strictly enforce UN Security Council Resolution 1701 with an updated mandate for UNIFIL to assist the LAF actively.",
-      "Engage in multilateral diplomacy involving regional stakeholders, including Iran and Gulf states, to create a comprehensive security architecture.",
-      "Address Lebanon's internal political and economic crises to build a resilient state capable of resisting external proxy manipulation."
+      "Strengthening the mandate and operational capabilities of UNIFIL or a joint international monitoring task force.",
+      "Empowering the Lebanese Armed Forces (LAF) through international training and funding to assert sovereignty over southern Lebanon.",
+      "Engaging in broader regional diplomatic dialogue involving key stakeholders like Iran and Arab states to ensure long-term stability.",
+      "Establishing clear, verifiable benchmarks for compliance with immediate consequences for violations."
     ],
     "mcqs": [
       {
-        "answer": "(c) Lebanon",
+        "answer": "(b) Lebanon",
         "options": [
           "(a) Syria",
-          "(b) Jordan",
-          "(c) Lebanon",
+          "(b) Lebanon",
+          "(c) Jordan",
           "(d) Israel"
         ],
-        "question": "With reference to West Asian geography, the 'Litani River', often mentioned in the context of security buffer zones, flows entirely within which of the following countries?",
-        "explanation": "The Litani River is an important water resource in southern Lebanon. It is geographically significant as UN Security Council Resolution 1701 designated the area between the Blue Line (border with Israel) and the Litani River to be free of any armed personnel other than the Lebanese army and UNIFIL."
+        "question": "The Litani River, often seen in the news regarding West Asian geopolitics, is located in which of the following countries?",
+        "explanation": "The Litani River is an important water resource in southern Lebanon, crucial to the geopolitics of the Israel-Lebanon border conflicts and UN Resolution 1701."
       },
       {
-        "answer": "(a) 1 and 2 only",
+        "answer": "(d) 1, 2 and 3",
         "options": [
           "(a) 1 and 2 only",
           "(b) 2 and 3 only",
           "(c) 1 and 3 only",
           "(d) 1, 2 and 3"
         ],
-        "question": "Consider the following statements regarding United Nations Security Council (UNSC) Resolution 1701:\n1. It was adopted to resolve the 2006 conflict between Israel and Hezbollah.\n2. It called for the complete disarmament of all armed groups in Lebanon.\n3. It established the United Nations Interim Force in Lebanon (UNIFIL) for the first time.\nWhich of the statements given above is/are correct?",
-        "explanation": "Statements 1 and 2 are correct. Resolution 1701 (2006) aimed to resolve the 2006 Lebanon War and called for the disarmament of all armed groups. Statement 3 is incorrect because UNIFIL was originally created by the Security Council in 1978 (Resolutions 425 and 426) following Israel's invasion of Lebanon; Resolution 1701 only enhanced its mandate and strength."
+        "question": "Consider the following statements regarding UN Security Council Resolution 1701:\n1. It was adopted to resolve the 2006 Israel-Lebanon conflict.\n2. It called for the disarmament of all armed groups in Lebanon, including Hezbollah.\n3. It designated the area between the Blue Line and the Litani River to be free of any armed personnel other than those of the Lebanese government and UNIFIL.\nWhich of the statements given above are correct?",
+        "explanation": "All three statements accurately describe the key mandates of UNSC Resolution 1701, which aimed to create a buffer zone free of non-state armed groups in southern Lebanon."
       },
       {
         "answer": "(b) Israel and Lebanon",
         "options": [
           "(a) Israel and Syria",
           "(b) Israel and Lebanon",
-          "(c) Lebanon and Syria",
-          "(d) Israel and the Gaza Strip"
+          "(c) Egypt and Gaza Strip",
+          "(d) Jordan and West Bank"
         ],
-        "question": "The term 'Blue Line', frequently seen in international news, represents the border demarcation between which two entities?",
-        "explanation": "The Blue Line is a border demarcation published by the United Nations on 7 June 2000 for the purposes of determining whether Israel had fully withdrawn from Lebanon."
+        "question": "The 'Blue Line', frequently mentioned in international relations, is the border demarcation between:",
+        "explanation": "The Blue Line is a border demarcation between Lebanon and Israel published by the United Nations in June 2000 to determine whether Israel had fully withdrawn from Lebanon."
       },
       {
         "answer": "(c) Mediterranean Sea",
         "options": [
           "(a) Red Sea",
-          "(b) Dead Sea",
+          "(b) Black Sea",
           "(c) Mediterranean Sea",
-          "(d) Persian Gulf"
+          "(d) Caspian Sea"
         ],
-        "question": "Which of the following bodies of water does Lebanon border?",
-        "explanation": "Lebanon is located in Western Asia, bordered by Syria to the north and east, Israel to the south, and the Mediterranean Sea to the west."
+        "question": "Which of the following bodies of water borders Lebanon to the west?",
+        "explanation": "Lebanon is bordered by the Mediterranean Sea to the west, Syria to the north and east, and Israel to the south."
       },
       {
-        "answer": "(b) 1 and 2 only",
+        "answer": "(c) Both 1 and 2",
         "options": [
           "(a) 1 only",
-          "(b) 1 and 2 only",
-          "(c) 2 and 3 only",
-          "(d) 1, 2 and 3"
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
         ],
-        "question": "With reference to the political system of Lebanon, consider the following statements:\n1. It operates under a unique confessionalist system where political offices are reserved for specific religious communities.\n2. The President of Lebanon must always be a Maronite Christian.\n3. The Prime Minister must be a Shia Muslim.\nWhich of the statements given above is/are correct?",
-        "explanation": "Statements 1 and 2 are correct. Lebanon's National Pact of 1943 established a confessionalist system. Under this system, the President must be a Maronite Christian, and the Prime Minister must be a Sunni Muslim (making Statement 3 incorrect, as the Speaker of the Parliament is reserved for a Shia Muslim)."
+        "question": "With reference to the United Nations Interim Force in Lebanon (UNIFIL), consider the following statements:\n1. It was originally established by the UN Security Council in 1978.\n2. India is one of the major troop-contributing countries to UNIFIL.\nWhich of the statements given above is/are correct?",
+        "explanation": "UNIFIL was created by the Security Council in March 1978 to confirm Israeli withdrawal from Lebanon, restore international peace and security, and assist the Lebanese Government in restoring its effective authority. India is historically and currently one of the largest troop contributors to UNIFIL."
       }
     ],
     "mains_questions": [
       {
         "gs_paper": "GS-II",
-        "question": "The persistent instability in West Asia poses significant challenges to India's strategic and economic interests. In light of the ongoing conflicts involving state and non-state actors in the region, evaluate India's policy options.",
+        "question": "The persistent instability in West Asia poses significant challenges to India's strategic and economic interests. In light of the recent Israel-Lebanon ceasefire developments, analyze India's stakes in the region and suggest a diplomatic strategy for India.",
         "model_answer": {
-          "body": "1. **Impact on India's Interests:**\n   - *Energy Security:* Any disruption in the Strait of Hormuz or regional instability leads to crude oil price volatility, impacting India's current account deficit (CAD) and domestic inflation.\n   - *Diaspora and Remittances:* Safety of millions of Indian workers; West Asia contributes over 50% of India's total inward remittances.\n   - *Connectivity Projects:* Geopolitical tensions jeopardize mega-projects like the India-Middle East-Europe Economic Corridor (IMEC).\n2. **India's Policy Dilemma:**\n   - Balancing its strategic partnership with Israel (defense, technology) against its historical ties with Arab nations and strategic relations with Iran (Chabahar port).\n3. **Policy Options for India:**\n   - *De-hyphenated Diplomacy:* Maintain independent bilateral relationships based on mutual interest without taking sides in regional rivalries.\n   - *Support for Multilateralism:* Advocate for dialogue, ceasefire, and adherence to international law (e.g., UNSC Resolution 1701).\n   - *Active Maritime Security:* Deploying naval assets (like Operation Sankalp) to secure sea lanes of communication (SLOCs).",
-          "conclusion": "India must transition from a passive observer to a constructive facilitator of peace in West Asia, leveraging its goodwill with all major regional powers (Israel, Gulf nations, and Iran) to advocate for stability, which is indispensable for India's own rise as a global economic power.",
-          "introduction": "West Asia is of vital strategic importance to India, serving as its primary source of energy security, hosting over 8.5 million Indian diaspora members, and acting as a gateway to Europe and Central Asia. The escalating conflicts, such as the Israel-Lebanon-Hezbollah crisis, threaten this delicate balance.",
-          "value_addition": "Mentioning specific initiatives like the I2U2 Group (India, Israel, UAE, US) and the impact of regional instability on the realization of its full potential."
+          "body": "India's stakes in West Asia can be categorized into:\n1. Energy Security: India imports over 60% of its crude oil from West Asia. Any escalation of conflict threatens supply chains and spikes global oil prices.\n2. Diaspora and Remittances: Over 8.5 million Indians reside in the Gulf region, contributing billions in remittances. Their safety is paramount during regional conflicts.\n3. Strategic Connectivity: Projects like the India-Middle East-Europe Economic Corridor (IMEC) rely heavily on regional stability.\n4. Peacekeeping Commitments: India is a major troop contributor to UNIFIL in southern Lebanon, putting Indian soldiers directly in the line of geopolitical friction.\n\nSuggested Diplomatic Strategy:\n- Maintain a 'De-hyphenated' Foreign Policy: India must continue to balance its strategic partnership with Israel while maintaining strong ties with Arab nations and Iran.\n- Advocate for Multilateralism: Support UN-led peace initiatives and respect for international law.\n- Enhance Maritime Security: Collaborate with regional navies to secure vital sea lanes of communication (SLOCs) like the Red Sea and Persian Gulf.",
+          "conclusion": "A stable West Asia is vital for India's rise as a global economic powerhouse. India must leverage its growing geopolitical influence and goodwill to advocate for dialogue, diplomacy, and long-term conflict resolution in the region.",
+          "introduction": "West Asia is a region of critical importance to India, acting as a primary source of energy security and hosting a massive Indian diaspora. The recent US-brokered Israel-Lebanon ceasefire highlights the fragile security architecture of the region, which directly impacts India's strategic interests.",
+          "value_addition": "Mentioning India's historical role in UNIFIL and the concept of 'Strategic Autonomy' in navigating complex West Asian alignments."
         }
       },
       {
         "gs_paper": "GS-II",
-        "question": "Analyze the role of non-state armed actors in West Asian geopolitics, with special reference to Hezbollah. How do these actors complicate the traditional state-centric framework of international relations and conflict resolution?",
+        "question": "Examine the role of external powers, particularly the United States, in mediating conflicts in West Asia. How do domestic political dynamics within the regional states influence the success of such external mediations?",
         "model_answer": {
-          "body": "1. **The Rise of Hybrid Actors (e.g., Hezbollah):**\n   - Hezbollah operates as a 'state within a state' in Lebanon, possessing a political wing, social service networks, and a military wing stronger than the national army.\n   - Backed by external state sponsors (Iran), they act as strategic proxies, allowing sponsors to project power while maintaining plausible deniability.\n2. **Complications in Conflict Resolution:**\n   - *Lack of Accountability:* NSAAs are not signatories to international treaties or Geneva Conventions, making deterrence and legal accountability difficult.\n   - *Sovereignty Deficit:* Agreements signed with sovereign governments (like the Lebanese government) cannot be enforced if the state lacks the monopoly over the use of force within its territory.\n   - *Asymmetric Warfare:* Traditional military doctrines of state-on-state deterrence fail against decentralized, ideologically driven guerrilla forces integrated into civilian populations.\n   - *Decoupling Dilemma:* As seen in the US-led talks, separating state-level negotiations from proxy actions is nearly impossible because the proxies' actions are tied to their sponsors' regional agendas.",
-          "conclusion": "To achieve lasting peace, international conflict resolution frameworks must evolve beyond state-centric models. This requires addressing the root causes of state weakness that allow NSAAs to flourish, alongside direct diplomatic engagement with their state sponsors.",
-          "introduction": "The geopolitical landscape of West Asia is increasingly defined by hybrid warfare, where non-state armed actors (NSAAs) like Hezbollah in Lebanon, Houthis in Yemen, and Hamas in Gaza wield military power comparable to, or exceeding, sovereign states, heavily complicating traditional diplomacy.",
-          "value_addition": "Use a diagrammatic representation or flow chart showing the 'Proxy-Sponsor Nexus' in West Asia to illustrate how local conflicts escalate into regional proxy wars."
+          "body": "Role of External Powers (US):\n- Diplomatic Leverage: Facilitating communication between hostile entities that do not officially recognize each other.\n- Security Guarantees: Providing military and financial aid to incentivize compliance.\n- Enforcement Frameworks: Structuring international monitoring mechanisms.\n\nInfluence of Domestic Dynamics:\n- Coalition Politics in Israel: Far-right factions within Israel's ruling coalition (e.g., Itamar Ben Gvir) oppose concessions, viewing them as capitulation, which threatens the stability of the government and the longevity of the peace deal.\n- Fragility of the Lebanese State: Lebanon's weak central government and army lack the institutional capacity to enforce disarmament on Hezbollah, rendering external agreements difficult to implement on the ground.\n- Public Opinion and Sovereignty: Domestic resistance to perceived external 'dictates' can undermine the legitimacy of the mediating power.",
+          "conclusion": "While external mediation is essential to initiate peace processes, lasting stability cannot be imposed from the outside. It requires addressing the underlying domestic political realities and strengthening local state institutions to ensure compliance and ownership of peace agreements.",
+          "introduction": "External powers, especially the United States, have historically played the role of primary mediators in West Asian conflicts. However, the success of these interventions is heavily contingent upon the complex domestic political landscapes of the regional states involved, as seen in the recent Israel-Lebanon ceasefire.",
+          "value_addition": "Citing the contrast between the top-down Abraham Accords and the bottom-up challenges of enforcing UN Resolution 1701."
         }
       },
       {
         "gs_paper": "GS-II",
-        "question": "The proposed creation of 'pilot zones' controlled exclusively by the Lebanese Armed Forces (LAF) is a key feature of the Israel-Lebanon ceasefire. Evaluate the structural and political challenges faced by the Lebanese state in implementing this provision.",
+        "question": "Non-state actors with external state backing have redefined the security paradigm in West Asia. Discuss this statement with special reference to Hezbollah and its impact on the regional security and sovereignty of Lebanon.",
         "model_answer": {
-          "body": "1. **Structural Weakness of the Lebanese Armed Forces (LAF):**\n   - *Resource Constraints:* Lebanon's severe economic crisis since 2019 has crippled the LAF's budget, leading to shortages of fuel, equipment, and basic salaries for soldiers.\n   - *Asymmetry of Force:* Hezbollah possesses advanced rocket arsenals, precision-guided munitions, and battle-hardened fighters, vastly outgunning the conventional Lebanese military.\n2. **Political and Confessional Divisions:**\n   - *Sectarian Composition:* The LAF itself is composed of soldiers from Lebanon's diverse sectarian communities (Shia, Sunni, Christian). Forcing the LAF to disarm Hezbollah (a predominantly Shia force) risks fracturing the army along sectarian lines, potentially triggering a civil war.\n   - *Lack of Political Consensus:* Lebanon's confessional political system is paralyzed, without a President, leaving the military without clear, unified civilian command and political backing to take sensitive security decisions.\n3. **External Interference:**\n   - Iran's continued financial and military support to Hezbollah bypasses state channels, undermining the authority of the central government in Beirut.",
-          "conclusion": "For 'pilot zones' to succeed, the international community must move beyond diplomatic declarations and actively provide substantial financial, logistical, and defensive aid to the LAF, while simultaneously facilitating internal political reconciliation in Lebanon.",
-          "introduction": "The Israel-Lebanon ceasefire framework relies on 'pilot zones' in southern Lebanon where the Lebanese Armed Forces (LAF) are expected to exercise exclusive control, excluding non-state actors like Hezbollah. While conceptually sound, this faces severe structural and political hurdles.",
-          "value_addition": "Reference to the historical precedent of the 1989 Taif Agreement, which disarmed other Lebanese militias but exempted Hezbollah under the guise of 'resistance', highlighting the long-standing structural challenge of militia disarmament in Lebanon."
+          "body": "Redefining the Security Paradigm:\n- Asymmetric Warfare: Hezbollah possesses state-like military capabilities, including advanced precision-guided missiles, bypassing conventional military deterrence.\n- Proxy Dynamics: Backed by Iran, Hezbollah acts as a strategic deterrent against Israel, aligning Lebanon's security decisions with broader regional geopolitical interests.\n\nImpact on Lebanon's Sovereignty:\n- State within a State: Hezbollah maintains its own armed wing independent of the Lebanese Armed Forces (LAF), directly undermining the state's monopoly on the legitimate use of force.\n- Political Paralysis: Hezbollah's political wing holds veto power over Lebanese state decisions, preventing the implementation of reforms and international resolutions like UNSC 1701.\n- Economic and Social Strain: Dragging Lebanon into conflicts without sovereign consensus exacerbates the country's severe economic crises and compromises its international standing.",
+          "conclusion": "The presence of heavily armed non-state actors like Hezbollah severely compromises Lebanese sovereignty and destabilizes West Asia. Achieving long-term peace requires the gradual disarmament of such militias and the strengthening of sovereign state institutions under international supervision.",
+          "introduction": "The proliferation of armed non-state actors backed by regional powers has transformed West Asia into a complex theater of proxy warfare. Hezbollah in Lebanon represents a prime example of a hybrid actor that wields significant military and political power, challenging traditional concepts of state sovereignty.",
+          "value_addition": "Using the term 'hybrid warfare' and referencing the 'Axis of Resistance' to describe the network of Iranian-backed non-state actors."
         }
       }
     ],
-    "ingested_at": "2026-06-04T06:31:35.925+00:00"
+    "ingested_at": "2026-06-04T12:56:38.212+00:00"
+  },
+  {
+    "id": "mpzk0vuwi6pwg2eyejp",
+    "title": "Fragile Ceasefire in West Asia: Israel-Hezbollah Conflict and US Mediation",
+    "source": "The Hindu",
+    "category": "International Relations",
+    "gs_paper": "GS-II",
+    "relevance_score": 85,
+    "keywords": [
+      "Israel",
+      "Hezbollah",
+      "Lebanon",
+      "West Asia",
+      "US Foreign Policy",
+      "UNSC Resolution 1701"
+    ],
+    "primary_keyword": "Israel",
+    "summary": [
+      "The Israeli military intercepted two projectiles fired from Lebanon shortly after US President Donald Trump announced a ceasefire agreement.",
+      "The conflict escalated significantly after Hezbollah launched retaliatory rocket attacks following the US-Israeli killing of Iran's supreme leader.",
+      "A previous truce established on April 17, 2026, has faced repeated violations by both sides, highlighting the fragility of peace agreements in the region.",
+      "US President Trump claimed to have secured commitments from both Israeli Prime Minister Benjamin Netanyahu and Hezbollah representatives to halt hostilities.",
+      "Israeli PM Netanyahu maintained that Israel would continue to strike targets in Beirut if Hezbollah's attacks on northern Israeli towns do not cease."
+    ],
+    "issue_overview": "The core issue is the persistent instability and fragility of ceasefires between Israel and Hezbollah. Despite high-level diplomatic intervention by the United States, ground-level military actions and retaliatory threats continue, threatening to plunge West Asia into a wider regional war. The conflict highlights the challenges of enforcing non-aggression agreements between a sovereign state and a powerful non-state armed actor.",
+    "background": "The conflict between Israel and Hezbollah is rooted in decades of geopolitical rivalry, border disputes (such as the Shebaa Farms), and proxy warfare involving Iran. Hezbollah, a Shia Islamist political party and militant group based in Lebanon, was established in the 1980s to oppose the Israeli occupation of southern Lebanon. The UN Security Council Resolution 1701, passed in 2006, aimed to resolve the conflict by demanding the disarmament of all armed groups in Lebanon and the deployment of the Lebanese Army and UNIFIL in the south, but its provisions have never been fully implemented.",
+    "stakeholders": [
+      "State of Israel",
+      "Hezbollah (Militant group in Lebanon)",
+      "Lebanese Government and Citizens",
+      "United States of America (as mediator)",
+      "Islamic Republic of Iran (Hezbollah's primary backer)",
+      "United Nations Interim Force in Lebanon (UNIFIL)",
+      "India (due to diaspora, energy security, and trade routes)"
+    ],
+    "arguments_for": [
+      "Diplomatic mediation by global superpowers like the US is crucial to prevent a full-scale regional war that could draw in other global powers.",
+      "A ceasefire provides a necessary humanitarian window to protect civilian lives and allow displaced populations on both sides of the border to return home.",
+      "De-escalation helps stabilize global energy markets and secures critical maritime trade routes in the Red Sea and Mediterranean."
+    ],
+    "arguments_against": [
+      "Unilateral or hasty ceasefires without addressing root security concerns (like Hezbollah's disarmament) only allow militant groups to regroup and rearm.",
+      "External mediation that bypasses formal international frameworks (like the UN) lacks long-term institutional enforcement mechanisms.",
+      "Temporary truces fail to resolve the underlying geopolitical proxy war between Israel/US and Iran."
+    ],
+    "challenges": [
+      "Lack of trust between Israel and Hezbollah, leading to preemptive strikes based on perceived threats.",
+      "The weakness of the Lebanese state, which prevents it from asserting authority over Hezbollah's military wing.",
+      "The continuous flow of advanced weaponry and financial support from Iran to Hezbollah.",
+      "Inability of UNIFIL to effectively enforce a demilitarized zone south of the Litani River as mandated by UNSC Resolution 1701."
+    ],
+    "way_forward": [
+      "Strengthening the mandate and enforcement capabilities of UNIFIL to monitor and prevent border violations.",
+      "Empowering the Lebanese Armed Forces (LAF) to take full control of security in southern Lebanon, gradually disarming non-state militias.",
+      "Initiating a comprehensive regional security dialogue involving major powers like Iran, Saudi Arabia, and Israel to address proxy conflicts.",
+      "Establishing a robust, independent verification mechanism to monitor ceasefire violations and impose diplomatic or economic sanctions on violators."
+    ],
+    "mcqs": [
+      {
+        "answer": "(a) Israel and Syria",
+        "options": [
+          "(a) Israel and Syria",
+          "(b) Israel, Syria, and Jordan",
+          "(c) Israel, Syria, and Iraq",
+          "(d) Israel, Egypt, and Syria"
+        ],
+        "question": "With reference to West Asian geography, which of the following countries share a land border with Lebanon?",
+        "explanation": "Lebanon is bordered by the Mediterranean Sea to the west, Syria to the north and east, and Israel to the south. It does not share a land border with Jordan, Iraq, or Egypt."
+      },
+      {
+        "answer": "(b) Israel and Lebanon",
+        "options": [
+          "(a) Israel and Syria (Golan Heights)",
+          "(b) Israel and Lebanon",
+          "(c) Israel and the Gaza Strip",
+          "(d) Lebanon and Syria"
+        ],
+        "question": "The 'Blue Line', often seen in the news in the context of West Asian conflicts, represents the border demarcation between which two entities?",
+        "explanation": "The Blue Line is a border demarcation between Lebanon and Israel published by the United Nations on 7 June 2000 for the purposes of determining whether Israel had fully withdrawn from Lebanon."
+      },
+      {
+        "answer": "(c) Both 1 and 2",
+        "options": [
+          "(a) 1 only",
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
+        ],
+        "question": "Consider the following statements regarding the United Nations Interim Force in Lebanon (UNIFIL):\n1. It was originally established by the UN Security Council in 1978.\n2. India is one of the largest troop-contributing countries to UNIFIL.\nWhich of the statements given above is/are correct?",
+        "explanation": "Statement 1 is correct: UNIFIL was created by the Security Council in March 1978 to confirm Israeli withdrawal from Lebanon, restore international peace and security, and assist the Lebanese Government in restoring its effective authority. Statement 2 is correct: India has been a major and consistent contributor of troops to UNIFIL for decades."
+      },
+      {
+        "answer": "(c) Resolution 1701",
+        "options": [
+          "(a) Resolution 242",
+          "(b) Resolution 338",
+          "(c) Resolution 1701",
+          "(d) Resolution 2254"
+        ],
+        "question": "Which of the following UN Security Council Resolutions is most directly associated with the cessation of hostilities between Israel and Hezbollah in the 2006 war?",
+        "explanation": "UNSC Resolution 1701 (2006) was intended to resolve the 2006 Lebanon War. It called for a full cessation of hostilities, the deployment of Lebanese forces and UNIFIL in southern Lebanon, and the disarmament of all armed groups, including Hezbollah."
+      },
+      {
+        "answer": "(c) Israel",
+        "options": [
+          "(a) Lebanon",
+          "(b) Syria",
+          "(c) Israel",
+          "(d) Jordan"
+        ],
+        "question": "The 'Shebaa Farms', a small strip of disputed land at the intersection of the Lebanese-Syrian border and the Israeli-occupied Golan Heights, is currently under the de facto control of which country?",
+        "explanation": "The Shebaa Farms is a disputed territory that is currently under de facto Israeli control, having been captured from Syria during the 1967 Six-Day War. Lebanon claims the territory belongs to it, with Syria's backing, while Israel and the UN regard it as Syrian territory occupied by Israel."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-II",
+        "question": "The persistent instability along the Israel-Lebanon border highlights the limitations of international peacekeeping and unilateral mediation. Analyze this statement in light of the role of UNIFIL and recent US diplomatic efforts in West Asia.",
+        "model_answer": {
+          "body": "1. **Limitations of UN Peacekeeping (UNIFIL):**\n   - **Lack of Enforcement Mandate:** UNIFIL operates under Chapter VI of the UN Charter, which limits its ability to use force except in self-defense. It cannot actively disarm Hezbollah.\n   - **Sovereignty Constraints:** UNIFIL relies on the cooperation of the Lebanese Armed Forces (LAF), which is often politically constrained from acting against Hezbollah.\n   - **Failure of Resolution 1701:** The resolution's mandate to keep the area south of the Litani River free of unauthorized armed personnel has not been realized due to Hezbollah's deep integration into local communities.\n\n2. **Limitations of Unilateral US Mediation:**\n   - **Perceived Bias:** The US's strong strategic alliance with Israel makes it an unequal mediator in the eyes of Hezbollah and its backer, Iran.\n   - **Short-term Focus:** US diplomatic efforts often focus on temporary ceasefires ('band-aid solutions') rather than addressing structural issues like border demarcation, the status of Shebaa Farms, and regional proxy dynamics.\n   - **Bypassing Multilateral Institutions:** Unilateral deals often lack the broad international legitimacy and institutional backing required for long-term monitoring.",
+          "conclusion": "To transition from a fragile truce to lasting peace, West Asian diplomacy must move beyond temporary unilateral ceasefires. A multilateral approach that strengthens UNIFIL's monitoring capabilities, empowers the Lebanese state, and addresses the broader Iran-Israel geopolitical rivalry is essential.",
+          "introduction": "The Israel-Lebanon border, marked by the UN-demarcated 'Blue Line', remains one of the most volatile corridors in West Asia. Despite the presence of the United Nations Interim Force in Lebanon (UNIFIL) since 1978 and repeated diplomatic interventions by the United States, sustainable peace remains elusive.",
+          "value_addition": "Mentioning the 'Litani River' boundary and the geopolitical concept of 'Proxy Warfare' adds significant depth to the answer."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "Examine the geopolitical and economic implications of the escalating West Asian conflict on India's strategic interests.",
+        "model_answer": {
+          "body": "1. **Economic Implications:**\n   - **Energy Security:** West Asia supplies over 60% of India's crude oil imports. Conflict-induced supply disruptions or spikes in global oil prices can widen India's Current Account Deficit (CAD) and fuel domestic inflation.\n   - **Trade and Connectivity:** Escalation threatens critical maritime trade routes (e.g., the Red Sea, Persian Gulf). It also jeopardizes ambitious connectivity projects like the India-Middle East-Europe Economic Corridor (IMEC).\n\n2. **Geopolitical and Strategic Implications:**\n   - **Balancing Act:** India maintains strategic partnerships with both Israel (defense and technology) and Arab nations/Iran (energy and connectivity). Escalation forces India into a difficult diplomatic balancing act.\n   - **Diaspora and Remittances:** Over 8.5 million Indians reside in West Asia, contributing billions in remittances. A wider conflict poses severe evacuation challenges and threatens their livelihoods.\n   - **Security of Peacekeepers:** India is a major troop contributor to UNIFIL in southern Lebanon. Escalation puts Indian soldiers directly in the line of fire.",
+          "conclusion": "India's policy of 'de-hyphenation' and strategic autonomy is put to the test during West Asian crises. India must advocate for dialogue, maritime security, and adherence to international law while preparing contingency plans for its diaspora and energy reserves.",
+          "introduction": "India has vital strategic, economic, and humanitarian interests in West Asia. Any escalation of conflict between Israel and non-state actors like Hezbollah, backed by regional powers like Iran, directly impacts India's domestic and foreign policy calculus.",
+          "value_addition": "Include a brief mention of the 'Operation Ajay' (evacuation from Israel) as a practical example of India's diaspora management during regional crises."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "Analyze how the rise of powerful non-state armed actors like Hezbollah challenges the traditional Westphalian concept of state sovereignty in the Middle East.",
+        "model_answer": {
+          "body": "1. **Monopoly on Violence:** Hezbollah possesses a military arsenal that rivals, and in some aspects surpasses, the Lebanese Armed Forces (LAF). It conducts foreign military campaigns (e.g., in Syria) and launches attacks against Israel without the authorization of the Lebanese state.\n2. **Parallel Governance:** Hezbollah provides extensive social services, healthcare, education, and security in its strongholds (southern Lebanon, Beqaa Valley, and southern Beirut), bypassing and undermining the official Lebanese government institutions.\n3. **External Allegiance:** While participating in Lebanon's democratic processes and holding cabinet positions, Hezbollah's primary ideological and financial allegiance is to Iran's Supreme Leader, compromising Lebanon's foreign policy sovereignty.\n4. **Implications for International Law:** Traditional international law and treaties (like ceasefires) are designed for state actors. When non-state actors violate these agreements, the sovereign state (Lebanon) is held responsible, leading to retaliatory actions that devastate the state's infrastructure and civilian population.",
+          "conclusion": "Hezbollah's dual status as a political party and an armed militia has hollowed out Lebanese sovereignty. Resolving this requires internal political reform in Lebanon to strengthen state institutions and international pressure to enforce the disarmament of non-state militias.",
+          "introduction": "The Westphalian model of international relations presumes that sovereign states hold a monopoly on the legitimate use of physical force within their territories. The rise of Hezbollah in Lebanon represents a profound challenge to this concept, creating a 'state within a state' dynamic.",
+          "value_addition": "Using terms like 'hybrid warfare', 'state within a state', and 'sovereignty deficit' enhances the academic quality of the response."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-04T13:51:58.28+00:00"
+  },
+  {
+    "id": "mpz3dtejqd75y5yct1l",
+    "title": "Fatal Neglect: Malviya Nagar hotel fire exposes systemic regulatory failures",
+    "source": "Millennium Post",
+    "category": "Disaster Management",
+    "gs_paper": "GS-III",
+    "relevance_score": 88,
+    "keywords": [],
+    "primary_keyword": null,
+    "summary": [
+      "A devastating fire at a bed-and-breakfast (B&B) facility in Delhi's Malviya Nagar claimed 21 lives, highlighting severe safety violations.",
+      "The establishment was operating 25 rooms despite being licensed for only six, showcasing rampant unauthorized commercial expansion.",
+      "The tragedy occurred despite a Delhi High Court directive five months prior instructing civic authorities to formulate a fire safety action plan.",
+      "Nearly 95% of Delhi's buildings fall below the 17.5-metre threshold of the National Building Code, exempting them from mandatory fire NOCs.",
+      "The incident has triggered a month-long safety audit across hotels, coaching centres, and nursing homes by the Delhi Lieutenant Governor."
+    ],
+    "issue_overview": "Systemic failure in enforcing urban building bylaws and fire safety norms, leading to preventable mass-casualty disasters in congested urban areas.",
+    "background": "Rapid, unplanned urbanization in India has led to mixed-land use violations, narrow access roads, and structural modifications that bypass safety codes. Past disasters (Uphaar Cinema, Kamala Mills, Surat coaching centre) highlight that compliance is often treated as a one-time paper exercise.",
+    "stakeholders": [
+      "Urban Residents and Tourists",
+      "Municipal Corporations (e.g., MCD)",
+      "Delhi Fire Services (DFS)",
+      "Commercial Property Owners",
+      "Judiciary and Law Enforcement"
+    ],
+    "arguments_for": [
+      "Mandating smart sensors and sprinklers in all residential and commercial buildings saves lives.",
+      "Strict criminal liability for regulatory officials prevents corruption and lax enforcement.",
+      "Publicly disclosing fire safety compliance data empowers consumers to make safe choices."
+    ],
+    "arguments_against": [
+      "Retrofitting old, congested urban structures with modern fire safety infrastructure is highly expensive.",
+      "Over-regulation can lead to harassment of small business owners by municipal inspectors.",
+      "Complete sealing of non-compliant structures could disrupt local economies and livelihoods."
+    ],
+    "challenges": [
+      "Exemption of a vast majority of buildings from mandatory fire NOCs due to height thresholds under the National Building Code.",
+      "Narrow lanes in congested urban pockets like Hauz Rani prevent the entry of standard fire tenders.",
+      "Lack of coordination between multiple civic agencies (MCD, Fire Services, Power Discoms)."
+    ],
+    "way_forward": [
+      "Amend the National Building Code to lower the height threshold for mandatory fire safety clearances.",
+      "Implement a digital, transparent, and automated single-window clearance system for building approvals.",
+      "Conduct regular, independent third-party safety audits of commercial establishments.",
+      "Equip local communities with basic firefighting training and emergency response kits."
+    ],
+    "mcqs": [
+      {
+        "answer": "(b) Bureau of Indian Standards (BIS)",
+        "options": [
+          "(a) National Disaster Management Authority (NDMA)",
+          "(b) Bureau of Indian Standards (BIS)",
+          "(c) Ministry of Housing and Urban Affairs",
+          "(d) NITI Aayog"
+        ],
+        "question": "Which of the following authorities is primarily responsible for formulating the National Building Code (NBC) of India?",
+        "explanation": "The National Building Code of India (NBC) is a comprehensive building code providing guidelines for regulating building construction activities across the country. It is formulated by the Bureau of Indian Standards (BIS)."
+      },
+      {
+        "answer": "(c) 17.5 metres",
+        "options": [
+          "(a) 10 metres",
+          "(b) 15 metres",
+          "(c) 17.5 metres",
+          "(d) 25 metres"
+        ],
+        "question": "Under the current National Building Code guidelines, what is the standard height threshold above which a residential building is generally classified as a 'high-rise' requiring mandatory fire safety clearances?",
+        "explanation": "According to the National Building Code, buildings with a height of 15 metres or more (and in some specific municipal jurisdictions, 17.5 metres or more) are classified as high-rise buildings and require mandatory fire safety clearances (NOCs)."
+      },
+      {
+        "answer": "(c) Both 1 and 2",
+        "options": [
+          "(a) 1 only",
+          "(b) 2 only",
+          "(c) Both 1 and 2",
+          "(d) Neither 1 nor 2"
+        ],
+        "question": "With reference to the 'National Disaster Management Guidelines for School Safety', which of the following statements is/are correct?\n1. It mandates quarterly fire safety audits in all schools.\n2. It recommends that schools should have at least two wide exit gates.\nSelect the correct answer using the code given below:",
+        "explanation": "The NDMA guidelines emphasize regular safety audits (including fire safety) and structural safety measures such as multiple wide exits to ensure rapid evacuation during emergencies."
+      },
+      {
+        "answer": "(c) A devastating fire caused by a transformer failure and blocked exits",
+        "options": [
+          "(a) A structural collapse during an earthquake",
+          "(b) A toxic gas leak from an air conditioning unit",
+          "(c) A devastating fire caused by a transformer failure and blocked exits",
+          "(d) A stampede triggered by a false alarm"
+        ],
+        "question": "The 'Uphaar Cinema tragedy', often cited in judicial precedents regarding public safety and civil liability in India, was primarily caused by:",
+        "explanation": "The 1997 Uphaar Cinema fire in Delhi, which killed 59 people, was caused by a fire starting from an electricity transformer, aggravated by locked exit doors and unauthorized extra seats blocking evacuation routes."
+      },
+      {
+        "answer": "(b) 12th Schedule, added by the 74th Amendment Act",
+        "options": [
+          "(a) 11th Schedule, added by the 73rd Amendment Act",
+          "(b) 12th Schedule, added by the 74th Amendment Act",
+          "(c) Article 311 of the Constitution",
+          "(d) Article 246A of the Constitution"
+        ],
+        "question": "Which of the following constitutional provisions empowers Urban Local Bodies (ULBs) to regulate building construction and public safety?",
+        "explanation": "The 12th Schedule of the Constitution, introduced by the 74th Constitutional Amendment Act, lists 18 functional items of municipal corporations, including regulation of land-use, construction of buildings, and fire services."
+      }
+    ],
+    "mains_questions": [
+      {
+        "gs_paper": "GS-III",
+        "question": "Urban fires in India are increasingly becoming man-made disasters rather than accidental tragedies. Analyze the systemic regulatory and administrative lapses that contribute to this menace.",
+        "model_answer": {
+          "body": "1. **Regulatory Lapses**:\n   - **Exemptions in Building Codes**: The National Building Code's height threshold (15-17.5m) leaves a vast majority of low-rise commercial buildings outside the mandatory fire NOC net.\n   - **Unauthorized Expansion**: Rampant violations of floor-area ratio (FAR) and illegal conversion of residential spaces into commercial units (e.g., B&Bs operating 25 rooms instead of the permitted 6).\n2. **Administrative Lapses**:\n   - **Lax Enforcement**: Corruption and lack of regular, surprise inspections by municipal authorities.\n   - **Lack of Inter-Agency Coordination**: Disconnect between electricity discoms, municipal corporations, and fire departments.\n3. **Planning Deficiencies**:\n   - Congested urban pockets with narrow access roads prevent fire tenders from reaching disaster sites timely.",
+          "conclusion": "Addressing urban fires requires shifting from a reactive firefighting approach to a proactive, technology-driven compliance regime where regulatory officials are held criminally accountable for lapses.",
+          "introduction": "The frequent occurrence of devastating fires in Indian cities, such as the recent Malviya Nagar hotel fire, highlights that urban fires are primarily systemic failures of governance, enforcement, and urban planning rather than mere accidents.",
+          "value_addition": "Citing the Delhi High Court's unheeded directive from five months prior serves as a powerful case study of judicial-administrative disconnect."
+        }
+      },
+      {
+        "gs_paper": "GS-III",
+        "question": "Discuss the role of community-based disaster management (CBDM) in mitigating the impact of urban fire hazards in densely populated Indian cities.",
+        "model_answer": {
+          "body": "1. **Immediate Response**: Densely populated areas benefit from trained local volunteers who can administer CPR, guide evacuations, and use basic firefighting equipment (as seen in Malviya Nagar where locals used mattresses to rescue trapped guests).\n2. **Hazard Mapping**: Local communities can identify and report blocked fire exits, illegal commercial storage of hazardous materials, and faulty wiring to authorities.\n3. **Awareness and Drills**: Regular community-level mock drills build a culture of safety and preparedness, reducing panic during actual emergencies.\n4. **Inclusivity**: CBDM ensures that vulnerable groups, such as the elderly, children, and disabled individuals, are accounted for in evacuation plans.",
+          "conclusion": "Empowering local communities through institutional support, training, and basic equipment is essential to build resilient cities capable of minimizing disaster impacts.",
+          "introduction": "In highly congested urban areas, formal emergency response teams often face delays due to traffic and narrow lanes. Community-Based Disaster Management (CBDM) acts as the vital first line of defense, significantly reducing casualties during the golden hour.",
+          "value_addition": "Integrating the real-life example of local residents using mattresses and administering CPR during the Malviya Nagar fire adds high contextual value."
+        }
+      },
+      {
+        "gs_paper": "GS-II",
+        "question": "Accountability is the weakest link in India's urban governance framework. In light of recurring urban disasters, suggest institutional reforms to enforce accountability in municipal administration.",
+        "model_answer": {
+          "body": "1. **Institutional Reforms Needed**:\n   - **Unified Command Structure**: Establish a single, empowered urban authority responsible for building approvals, fire safety, and utility connections to eliminate finger-pointing.\n   - **Independent Safety Regulators**: Create an independent municipal safety commission with powers to prosecute both private violators and negligent public officials.\n   - **Strict Criminal Liability**: Amend municipal laws to introduce severe criminal penalties, including charges of culpable homicide, for officials who clear non-compliant structures.\n   - **Digital Transparency**: Mandate public dashboards showing the real-time compliance and inspection history of all commercial buildings.",
+          "conclusion": "True accountability can only be established when the cost of non-compliance and regulatory negligence exceeds the benefits of corruption.",
+          "introduction": "Despite stringent laws and judicial interventions, urban disasters like building collapses and fires recur with impunity. This is primarily due to a fragmented governance structure where accountability is easily diffused among multiple agencies.",
+          "value_addition": "Referencing the 74th Amendment Act's devolution of powers and highlighting the gap between devolution and actual administrative accountability strengthens the constitutional analysis."
+        }
+      }
+    ],
+    "ingested_at": "2026-06-04T06:06:08.155+00:00"
   }
 ]
