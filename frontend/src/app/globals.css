@@ -24,7 +24,7 @@
   [data-theme='dark'] {
     --bg-primary: #0a0a0b;
     --text-primary: #f9fafb;
-    --text-secondary: #9ca3af;
+    --text-secondary: #e2e8f0; /* Brighter for dark mode: slate-200 level */
     --accent-color: #3b82f6;
     --card-bg: #111112;
     --border-color: rgba(255, 255, 255, 0.08);
@@ -54,11 +54,11 @@
   }
 
   .badge-pill {
-    @apply px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 dark:bg-white/5 dark:text-white/40;
+    @apply px-4 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 dark:bg-white/10 dark:text-white/80;
   }
 
   .badge-pill-primary {
-    @apply bg-blue-50 text-blue-600 border border-blue-100 dark:bg-blue-500/10 dark:text-blue-400 dark:border-blue-500/20;
+    @apply bg-blue-50 text-blue-600 border border-blue-100 dark:bg-blue-500/20 dark:text-blue-300 dark:border-blue-500/30;
   }
 
   .main-btn {
@@ -66,7 +66,7 @@
   }
 
   .secondary-btn {
-    @apply px-8 py-4 border-2 border-gray-200 text-gray-600 rounded-2xl font-bold hover:bg-gray-50 transition-all dark:border-white/10 dark:text-white/60 dark:hover:bg-white/5;
+    @apply px-8 py-4 border-2 border-gray-200 text-gray-600 rounded-2xl font-bold hover:bg-gray-50 transition-all dark:border-white/10 dark:text-white/90 dark:hover:bg-white/10;
   }
 }
 

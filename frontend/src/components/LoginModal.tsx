@@ -87,7 +87,7 @@ export default function LoginModal({ onSuccess, onClose }: LoginModalProps) {
                   placeholder="Officer Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-2xl text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 transition-all"
+                  className="w-full pl-12 pr-4 py-4 bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-white/5 rounded-2xl text-sm font-bold text-gray-900 dark:text-white focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-600/5 transition-all"
                 />
               </div>
             </div>

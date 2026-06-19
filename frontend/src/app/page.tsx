@@ -23,6 +23,8 @@ export default function Home() {
   const [showLogin, setShowLogin] = useState(false);
   const [showMethodology, setShowMethodology] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [fromDate, setFromDate] = useState<string>("");
+  const [toDate, setToDate] = useState<string>("");
 
   useEffect(() => {
     setArticles(getArticles());
@@ -84,6 +86,19 @@ export default function Home() {
     .filter(a => filterCategory === "All" || a.category === filterCategory)
     .filter(a => !filterImportant || a.isImportant)
     .filter(a => !filterCompleted || a.isCompleted)
+    .filter(a => {
+      if (!a.ingested_at) return true;
+      const articleDate = new Date(a.ingested_at).getTime();
+      if (fromDate) {
+        const from = new Date(fromDate).getTime();
+        if (articleDate < from) return false;
+      }
+      if (toDate) {
+        const to = new Date(toDate).setHours(23, 59, 59, 999);
+        if (articleDate > to) return false;
+      }
+      return true;
+    })
     .sort((a, b) => {
       const dateA = a.ingested_at ? new Date(a.ingested_at).getTime() : 0;
       const dateB = b.ingested_at ? new Date(b.ingested_at).getTime() : 0;
@@ -232,16 +247,50 @@ export default function Home() {
           </div>
           <div className="flex items-center gap-2 md:gap-3">
             <div className="badge-pill-primary badge-pill">Assets: {articles.length}</div>
-            <div className="badge-pill hidden md:block">UPSC 2024/25</div>
+            <div className="badge-pill hidden md:block">UPSC 2026</div>
           </div>
         </div>
 
         {/* Sorting & Filtering Bar */}
         <div className="flex flex-col gap-10 mb-16 px-2">
+          {/* Date Selector Bar */}
+          <div className="flex flex-col gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Date Intelligence Window</span>
+            <div className="flex flex-wrap items-center gap-4">
+               <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
+                  <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">From</span>
+                  <input 
+                    type="date" 
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                  />
+               </div>
+               <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
+                  <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">To</span>
+                  <input 
+                    type="date" 
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                  />
+               </div>
+               {(fromDate || toDate) && (
+                 <button 
+                   onClick={() => { setFromDate(""); setToDate(""); }}
+                   className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+                 >
+                   Reset Window
+                 </button>
+               )}
+            </div>
+          </div>
           {/* Categories Horizontal List */}
           <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Filter by Topic</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Filter by Topic</span>
               {!user && (
                  <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full">
                     Read-Only Mode
@@ -256,7 +305,7 @@ export default function Home() {
                   className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border ${
                     filterCategory === cat
                       ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20"
-                      : "bg-white dark:bg-white/[0.02] text-gray-400 border-gray-100 dark:border-white/5 hover:border-blue-600/30 hover:text-blue-600"
+                      : "bg-white dark:bg-white/[0.03] text-gray-900 dark:text-white/70 border-gray-100 dark:border-white/10 hover:border-blue-600/30 hover:text-blue-600"
                   }`}
                 >
                   {cat}

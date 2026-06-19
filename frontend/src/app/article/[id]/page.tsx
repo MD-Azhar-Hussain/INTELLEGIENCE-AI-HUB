@@ -100,7 +100,7 @@ export default function ArticleDetail() {
 
             <div className="flex items-center gap-1.5 sm:ml-auto text-emerald-600">
               <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[9px] md:text-[10px] font-black uppercase tracking-widest">{article.relevance_score}% Relevance</span>
+              <span className="text-[10px] md:text-[10px] font-black uppercase tracking-widest">{article.relevance_score}% Relevance</span>
             </div>
           </div>
           
