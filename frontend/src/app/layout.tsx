@@ -34,7 +34,7 @@ export default function RootLayout({
           </div>
           <footer className="py-20 border-t border-gray-100 dark:border-white/5 text-center mt-auto">
             <p className="text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-[0.4em] mb-3">
-              Intelligence Directive Deployment
+              Intelligence Directive Development Practice
             </p>
             <p className="text-[11px] font-bold text-gray-500 dark:text-gray-400">
               Made this for Special Person 
