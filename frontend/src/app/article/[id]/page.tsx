@@ -8,7 +8,8 @@ import {
   ArrowLeft, BookOpen, Clock, Target, Users, 
   MessageSquare, FastForward, CheckCircle2,
   BrainCircuit, Layout, HelpCircle, Sparkles,
-  Command, Fingerprint, Layers, Loader2
+  Command, Fingerprint, Layers, Loader2,
+  AlertCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
