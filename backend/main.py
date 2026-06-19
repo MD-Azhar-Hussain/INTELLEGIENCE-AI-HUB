@@ -53,7 +53,12 @@ async def register(payload: dict):
     
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
-    user_data = {"name": name, "email": email, "password_hash": hashed.decode('utf-8'), "created_at": "now()"}
+    user_data = {
+        "name": name, 
+        "email": email, 
+        "password_hash": hashed.decode('utf-8'), 
+        "created_at": datetime.now(timezone.utc).isoformat()
+    }
     
     await asyncio.to_thread(database.save_user, user_data)
     return {"message": "Success", "user": {"name": name, "email": email}}
