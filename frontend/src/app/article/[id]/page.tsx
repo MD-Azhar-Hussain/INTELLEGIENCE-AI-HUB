@@ -352,6 +352,7 @@ function MainsCard({ question, index, articleContext }: any) {
     setIsCritiquing(true);
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8005";
+      const user = getUser();
       const response = await axios.post(`${apiUrl}/critique-answer`, {
         question: question.question,
         user_answer: userAnswer,
