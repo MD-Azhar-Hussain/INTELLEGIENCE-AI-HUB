@@ -1,51 +1,49 @@
-# UPSC Intelligence Hub - Get Started
+# UPSC Intelligence Hub (Volme)
+**Strategic Intelligence & Answer Methodology Platform**
 
-Welcome to your AI-powered UPSC mentor. Follow these steps to get the system running locally.
+## 🛰️ Project Overview
+Volme is a high-performance, "Luxury Zen" preparation platform for UPSC aspirants. It uses advanced AI (Gemini Flash 2.0/3.5) to scrape, analyze, and categorize news intelligence, providing officers with automated summaries, MCQs, and Mains answer critiques.
 
-## Prerequisite: Gemini API Key
-This app uses Gemini 1.5 Flash to process newspapers. You must provide an API key.
-1. Go to [Google AI Studio](https://aistudio.google.com/).
-2. Generate an API Key.
-3. Open `backend/.env` and paste your key:
-   ```env
-   GEMINI_API_KEY=your_actual_key_here
-   ```
-
-## 1. Start the Backend
-Open a terminal in the `backend` folder:
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the server
-uvicorn main:app --reload
-```
-The backend will run on `http://localhost:8000`.
-
-## 2. Start the Frontend
-Open another terminal in the `frontend` folder:
-```bash
-# Install dependencies
-npm install
-
-# Run the development server
-npm run dev
-```
-The frontend will run on `http://localhost:3000`.
-
-## 3. How to use
-1. Open `http://localhost:3000` in your browser.
-2. Click **"Ingest PDF Now"**.
-3. Upload a PDF of "The Hindu" or "Indian Express".
-4. Wait for the AI to process (usually 10-20 seconds).
-5. View your structured UPSC Intelligence, MCQs, and Mains questions!
-
-## Phase 1 (Current) Features:
-- [x] PDF Upload & Text Extraction
-- [x] AI Editorial Extraction (Gemini)
-- [x] UPSC Categorization & GS Paper Mapping
-- [x] MCQ & Mains Question Generation
-- [x] Premium Dark Mode Dashboard
+## 🏛️ Architecture: The Two-Tier Command
+The system is built on a "Resilient Hybrid" architecture:
+- **Frontend**: Next.js 16 (App Router) + Framer Motion (Luxury UI).
+- **Backend**: FastAPI (Python 3.10+) + AI Engine (Gemini).
+- **Database**: 
+  - **Cloud (Supabase)**: Primary source of truth for global synchronization.
+  - **Local (JSON Fallback)**: Persistent cache for zero-latency and offline functionality.
 
 ---
-*Built with ❤️ for UPSC Aspirants.*
+
+## ⚡ Core Directives (Current Features)
+1.  **AI Ingestion Engine**: Scrapes and deciphers complex news articles into GS-Paper-wise intelligence.
+2.  **Strategic Evaluation**: Evaluates Mains answers with precise feedback based on UPSC standards.
+3.  **Adaptive Filtering**: Search index by topic, date-range, and importance.
+4.  **Admin Power House**: 
+    - Full database authority at `/admin`.
+    - Duplicate detection engine to keep the feed clean.
+    - Global system stats monitoring.
+
+---
+
+## 🚀 Future Upgrades (The Roadmap)
+As per the "Final Strategic Review," the following modules are planned for future deployment:
+
+### 1. **The "Global Pulse" Ingestion (Priority)**
+- **System**: An Admin-only "Fetch Everything" trigger.
+- **Goal**: Automatically refresh the global feed for all users from predefined news hubs in one click.
+
+### 2. **Mock Evaluation Tiers**
+- **System**: Time-bound answer writing with a countdown clock and instant AI scoring.
+
+### 3. **Topic Clustering V2**
+- **System**: Advanced semantic grouping of articles to show "Issue Timelines" (e.g., tracking the evolution of a bill).
+
+---
+
+## 🛠️ Deployment Instructions
+1.  **Backend**: Deploy `backend/` to Railway/Render. Ensure `SUPABASE_URL`, `SUPABASE_KEY`, and `GEMINI_API_KEY` are in the ENV.
+2.  **Frontend**: Deploy `frontend/` to Vercel. Set `NEXT_PUBLIC_API_URL` to point to your live backend.
+
+---
+**Status**: Production Ready.
+**Authority**: MD Azhar Hussain

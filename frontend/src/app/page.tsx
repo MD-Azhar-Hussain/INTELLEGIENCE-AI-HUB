@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import UploadModal from "@/components/UploadModal";
-import { Sparkles, Trash2, ArrowRight, Fingerprint, Layers, LogIn, User as UserIcon, LogOut } from "lucide-react";
+import { Sparkles, Trash2, ArrowRight, Fingerprint, Layers, LogIn, User as UserIcon, LogOut, Search, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Article, getArticles, addArticles, clearArticles, generateId, getUser, logout, User, getArticlesFromCloud } from "@/lib/store";
 import LoginModal from "@/components/LoginModal";
@@ -25,18 +25,20 @@ export default function Home() {
   const [user, setUser] = useState<User | null>(null);
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
+    // ONE-TIME AMNESTY: Clear old local caches to ensure sync with Pure Cloud
+    if (!localStorage.getItem("upsc_hub_v2_synced")) {
+        clearArticles();
+        localStorage.setItem("upsc_hub_v2_synced", "true");
+    }
+
     setArticles(getArticles());
     setUser(getUser());
     setIsMounted(true);
-    // Cloud Sync & Migration on Mount
+    // Cloud Sync on Mount
     const sync = async () => {
-        const u = getUser();
-        if (u) {
-            // Transfer local baggage to cloud
-            await import("@/lib/store").then(m => m.migrateLocalArticlesToCloud());
-        }
         const cloudArticles = await import("@/lib/store").then(m => m.getArticlesFromCloud());
         setArticles(cloudArticles);
     };
@@ -86,6 +88,17 @@ export default function Home() {
     .filter(a => filterCategory === "All" || a.category === filterCategory)
     .filter(a => !filterImportant || a.isImportant)
     .filter(a => !filterCompleted || a.isCompleted)
+    .filter(a => {
+      if (!searchQuery.trim()) return true;
+      const query = searchQuery.toLowerCase().trim();
+      const titleMatch = a.title?.toLowerCase().includes(query);
+      const catMatch = a.category?.toLowerCase().includes(query);
+      const primaryKeyMatch = a.primary_keyword?.toLowerCase().includes(query);
+      const keywordsMatch = a.keywords?.some(k => k.toLowerCase().includes(query));
+      const summaryMatch = a.summary?.some(s => s.toLowerCase().includes(query));
+      const overviewMatch = a.issue_overview?.toLowerCase().includes(query);
+      return titleMatch || catMatch || primaryKeyMatch || keywordsMatch || summaryMatch || overviewMatch;
+    })
     .filter(a => {
       if (!a.ingested_at) return true;
       const articleDate = new Date(a.ingested_at).getTime();
@@ -253,6 +266,29 @@ export default function Home() {
 
         {/* Sorting & Filtering Bar */}
         <div className="flex flex-col gap-10 mb-16 px-2">
+          {/* Search Bar */}
+          <div className="flex flex-col gap-4">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Search Feed</span>
+            <div className="relative group max-w-xl">
+              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={18} />
+              <input 
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search by title, category, keywords, summary, or details..."
+                className="w-full pl-14 pr-12 py-4 bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/10 rounded-2xl text-sm font-semibold focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-500/5 transition-all shadow-md dark:shadow-none placeholder-gray-400 dark:placeholder-white/30 text-gray-900 dark:text-white"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
+                >
+                  <X size={16} />
+                </button>
+              )}
+            </div>
+          </div>
+
           {/* Date Selector Bar */}
           <div className="flex flex-col gap-4">
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Date Intelligence Window</span>
@@ -422,17 +458,46 @@ export default function Home() {
                 />
               ))
             ) : (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="md:col-span-2 text-center py-48 luxury-card border-dashed bg-gray-50/30 dark:bg-white/[0.01]"
-              >
-                <div className="w-20 h-20 rounded-[2rem] bg-white dark:bg-white/5 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center mx-auto mb-8">
-                  <Fingerprint className="text-gray-300" size={32} />
-                </div>
-                <h3 className="text-xl font-bold mb-3">Unit Awaiting Ingestion</h3>
-                <p className="text-gray-400 font-medium text-sm">Upload a PDF to generate high-yield intelligence.</p>
-              </motion.div>
+              articles.length > 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="md:col-span-2 text-center py-48 luxury-card border-dashed bg-gray-50/30 dark:bg-white/[0.01]"
+                >
+                  <div className="w-20 h-20 rounded-[2rem] bg-white dark:bg-white/5 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center mx-auto mb-8">
+                    <Search className="text-gray-300" size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">No Matching Intelligence</h3>
+                  <p className="text-gray-400 font-medium text-sm mb-6">Adjust your search query or filters to scan other assets.</p>
+                  {(searchQuery || filterCategory !== "All" || filterImportant || filterCompleted || fromDate || toDate) && (
+                    <button 
+                      onClick={() => {
+                        setSearchQuery("");
+                        setFilterCategory("All");
+                        setFilterImportant(false);
+                        setFilterCompleted(false);
+                        setFromDate("");
+                        setToDate("");
+                      }}
+                      className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold transition-all shadow-lg shadow-blue-600/20"
+                    >
+                      Reset All Filters & Search
+                    </button>
+                  )}
+                </motion.div>
+              ) : (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="md:col-span-2 text-center py-48 luxury-card border-dashed bg-gray-50/30 dark:bg-white/[0.01]"
+                >
+                  <div className="w-20 h-20 rounded-[2rem] bg-white dark:bg-white/5 shadow-sm border border-gray-100 dark:border-white/10 flex items-center justify-center mx-auto mb-8">
+                    <Fingerprint className="text-gray-300" size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">Unit Awaiting Ingestion</h3>
+                  <p className="text-gray-400 font-medium text-sm">Upload a PDF to generate high-yield intelligence.</p>
+                </motion.div>
+              )
             )
           )}
         </div>

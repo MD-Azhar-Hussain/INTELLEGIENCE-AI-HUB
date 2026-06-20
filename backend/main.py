@@ -27,6 +27,18 @@ async def verify_officer(x_officer_email: str = Header(None)):
         raise HTTPException(status_code=403, detail="Access denied: Not a registered officer")
     return x_officer_email
 
+# Admin Power House Security
+async def verify_admin(x_officer_email: str = Header(None)):
+    email = await verify_officer(x_officer_email)
+    user = await asyncio.to_thread(database.get_user, email)
+    
+    # Check if user has explicit admin role OR is in the master admin list
+    # Tip: You can change the email below to your own email to grant yourself access
+    ADMIN_EMAILS = ["admin@gmail.com", "tempmailer0099@gmail.com", "azhar@example.com"] 
+    if user.get("role") != "admin" and email not in ADMIN_EMAILS:
+        raise HTTPException(status_code=403, detail="Strategic Clearance Level 2 required: Admin access denied")
+    return email
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -194,3 +206,38 @@ async def critique_answer(payload: dict):
     if "error" in result:
         return {"error": result["error"]}
     return result
+
+# --- ADMIN POWER HOUSE ---
+
+@app.get("/admin/stats")
+async def admin_stats(admin: str = Depends(verify_admin)):
+    return await asyncio.to_thread(database.get_admin_stats)
+
+@app.get("/admin/duplicates")
+async def detect_duplicates(admin: str = Depends(verify_admin)):
+    """Analyze the intelligence feed for overlapping or redundant assets."""
+    articles = await asyncio.to_thread(database.get_articles)
+    seen_titles = {}
+    duplicates = []
+    
+    for a in articles:
+        title = a.get("title", "").lower().strip()
+        if not title: continue
+        
+        # Simple Title Matching for efficiency
+        if title in seen_titles:
+            duplicates.append({
+                "original": seen_titles[title],
+                "duplicate": a
+            })
+        else:
+            seen_titles[title] = a
+            
+    return {"duplicate_count": len(duplicates), "clusters": duplicates}
+
+@app.delete("/admin/article/{article_id}")
+async def admin_delete_article(article_id: str, admin: str = Depends(verify_admin)):
+    success = await asyncio.to_thread(database.delete_article, article_id)
+    if not success:
+        raise HTTPException(status_code=404, detail="Asset not found or already purged")
+    return {"message": "Strategic asset successfully purged from global intelligence feed"}

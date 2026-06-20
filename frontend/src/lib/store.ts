@@ -205,30 +205,9 @@ export function clearArticles(): void {
 }
 
 export async function migrateLocalArticlesToCloud(): Promise<void> {
-  const user = getUser();
-  const articles = getArticles();
-  if (articles.length === 0 || !user) return;
-
-  console.log(`Migrating ${articles.length} articles to cloud for ${user.email}...`);
-  try {
-      // allSettled: one bad article won't abort the whole batch
-      const results = await Promise.allSettled(
-        articles.map(article =>
-          axios.post(`${API_BASE}/migrate-article`, article, getAuthHeaders())
-        )
-      );
-
-      const failed = results.filter(r => r.status === "rejected");
-      if (failed.length === 0) {
-          // Only purge local cache if everything made it to cloud
-          localStorage.removeItem(STORAGE_KEY);
-          console.log("Migration fully successful. Local cache cleared.");
-      } else {
-          console.warn(`Migration: ${articles.length - failed.length} ok, ${failed.length} failed.`);
-      }
-  } catch (err) {
-      console.error("Migration error", err);
-  }
+  // DECOMMISSIONED: Pure Cloud Architecture now handles all data.
+  // This prevents old local caches from re-uploading deleted articles.
+  console.log("Migration system decommissioned. Operating in Pure Cloud mode.");
 }
 
 export function generateId(): string {
