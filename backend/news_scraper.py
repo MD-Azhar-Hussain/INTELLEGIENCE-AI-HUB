@@ -1,9 +1,14 @@
 import trafilatura
+from trafilatura.settings import use_config as _traf_use_config
 import json
 import requests
 from pydantic import BaseModel
 from typing import Optional
 from bs4 import BeautifulSoup
+
+# Limit trafilatura's own HTTP fetcher to 6s (default is 30s — the main delay culprit)
+_TRAF_CONFIG = _traf_use_config()
+_TRAF_CONFIG.set("DEFAULT", "DOWNLOAD_TIMEOUT", "6")
 
 class ScrapedArticle(BaseModel):
     title: str
@@ -28,13 +33,16 @@ def scrape_news(url: str):
     try:
         # Use a session to handle cookies (sites like Mint love this)
         session = requests.Session()
-        response = session.get(url, headers=headers, timeout=20, allow_redirects=True)
+        response = session.get(url, headers=headers, timeout=6, allow_redirects=True)
         response.raise_for_status()
         html_content = response.text
+        print(f"✅ Fetched {len(html_content)} chars via requests", flush=True)
     except Exception as e:
-        print(f"⚠️ Initial fetch error: {e}")
-        # Fallback to trafilatura's direct fetcher
-        html_content = trafilatura.fetch_url(url)
+        print(f"⚠️ requests fetch failed ({e.__class__.__name__}), trying trafilatura fallback...", flush=True)
+        # Fallback to trafilatura's direct fetcher — capped at 6s via config
+        html_content = trafilatura.fetch_url(url, config=_TRAF_CONFIG) or ""
+        if html_content:
+            print(f"✅ Fetched {len(html_content)} chars via trafilatura", flush=True)
     
     if not html_content:
         return {"error": "The source server blocked the request. Please try another source or copy-paste the text manually."}

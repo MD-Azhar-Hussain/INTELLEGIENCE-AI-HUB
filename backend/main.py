@@ -35,9 +35,10 @@ async def verify_admin(x_officer_email: str = Header(None)):
     # Check if user has explicit admin role OR is in the master admin list
     # Tip: You can change the email below to your own email to grant yourself access
     ADMIN_EMAILS = ["admin@gmail.com", "tempmailer0099@gmail.com", "azhar@example.com"] 
-    if user.get("role") != "admin" and email not in ADMIN_EMAILS:
+    if not user or (user.get("role") != "admin" and email not in ADMIN_EMAILS):
         raise HTTPException(status_code=403, detail="Strategic Clearance Level 2 required: Admin access denied")
     return email
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -146,14 +147,15 @@ async def import_news(payload: dict, officer: str = Depends(verify_officer)):
     if not url:
         raise HTTPException(status_code=400, detail="URL is required")
         
+    print(f"🌐 Scraping URL: {url}...", flush=True)
     # Scraping is a blocking network call
     result = await asyncio.to_thread(scrape_news, url)
     if "error" in result:
         return {"error": result["error"]}
     
     try:
-        # Analysis can take 10s+
         print(f"🕵️  Analyzing content from {url}...", flush=True)
+        # Analysis can take 10s+
         ai_result = await asyncio.to_thread(process_document, text=result["content"])
         
         if isinstance(ai_result, list) and len(ai_result) > 0:

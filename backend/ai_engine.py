@@ -2,48 +2,122 @@ import json
 import os
 import re
 from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dotenv import load_dotenv
+import httpx
 from google import genai
 from google.genai import types
 
 load_dotenv()
 
-EDITORIAL_PROMPT = """
-You are an expert UPSC mentor. Analyze the provided newspaper/document and extract ALL significant editorials, opinion pieces, and important news articles relevant to UPSC/Civil Services preparation.
+# Per-model hard timeout (seconds) — 10s then move to next model
+MODEL_TIMEOUT_SECONDS = 10
 
-For each article, return a JSON object with EXACTLY these fields (no extras):
+# ─────────────────────────────────────────────────────────────────────────────
+# GEMINI PROMPT  (returns a plain JSON array — Gemini handles this fine)
+# ─────────────────────────────────────────────────────────────────────────────
+EDITORIAL_PROMPT = """
+You are an elite UPSC mentor. Analyze the provided newspaper article and produce a
+premium intelligence brief for IAS/Civil Services aspirants.
+
+Return a JSON array [ {...} ] with EXACTLY these fields per article:
 {
-  "title": "Clear concise headline (string)",
-  "category": "Economy | Polity | Environment | International Relations | Science | Security | Society | History",
-  "gs_paper": "GS-I | GS-II | GS-III | GS-IV",
-  "relevance_score": 85,
-  "primary_keyword": "single most important keyword",
-  "keywords": ["keyword1", "keyword2", "keyword3"],
-  "summary": ["Key point 1", "Key point 2", "Key point 3"],
-  "issue_overview": "One paragraph explaining the core issue",
-  "background": "One paragraph of historical/contextual background",
-  "stakeholders": ["Stakeholder 1", "Stakeholder 2"],
-  "arguments_for": ["Argument in favour 1", "Argument in favour 2"],
-  "arguments_against": ["Argument against 1", "Argument against 2"],
-  "challenges": ["Challenge 1", "Challenge 2"],
-  "way_forward": ["Recommendation 1", "Recommendation 2"],
+  "title": "Clear concise headline derived from the article",
+  "category": "ONE of: Economy | Polity | Environment | International Relations | Science | Security | Society | History — choose the MOST accurate based on article content",
+  "gs_paper": "ONE of: GS-I | GS-II | GS-III | GS-IV — assign based on actual subject matter",
+  "relevance_score": <integer 0-95 — use 0 if the article has zero UPSC relevance (e.g. sports, entertainment, celebrity news); otherwise 50-95 based on actual UPSC importance>,
+  "primary_keyword": "the single most important UPSC keyword from this article",
+  "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+  "summary": [
+    "Specific fact or event point 1 with actors/dates/numbers",
+    "Specific fact or event point 2 with actors/dates/numbers",
+    "Specific fact or event point 3 with actors/dates/numbers",
+    "Specific fact or event point 4 with actors/dates/numbers",
+    "Specific fact or event point 5 with actors/dates/numbers"
+  ],
+  "issue_overview": "3–4 sentence paragraph with genuine analytical depth — explain WHY this matters, the competing interests, and the systemic implications. Do NOT just restate the headline.",
+  "background": "3–4 sentence paragraph with historical roots, relevant treaties/laws/incidents with dates, prior context that explains the current situation.",
+  "stakeholders": [
+    "Stakeholder 1: specific role and interest in this issue",
+    "Stakeholder 2: specific role and interest",
+    "Stakeholder 3: specific role and interest",
+    "Stakeholder 4: specific role and interest"
+  ],
+  "arguments_for": [
+    "Specific well-reasoned argument with logic/evidence from the article",
+    "Specific well-reasoned argument 2",
+    "Specific well-reasoned argument 3",
+    "Specific well-reasoned argument 4"
+  ],
+  "arguments_against": [
+    "Specific well-reasoned counter-argument 1",
+    "Specific well-reasoned counter-argument 2",
+    "Specific well-reasoned counter-argument 3",
+    "Specific well-reasoned counter-argument 4"
+  ],
+  "challenges": [
+    "Specific implementation or systemic challenge 1",
+    "Specific challenge 2",
+    "Specific challenge 3",
+    "Specific challenge 4"
+  ],
+  "way_forward": [
+    "Concrete actionable policy recommendation 1",
+    "Concrete actionable recommendation 2",
+    "Concrete actionable recommendation 3",
+    "Concrete actionable recommendation 4"
+  ],
   "mcqs": [
     {
-      "question": "MCQ question text",
-      "options": ["Option A", "Option B", "Option C", "Option D"],
-      "answer": "Option A",
-      "explanation": "Why this answer is correct"
+      "question": "Challenging factual/conceptual question derived directly from this article's content — requires real knowledge to answer",
+      "options": ["(a) Option A", "(b) Option B", "(c) Option C", "(d) Option D"],
+      "answer": "(b) Option B",
+      "explanation": "2-sentence explanation citing specific facts from the article and why the other options are wrong."
+    },
+    {
+      "question": "Statement-based question (e.g. 'Consider the following statements: 1... 2... Which is/are correct?')",
+      "options": ["(a) 1 only", "(b) 2 only", "(c) Both 1 and 2", "(d) Neither 1 nor 2"],
+      "answer": "(c) Both 1 and 2",
+      "explanation": "2-sentence explanation with evidence."
+    },
+    {
+      "question": "Application or inference question — requires understanding the article's implications",
+      "options": ["(a) Option A", "(b) Option B", "(c) Option C", "(d) Option D"],
+      "answer": "(a) Option A",
+      "explanation": "2-sentence explanation."
+    },
+    {
+      "question": "Geography/institution/treaty identification question tied to article topics",
+      "options": ["(a) Option A", "(b) Option B", "(c) Option C", "(d) Option D"],
+      "answer": "(d) Option D",
+      "explanation": "2-sentence explanation."
+    },
+    {
+      "question": "Historical precedent or comparison question related to the article's context",
+      "options": ["(a) Option A", "(b) Option B", "(c) Option C", "(d) Option D"],
+      "answer": "(b) Option B",
+      "explanation": "2-sentence explanation."
     }
   ],
   "mains_questions": [
     {
-      "question": "Mains question text",
+      "question": "Mains-style analytical question (250 words) directly tied to the article's core theme",
       "gs_paper": "GS-II",
       "model_answer": {
-        "introduction": "Introduction paragraph",
-        "body": "Body paragraph with analysis",
-        "conclusion": "Conclusion paragraph",
-        "value_addition": "Extra facts/data to add"
+        "introduction": "2-sentence contextual introduction with relevant facts",
+        "body": "3–4 paragraph analytical body covering multiple dimensions: constitutional/legal, economic, social, strategic",
+        "conclusion": "2-sentence conclusion with forward-looking statement",
+        "value_addition": "Relevant data point, treaty, constitutional article, or committee name to strengthen the answer"
+      }
+    },
+    {
+      "question": "Second Mains question from a different angle (e.g. governance, ethics, economy)",
+      "gs_paper": "GS-III",
+      "model_answer": {
+        "introduction": "2-sentence introduction",
+        "body": "3–4 paragraph analytical body",
+        "conclusion": "2-sentence conclusion",
+        "value_addition": "Relevant fact/data/treaty"
       }
     }
   ]
@@ -51,12 +125,121 @@ For each article, return a JSON object with EXACTLY these fields (no extras):
 
 CRITICAL RULES:
 - ALL array fields MUST be actual JSON arrays, NEVER strings.
-- relevance_score MUST be a number (integer), NOT a string.
-- Return ONLY a JSON array [ {...}, {...} ] with no markdown, no code fences, no explanation.
+- relevance_score MUST be an integer: 0 if the article is NOT relevant to UPSC (sports/celebrity/entertainment), or 50-95 for relevant content. NEVER hardcode the same number for all articles.
+- MCQs must be SPECIFIC to this article — not generic trivia. Require real knowledge to answer.
+- Return ONLY a JSON array [ {...} ] with no markdown, no code fences, no explanation.
 """
 
-# Global cache so we don't list models on every request
+# ─────────────────────────────────────────────────────────────────────────────
+# GROQ / OPENROUTER — System message + wrapper format
+# (json_object mode requires a dict, so we use {"articles":[...]} wrapper)
+# ─────────────────────────────────────────────────────────────────────────────
+_ANALYST_SYSTEM_MSG = """You are an elite UPSC Intelligence Analyst producing premium briefings for IAS aspirants.
+Your analysis must be DYNAMIC — derived entirely from the specific article provided, not from generic templates.
+
+MANDATORY QUALITY STANDARDS:
+- summary: minimum 5 bullets with SPECIFIC facts, actors, figures, and dates from the article
+- issue_overview: 3-4 sentences with analytical depth — explain the competing interests, systemic cause, and larger significance
+- background: 3-4 sentences with historical roots — cite treaties, incidents, dates, constitutional provisions where relevant
+- stakeholders: minimum 4 NAMED stakeholders with their specific interests
+- arguments_for: minimum 4 points with concrete supporting logic, not generic statements
+- arguments_against: minimum 4 specific counter-arguments
+- challenges: minimum 4 distinct implementation/structural challenges
+- way_forward: minimum 4 specific, actionable, policy-level recommendations
+- mcqs: exactly 5 challenging MCQs — statement-based, map/geography, institutional — all SPECIFIC to this article
+- mains_questions: 2 full questions with complete model answers
+- relevance_score: integer — 0 if completely unrelated to UPSC (sports, celebrity, entertainment), or 50-95 based on UPSC importance. NEVER same score for every article
+- category & gs_paper: chosen based on the article's ACTUAL subject, not assigned generically
+
+STRICTLY FORBIDDEN:
+- Generic filler: "engage in diplomacy", "work together", "address the issue"
+- Repeating the headline in summary bullets
+- Same relevance_score for different articles
+- MCQ options without (a)/(b)/(c)/(d) labels
+- Fewer items than the minimums above"""
+
+# Separate, focused system message for answer-critique calls
+_CRITIQUE_SYSTEM_MSG = """You are a strict UPSC evaluator assessing a candidate's mains answer.
+Return ONLY a JSON object with exactly these keys:
+{
+  "score": <integer 0-10>,
+  "strengths": ["strength 1", "strength 2", "strength 3"],
+  "weaknesses": ["weakness 1", "weakness 2"],
+  "structure_feedback": "Specific advice on introduction/body/conclusion structure",
+  "value_addition": "Specific facts, data, treaties, or constitutional articles missing from the answer",
+  "overall_evaluation": "2-3 sentence holistic evaluation with actionable improvement tips"
+}
+Be specific and direct — reference the actual content of the answer. No generic feedback."""
+
+_NON_GEMINI_PROMPT_SUFFIX = """
+
+RETURN FORMAT — a JSON object with key "articles" containing an array:
+{
+  "articles": [
+    {
+      "title": "Article-specific headline",
+      "category": "Economy|Polity|Environment|International Relations|Science|Security|Society|History",
+      "gs_paper": "GS-I|GS-II|GS-III|GS-IV",
+      "relevance_score": <0 if unrelated to UPSC; 50-95 based on actual importance>,
+      "primary_keyword": "most important UPSC keyword",
+      "keywords": ["kw1","kw2","kw3","kw4","kw5"],
+      "summary": ["fact 1 with specific details","fact 2","fact 3","fact 4","fact 5"],
+      "issue_overview": "3-4 sentence analytical paragraph specific to this article",
+      "background": "3-4 sentence historical context with dates/treaties/laws",
+      "stakeholders": ["Name/Group 1: their specific interest","Name/Group 2: interest","Name/Group 3: interest","Name/Group 4: interest"],
+      "arguments_for": ["specific argument 1","specific argument 2","specific argument 3","specific argument 4"],
+      "arguments_against": ["specific counter 1","counter 2","counter 3","counter 4"],
+      "challenges": ["challenge 1","challenge 2","challenge 3","challenge 4"],
+      "way_forward": ["recommendation 1","recommendation 2","recommendation 3","recommendation 4"],
+      "mcqs": [
+        {"question":"Statement-based Q from article","options":["(a) ...","(b) ...","(c) ...","(d) ..."],"answer":"(b) ...","explanation":"2-sentence explanation with article facts."},
+        {"question":"Factual Q requiring real knowledge","options":["(a) ...","(b) ...","(c) ...","(d) ..."],"answer":"(a) ...","explanation":"2-sentence explanation."},
+        {"question":"Geography/Institution Q tied to article","options":["(a) ...","(b) ...","(c) ...","(d) ..."],"answer":"(c) ...","explanation":"2-sentence explanation."},
+        {"question":"Application/inference Q from article's implications","options":["(a) ...","(b) ...","(c) ...","(d) ..."],"answer":"(d) ...","explanation":"2-sentence explanation."},
+        {"question":"Historical precedent Q contextualising the article","options":["(a) ...","(b) ...","(c) ...","(d) ..."],"answer":"(b) ...","explanation":"2-sentence explanation."}
+      ],
+      "mains_questions": [
+        {"question":"250-word Mains Q on article's core theme","gs_paper":"GS-II","model_answer":{"introduction":"2-sentence context","body":"multi-paragraph analysis covering legal/economic/social/strategic dimensions","conclusion":"2-sentence forward-looking close","value_addition":"specific treaty/article/data point"}},
+        {"question":"Second Mains Q from different angle","gs_paper":"GS-III","model_answer":{"introduction":"2-sentence context","body":"multi-paragraph analysis","conclusion":"2-sentence close","value_addition":"specific fact/data"}}
+      ]
+    }
+  ]
+}
+No markdown. No explanation. Only the JSON object above."""
+
+
+def _build_ingestion_prompt(text: str) -> str:
+    """Build the Groq/OpenRouter ingestion prompt with the wrapper format."""
+    return (
+        "Analyze the following news article thoroughly for UPSC Civil Services preparation.\n"
+        "Every field must be SPECIFIC to this article — no generic filler.\n\n"
+        "ARTICLE TEXT:\n"
+        + text[:28000]
+        + _NON_GEMINI_PROMPT_SUFFIX
+    )
+
+
+def _parse_non_gemini_response(raw: str) -> list:
+    """Parse Groq/OpenRouter response — handles {"articles":[]} and plain [] formats."""
+    cleaned = _clean_json_response(raw)
+    data = json.loads(cleaned)
+    if isinstance(data, dict) and "articles" in data:
+        result = data["articles"]
+    elif isinstance(data, list):
+        result = data
+    elif isinstance(data, dict):
+        # Single article object without wrapper
+        result = [data]
+    else:
+        raise ValueError(f"Unexpected response shape: {type(data)}")
+    return result if isinstance(result, list) else [result]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Utility helpers  (defined early so all callers below can reference them)
+# ─────────────────────────────────────────────────────────────────────────────
 _cached_models: list = []
+
 
 def _clean_json_response(raw: str) -> str:
     """Strip markdown code fences and whitespace from AI response."""
@@ -65,79 +248,303 @@ def _clean_json_response(raw: str) -> str:
     text = re.sub(r'\n?```$', '', text)
     return text.strip()
 
-def _get_efficient_models(client) -> list:
-    global _cached_models
-    # gemini-1.5-flash was not found in the verified pool.
-    # Switching to the latest verified stable models for this project.
-    stable_models = ["gemini-2.0-flash", "gemini-3.5-flash", "gemini-flash-latest"]
-    return stable_models
 
+def _get_efficient_models_primary(client) -> list:
+    """Tier-1 Gemini: tried before Groq."""
+    return ["gemini-3.5-flash"]
+
+
+def _get_efficient_models_secondary(client) -> list:
+    """Tier-2 Gemini: tried after Groq."""
+    return ["gemini-flash-latest", "gemini-2.0-flash"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GROQ
+# ─────────────────────────────────────────────────────────────────────────────
+def _process_via_groq(prompt: str, is_critique: bool = False) -> str:
+    api_key = os.getenv("GROQ_API_KEY")
+    if not api_key:
+        raise ValueError("GROQ_API_KEY not configured")
+
+    model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json"
+    }
+
+    # Use critique-specific system msg to avoid confusing Groq with ingestion instructions
+    sys_msg = _CRITIQUE_SYSTEM_MSG if is_critique else _ANALYST_SYSTEM_MSG
+
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": sys_msg},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.3 if is_critique else 0.15,
+        "response_format": {"type": "json_object"},
+        "max_tokens": 8000
+    }
+
+    print(f"⚡ TRYING GROQ: {model}...", flush=True)
+    # connect=4s hard cap, read=10s for streaming response body
+    _timeout = httpx.Timeout(10.0, connect=4.0)
+    with httpx.Client(timeout=_timeout) as client:
+        response = client.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers)
+        response.raise_for_status()
+        resp_data = response.json()
+        return resp_data["choices"][0]["message"]["content"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OPENROUTER
+# ─────────────────────────────────────────────────────────────────────────────
+def _process_via_openrouter(prompt: str, is_critique: bool = False, model: str = None) -> str:
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        raise ValueError("OPENROUTER_API_KEY not configured")
+
+    if model is None:
+        model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://github.com/MD-Azhar-Hussain/INTELLEGIENCE-AI-HUB",
+        "X-Title": "UPSC Intelligence Hub"
+    }
+
+    # Use critique-specific system msg to avoid confusing OpenRouter with ingestion instructions
+    sys_msg = _CRITIQUE_SYSTEM_MSG if is_critique else _ANALYST_SYSTEM_MSG
+
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": sys_msg},
+            {"role": "user", "content": prompt}
+        ],
+        "temperature": 0.3 if is_critique else 0.15,
+        "response_format": {"type": "json_object"},
+        "max_tokens": 8000
+    }
+
+    print(f"⚡ TRYING OPENROUTER: {model}...", flush=True)
+    # connect=4s hard cap, read=10s for streaming response body
+    _timeout = httpx.Timeout(10.0, connect=4.0)
+    with httpx.Client(timeout=_timeout) as client:
+        response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
+        response.raise_for_status()
+        resp_data = response.json()
+        return resp_data["choices"][0]["message"]["content"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MAIN INGESTION PIPELINE
+# ─────────────────────────────────────────────────────────────────────────────
 def process_document(text: str = None, pdf_bytes: bytes = None) -> list | dict:
     try:
-        api_key = os.getenv("GEMINI_API_KEY")
-        if not api_key:
-            return {"error": "GEMINI_API_KEY not configured"}
-
-        client = genai.Client(api_key=api_key)
-        model_list = _get_efficient_models(client)
-
         if text:
-            prompt_text = EDITORIAL_PROMPT + "\n\nARTICLE TEXT:\n" + text[:30000]
-            contents = [prompt_text]
+            # Gemini prompt (returns plain JSON array)
+            gemini_prompt_text = EDITORIAL_PROMPT + "\n\nARTICLE TEXT:\n" + text[:30000]
+            gemini_contents = [gemini_prompt_text]
+            # Groq/OpenRouter prompt (returns {"articles":[...]} wrapper)
+            non_gemini_prompt = _build_ingestion_prompt(text)
         elif pdf_bytes:
-            contents = [
+            gemini_contents = [
                 EDITORIAL_PROMPT,
                 types.Part.from_bytes(data=pdf_bytes, mime_type="application/pdf")
             ]
+            non_gemini_prompt = None  # PDF not supported on Groq/OR
         else:
             return {"error": "No content provided"}
 
         last_err = None
-        for model_id in model_list:
-            try:
-                print(f"🚀 INGESTING WITH: {model_id}...", flush=True)
-                response = client.models.generate_content(
-                    model=model_id,
-                    contents=contents,
+        gemini_api_key = os.getenv("GEMINI_API_KEY")
+        gemini_client = genai.Client(api_key=gemini_api_key) if gemini_api_key else None
+
+        def _run_gemini_model(model_id: str):
+            """Run a single Gemini model with timeout. Returns result list or raises."""
+            def _call(mid=model_id):
+                return gemini_client.models.generate_content(
+                    model=mid,
+                    contents=gemini_contents,
                     config=types.GenerateContentConfig(
                         temperature=0.1,
                         response_mime_type="application/json"
                     )
                 )
+            print(f"🚀 INGESTING WITH GEMINI: {model_id}...", flush=True)
+            with ThreadPoolExecutor(max_workers=1) as executor:
+                future = executor.submit(_call)
+                response = future.result(timeout=MODEL_TIMEOUT_SECONDS)
+            if not response or not response.text:
+                raise ValueError(f"Empty response from {model_id}")
+            cleaned = _clean_json_response(response.text)
+            parsed = json.loads(cleaned)
+            return parsed if isinstance(parsed, list) else [parsed]
 
-                if not response or not response.text:
-                    continue
+        # ── Phase 1: gemini-3.5-flash ──────────────────────────────────────────
+        if gemini_client:
+            for model_id in _get_efficient_models_primary(gemini_client):
+                try:
+                    result = _run_gemini_model(model_id)
+                    print(f"✅ GEMINI SUCCESS: {model_id}", flush=True)
+                    return result
+                except FuturesTimeoutError:
+                    print(f"⏱️ GEMINI {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), moving on...", flush=True)
+                except Exception as e:
+                    last_err = str(e)
+                    print(f"⚠️ GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
+        else:
+            print("⚠️ GEMINI_API_KEY missing, skipping Gemini phase.", flush=True)
 
-                cleaned = _clean_json_response(response.text)
-                parsed = json.loads(cleaned)
-                result = parsed if isinstance(parsed, list) else [parsed]
-                print(f"✅ SUCCESS: {model_id}", flush=True)
+        # ── Phase 2: Groq (llama-3.3-70b-versatile) ───────────────────────────
+        if os.getenv("GROQ_API_KEY") and non_gemini_prompt:
+            try:
+                response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
+                result = _parse_non_gemini_response(response_text)
+                print("✅ GROQ SUCCESS!", flush=True)
                 return result
+            except Exception as groq_err:
+                last_err = str(groq_err)
+                print(f"⚠️ GROQ FAILED: {last_err[:100]}", flush=True)
+        elif not os.getenv("GROQ_API_KEY"):
+            print("⚠️ GROQ_API_KEY missing, skipping Groq phase.", flush=True)
 
-            except Exception as e:
-                last_err = str(e)
-                print(f"⚠️ {model_id} FAILED: {last_err[:100]}", flush=True)
-                continue
+        # ── Phase 3: gemini-flash-latest → gemini-2.0-flash ───────────────────
+        if gemini_client:
+            for model_id in _get_efficient_models_secondary(gemini_client):
+                try:
+                    result = _run_gemini_model(model_id)
+                    print(f"✅ GEMINI SUCCESS: {model_id}", flush=True)
+                    return result
+                except FuturesTimeoutError:
+                    print(f"⏱️ GEMINI {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), moving on...", flush=True)
+                except Exception as e:
+                    last_err = str(e)
+                    print(f"⚠️ GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
 
-        return {"error": "All models failed", "details": last_err}
+        # ── Phase 4: OpenRouter — Gemini model ────────────────────────────────
+        openrouter_gemini_model = os.getenv("OPENROUTER_GEMINI_MODEL", "google/gemini-2.0-flash-exp:free")
+        if os.getenv("OPENROUTER_API_KEY") and non_gemini_prompt:
+            try:
+                response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False, model=openrouter_gemini_model)
+                result = _parse_non_gemini_response(response_text)
+                print(f"✅ OPENROUTER (Gemini) SUCCESS via {openrouter_gemini_model}!", flush=True)
+                return result
+            except Exception as or_err:
+                last_err = str(or_err)
+                print(f"⚠️ OPENROUTER (Gemini) FAILED: {last_err[:100]}", flush=True)
+
+        # ── Phase 5: OpenRouter — llama fallback ──────────────────────────────
+        if os.getenv("OPENROUTER_API_KEY") and non_gemini_prompt:
+            try:
+                other_model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
+                response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False, model=other_model)
+                result = _parse_non_gemini_response(response_text)
+                print(f"✅ OPENROUTER ({other_model}) SUCCESS!", flush=True)
+                return result
+            except Exception as or_err:
+                last_err = str(or_err)
+                print(f"⚠️ OPENROUTER ({other_model}) FAILED: {last_err[:100]}", flush=True)
+        elif not os.getenv("OPENROUTER_API_KEY"):
+            print("⚠️ OPENROUTER_API_KEY missing, skipping OpenRouter phases.", flush=True)
+
+        return {"error": "All AI models and fallback engines failed", "details": last_err}
 
     except Exception as e:
-        print(f"❌ AI ERROR: {e}", flush=True)
+        print(f"❌ CRITICAL AI ENGINE ERROR: {e}", flush=True)
         return {"error": "AI system failure", "details": str(e)}
 
+
+# ─────────────────────────────────────────────────────────────────────────────
+# MAINS ANSWER CRITIQUE
+# ─────────────────────────────────────────────────────────────────────────────
 def critique_user_answer(question: str, user_answer: str, context: str) -> dict:
-    try:
-        api_key = os.getenv("GEMINI_API_KEY")
-        client = genai.Client(api_key=api_key)
+    prompt = (
+        f"Critique this UPSC answer.\n"
+        f"Context: {context[:2000]}\n"
+        f"Question: {question}\n"
+        f"Answer: {user_answer}\n\n"
+        f"Return a JSON object with: score (integer 0-10), strengths (list), weaknesses (list), "
+        f"structure_feedback (string), value_addition (string), overall_evaluation (string)."
+    )
+    last_err = None
 
-        prompt = f"Critique this UPSC answer. Context: {context[:2000]}. Q: {question}. Answer: {user_answer}. Return JSON with: score, strengths (list), weaknesses (list), structure_feedback, value_addition, overall_evaluation."
+    # Phase 1: Try Gemini (gemini-3.5-flash → gemini-flash-latest → gemini-2.0-flash)
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    if gemini_api_key:
+        client = genai.Client(api_key=gemini_api_key)
+        for model_id in ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.0-flash"]:
+            try:
+                print(f"🚀 CRITIQUING WITH GEMINI: {model_id}...", flush=True)
 
-        response = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=[prompt],
-            config=types.GenerateContentConfig(temperature=0.2, response_mime_type="application/json")
-        )
-        cleaned = _clean_json_response(response.text)
-        return json.loads(cleaned)
-    except Exception as e:
-        return {"error": "Critique failure", "details": str(e)}
+                def _call_critique(mid=model_id):
+                    return client.models.generate_content(
+                        model=mid,
+                        contents=[prompt],
+                        config=types.GenerateContentConfig(temperature=0.2, response_mime_type="application/json")
+                    )
+
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(_call_critique)
+                    try:
+                        response = future.result(timeout=MODEL_TIMEOUT_SECONDS)
+                    except FuturesTimeoutError:
+                        print(f"⏱️ GEMINI critique {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), trying next...", flush=True)
+                        continue
+
+                cleaned = _clean_json_response(response.text)
+                print(f"✅ GEMINI CRITIQUE SUCCESS: {model_id}!", flush=True)
+                return json.loads(cleaned)
+            except FuturesTimeoutError:
+                continue
+            except Exception as e:
+                last_err = str(e)
+                print(f"⚠️ Gemini critique {model_id} failed: {last_err[:100]}", flush=True)
+    else:
+        print("⚠️ GEMINI_API_KEY missing, skipping Gemini critique.", flush=True)
+
+    # Phase 2: Try Groq
+    if os.getenv("GROQ_API_KEY"):
+        try:
+            response_text = _process_via_groq(prompt, is_critique=True)
+            cleaned = _clean_json_response(response_text)
+            data = json.loads(cleaned)
+            # Groq sometimes wraps critique in {"critique":{...}} or {"result":{...}}
+            if isinstance(data, dict):
+                for wrap_key in ("critique", "result", "evaluation", "feedback"):
+                    if wrap_key in data and isinstance(data[wrap_key], dict):
+                        data = data[wrap_key]
+                        break
+            print("✅ GROQ CRITIQUE SUCCESS!", flush=True)
+            return data
+        except Exception as e:
+            last_err = str(e)
+            print(f"⚠️ Groq critique failed: {last_err[:100]}", flush=True)
+    else:
+        print("⚠️ GROQ_API_KEY missing, skipping Groq critique.", flush=True)
+
+    # Phase 3: Try OpenRouter
+    if os.getenv("OPENROUTER_API_KEY"):
+        try:
+            response_text = _process_via_openrouter(prompt, is_critique=True)
+            cleaned = _clean_json_response(response_text)
+            data = json.loads(cleaned)
+            # OpenRouter may also wrap in an outer key
+            if isinstance(data, dict):
+                for wrap_key in ("critique", "result", "evaluation", "feedback"):
+                    if wrap_key in data and isinstance(data[wrap_key], dict):
+                        data = data[wrap_key]
+                        break
+            print("✅ OPENROUTER CRITIQUE SUCCESS!", flush=True)
+            return data
+        except Exception as e:
+            last_err = str(e)
+            print(f"⚠️ OpenRouter critique failed: {last_err[:100]}", flush=True)
+    else:
+        print("⚠️ OPENROUTER_API_KEY missing, skipping OpenRouter critique.", flush=True)
+
+    return {"error": "All critique engines failed", "details": last_err}

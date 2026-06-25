@@ -634,8 +634,14 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
               </div>
             )}
             <div className="flex flex-col items-end">
-              <span className="text-[11px] font-black text-blue-600 tracking-widest">{article.relevance_score}%</span>
-              <span className="text-[8px] font-bold text-gray-300 uppercase tracking-tighter">Relevance</span>
+              {article.relevance_score < 30 ? (
+                <span className="text-[10px] font-black text-red-500 tracking-widest">Not Related</span>
+              ) : (
+                <>
+                  <span className="text-[11px] font-black text-blue-600 tracking-widest">{article.relevance_score}%</span>
+                  <span className="text-[8px] font-bold text-gray-300 uppercase tracking-tighter">Relevance</span>
+                </>
+              )}
             </div>
           </div>
         </div>

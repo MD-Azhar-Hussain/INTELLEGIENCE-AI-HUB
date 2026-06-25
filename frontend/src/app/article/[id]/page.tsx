@@ -98,10 +98,17 @@ export default function ArticleDetail() {
               </div>
             )}
 
-            <div className="flex items-center gap-1.5 sm:ml-auto text-emerald-600">
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-              <span className="text-[10px] md:text-[10px] font-black uppercase tracking-widest">{article.relevance_score}% Relevance</span>
-            </div>
+            {article.relevance_score < 30 ? (
+              <div className="flex items-center gap-1.5 sm:ml-auto">
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                <span className="text-[10px] md:text-[10px] font-black uppercase tracking-widest text-red-500">Not Related to UPSC</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1.5 sm:ml-auto text-emerald-600">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-[10px] md:text-[10px] font-black uppercase tracking-widest">{article.relevance_score}% Relevance</span>
+              </div>
+            )}
           </div>
           
           <h1 className="text-3xl md:text-7xl font-extrabold mb-8 md:mb-12 tracking-tighter leading-[1.1] md:leading-[1] text-[var(--text-primary)]">
