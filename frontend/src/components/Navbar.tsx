@@ -24,6 +24,7 @@ export default function Navbar({ onMethodologyClick }: { onMethodologyClick?: ()
         <div className="hidden md:flex items-center gap-8 lg:gap-12">
           <NavLink href="/">Dashboard</NavLink>
           <NavLink href="/import">Import News</NavLink>
+          <NavLink href="/newspaper">Page Scanner</NavLink>
           <button 
             onClick={onMethodologyClick}
             className="text-[13px] font-bold text-gray-400 hover:text-blue-600 transition-colors tracking-wide uppercase"

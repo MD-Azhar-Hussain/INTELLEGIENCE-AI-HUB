@@ -168,9 +168,16 @@ export default function ImportNewsPage() {
                     </div>
                   )}
                 </div>
-                <div className="sm:ml-auto flex items-center gap-2 text-green-500 text-[10px] font-black uppercase tracking-widest">
-                  <CheckCircle2 size={16} />
-                  Pure Content
+                <div className="sm:ml-auto flex items-center gap-3">
+                  {article.summary && (
+                    <div className="flex items-center gap-1.5 text-blue-500 text-[10px] font-black uppercase tracking-widest bg-blue-500/10 px-3 py-1 rounded-full">
+                      Already Ingested
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2 text-green-500 text-[10px] font-black uppercase tracking-widest">
+                    <CheckCircle2 size={16} />
+                    Pure Content
+                  </div>
                 </div>
               </div>
 

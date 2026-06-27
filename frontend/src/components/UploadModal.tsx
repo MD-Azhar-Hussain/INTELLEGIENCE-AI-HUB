@@ -5,6 +5,7 @@ import { X, Upload, CheckCircle2, AlertCircle, Loader2, FileText, Fingerprint } 
 import axios from "axios";
 import { getUser } from "@/lib/store";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 export default function UploadModal({ onUploadSuccess }: { onUploadSuccess: (data: any[], filename: string) => void }) {
   const [file, setFile] = useState<File | null>(null);
@@ -48,8 +49,8 @@ export default function UploadModal({ onUploadSuccess }: { onUploadSuccess: (dat
         <div className="w-12 h-12 md:w-14 md:h-14 bg-gray-50 dark:bg-white/5 rounded-2xl flex items-center justify-center mb-6 md:mb-8 border border-gray-100 dark:border-white/10">
           <Fingerprint size={24} className="text-gray-400 md:w-7 md:h-7" />
         </div>
-        <h2 className="text-3xl md:text-4xl font-bold mb-3 md:mb-4 tracking-tight">Ingest Assets</h2>
-        <p className="text-gray-500 font-medium leading-relaxed max-w-sm text-sm md:text-base">Broadcast your PDF documents for intelligence synthesis.</p>
+        <h2 className="text-2xl md:text-3xl font-extrabold mb-3 md:mb-4 tracking-tight uppercase">Complete Summarizer</h2>
+        <p className="text-gray-500 font-medium leading-relaxed max-w-sm text-sm md:text-base">Upload a newspaper PDF to analyze and summarize the entire document at once.</p>
       </div>
 
       <div className="space-y-8 md:space-y-10">
@@ -63,7 +64,7 @@ export default function UploadModal({ onUploadSuccess }: { onUploadSuccess: (dat
             />
             <div className="border-2 border-dashed border-gray-100 dark:border-white/10 rounded-2xl md:rounded-3xl py-16 md:py-24 flex flex-col items-center justify-center gap-3 md:gap-4 hover:border-blue-600 hover:bg-blue-50 transition-all">
               <Upload size={28} className="text-gray-300 group-hover:text-blue-600 transition-colors md:w-8 md:h-8" />
-              <p className="font-bold text-gray-400 group-hover:text-blue-600 transition-colors text-sm md:text-base">Select PDF Archive</p>
+              <p className="font-bold text-gray-400 group-hover:text-blue-600 transition-colors text-sm md:text-base">Select Newspaper PDF</p>
             </div>
           </div>
         ) : (
@@ -101,12 +102,21 @@ export default function UploadModal({ onUploadSuccess }: { onUploadSuccess: (dat
           {status === "uploading" || status === "processing" ? (
             <>
               <Loader2 className="animate-spin" size={20} />
-              <span className="text-sm md:text-lg">Executing Synthesis...</span>
+              <span className="text-sm md:text-lg">Summarizing Newspaper...</span>
             </>
           ) : (
-            <span className="text-sm md:text-lg">Archive Decipherment →</span>
+            <span className="text-sm md:text-lg">Summarize Entire Paper →</span>
           )}
         </button>
+
+        <div className="text-center pt-2">
+          <Link
+            href="/newspaper"
+            className="text-xs font-black uppercase tracking-widest text-blue-600 hover:text-blue-700 transition-colors"
+          >
+            Use Page-by-Page Scanner instead →
+          </Link>
+        </div>
       </div>
     </div>
   );

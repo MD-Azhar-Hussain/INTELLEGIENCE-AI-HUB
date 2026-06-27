@@ -9,6 +9,7 @@ import { Article, getArticles, addArticles, clearArticles, generateId, getUser, 
 import LoginModal from "@/components/LoginModal";
 import MethodologyModal from "@/components/MethodologyModal";
 import ArticleStack from "@/components/ArticleStack";
+import NewspaperCluster from "@/components/NewspaperCluster";
 import Link from "next/link";
 
 export default function Home() {
@@ -19,19 +20,27 @@ export default function Home() {
   const [filterCategory, setFilterCategory] = useState<string>("All");
   const [filterImportant, setFilterImportant] = useState(false);
   const [filterCompleted, setFilterCompleted] = useState(false);
-  const [groupMode, setGroupMode] = useState(false);
+  const [viewMode, setViewMode] = useState<"feed" | "decks" | "newspapers">("feed");
   const [showLogin, setShowLogin] = useState(false);
   const [showMethodology, setShowMethodology] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [fromDate, setFromDate] = useState<string>("");
   const [toDate, setToDate] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [minRelevance, setMinRelevance] = useState<number>(0);
 
   useEffect(() => {
     // ONE-TIME AMNESTY: Clear old local caches to ensure sync with Pure Cloud
     if (!localStorage.getItem("upsc_hub_v2_synced")) {
         clearArticles();
         localStorage.setItem("upsc_hub_v2_synced", "true");
+    }
+
+    // Check if redirecting from an already ingested newspaper view
+    const savedTab = localStorage.getItem("active_feed_tab") as "feed" | "decks" | "newspapers";
+    if (savedTab) {
+      setViewMode(savedTab);
+      localStorage.removeItem("active_feed_tab");
     }
 
     setArticles(getArticles());
@@ -88,6 +97,7 @@ export default function Home() {
     .filter(a => filterCategory === "All" || a.category === filterCategory)
     .filter(a => !filterImportant || a.isImportant)
     .filter(a => !filterCompleted || a.isCompleted)
+    .filter(a => (a.relevance_score ?? 0) >= minRelevance)
     .filter(a => {
       if (!searchQuery.trim()) return true;
       const query = searchQuery.toLowerCase().trim();
@@ -177,7 +187,29 @@ export default function Home() {
     })).sort((a, b) => b.articles.length - a.articles.length);
   };
 
+  const groupArticlesByNewspaper = (list: Article[]) => {
+    const groups: Record<string, Article[]> = {};
+    list.forEach(article => {
+      // Group articles that have a PDF filename
+      if (article.filename && article.filename.toLowerCase().endsWith(".pdf")) {
+        const key = article.filename;
+        if (!groups[key]) groups[key] = [];
+        groups[key].push(article);
+      }
+    });
+    return Object.entries(groups).map(([filename, articles]) => ({
+      filename,
+      articles
+    })).sort((a, b) => {
+      // Sort by ingestion date of first article in the cluster descending
+      const dateA = a.articles[0]?.ingested_at ? new Date(a.articles[0].ingested_at).getTime() : 0;
+      const dateB = b.articles[0]?.ingested_at ? new Date(b.articles[0].ingested_at).getTime() : 0;
+      return dateB - dateA;
+    });
+  };
+
   const groupedDecks = groupArticlesByKeyword(sortedArticles);
+  const groupedNewspapers = groupArticlesByNewspaper(sortedArticles);
 
   if (!isMounted) return <div className="min-h-screen bg-[var(--bg-primary)]" />;
 
@@ -230,7 +262,7 @@ export default function Home() {
             {user ? (
               <>
                 <button onClick={() => setShowUpload(true)} className="main-btn group w-full sm:w-auto">
-                  Start Ingestion
+                  Complete Summarizer
                   <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </button>
                 <button onClick={handleLogout} className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2">
@@ -289,38 +321,70 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Date Selector Bar */}
-          <div className="flex flex-col gap-4">
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Date Intelligence Window</span>
-            <div className="flex flex-wrap items-center gap-4">
-               <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
-                  <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">From</span>
-                  <input 
-                    type="date" 
-                    value={fromDate}
-                    onChange={(e) => setFromDate(e.target.value)}
-                    max={new Date().toISOString().split('T')[0]}
-                    className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
-                  />
-               </div>
-               <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
-                  <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">To</span>
-                  <input 
-                    type="date" 
-                    value={toDate}
-                    onChange={(e) => setToDate(e.target.value)}
-                    max={new Date().toISOString().split('T')[0]}
-                    className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
-                  />
-               </div>
-               {(fromDate || toDate) && (
-                 <button 
-                   onClick={() => { setFromDate(""); setToDate(""); }}
-                   className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
-                 >
-                   Reset Window
-                 </button>
-               )}
+          {/* Filter Options Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Date Selector Bar */}
+            <div className="flex flex-col gap-4">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Date Intelligence Window</span>
+              <div className="flex flex-wrap items-center gap-4">
+                 <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
+                    <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">From</span>
+                    <input 
+                      type="date" 
+                      value={fromDate}
+                      onChange={(e) => setFromDate(e.target.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                    />
+                 </div>
+                 <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
+                    <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">To</span>
+                    <input 
+                      type="date" 
+                      value={toDate}
+                      onChange={(e) => setToDate(e.target.value)}
+                      max={new Date().toISOString().split('T')[0]}
+                      className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                    />
+                 </div>
+                 {(fromDate || toDate) && (
+                   <button 
+                     onClick={() => { setFromDate(""); setToDate(""); }}
+                     className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+                   >
+                     Reset Window
+                   </button>
+                 )}
+              </div>
+            </div>
+
+            {/* Relevance Slider Filter */}
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">
+                  Minimum Relevance: <span className="text-blue-600 dark:text-blue-400 font-extrabold">{minRelevance}%</span>
+                </span>
+                {minRelevance > 0 && (
+                  <button 
+                    onClick={() => setMinRelevance(0)}
+                    className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+                  >
+                    Reset Threshold
+                  </button>
+                )}
+              </div>
+              <div className="flex items-center gap-4 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-[9px]">
+                <input
+                  type="range"
+                  min="0"
+                  max="95"
+                  step="5"
+                  value={minRelevance}
+                  onChange={(e) => setMinRelevance(parseInt(e.target.value))}
+                  className="w-full h-1 bg-gray-200 dark:bg-white/10 rounded-lg appearance-none cursor-pointer accent-blue-600 focus:outline-none"
+                />
+                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest min-w-[36px] text-right">{minRelevance}%+</span>
+              </div>
             </div>
           </div>
           {/* Categories Horizontal List */}
@@ -376,16 +440,22 @@ export default function Home() {
 
               <div className="flex items-center gap-1 p-1 bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/10 rounded-2xl">
                 <button 
-                  onClick={() => setGroupMode(false)}
-                  className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${!groupMode ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
+                  onClick={() => setViewMode("feed")}
+                  className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "feed" ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
                 >
                   Feed
                 </button>
                 <button 
-                  onClick={() => setGroupMode(true)}
-                  className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${groupMode ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
+                  onClick={() => setViewMode("decks")}
+                  className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "decks" ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
                 >
                   Decks
+                </button>
+                <button 
+                  onClick={() => setViewMode("newspapers")}
+                  className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "newspapers" ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
+                >
+                  Newspapers
                 </button>
               </div>
             </div>
@@ -418,7 +488,7 @@ export default function Home() {
 
         {/* Intelligence Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {groupMode ? (
+          {viewMode === "decks" ? (
             groupedDecks.length > 0 ? (
               groupedDecks.map((deck) => (
                 <ArticleStack 
@@ -443,6 +513,37 @@ export default function Home() {
             ) : (
                 <div className="col-span-full py-40 text-center luxury-card bg-gray-50/10 border-dashed">
                     <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Strategic vacuum detected. No decks available.</p>
+                </div>
+            )
+          ) : viewMode === "newspapers" ? (
+            groupedNewspapers.length > 0 ? (
+              groupedNewspapers.map((paper) => (
+                <NewspaperCluster
+                  key={paper.filename}
+                  filename={paper.filename}
+                  articles={paper.articles}
+                  onToggle={(updated) => setArticles(updated)}
+                  requestLogin={() => setShowLogin(true)}
+                  isLoggedIn={!!user}
+                  renderCard={(article) => (
+                    <ArticleCard 
+                      key={article.id || generateId()} 
+                      article={article} 
+                      index={0} 
+                      onToggle={(updated) => setArticles(updated)}
+                      requestLogin={() => setShowLogin(true)}
+                      isLoggedIn={!!user}
+                    />
+                  )}
+                />
+              ))
+            ) : (
+                <div className="col-span-full py-40 text-center luxury-card bg-gray-50/10 border-dashed">
+                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">
+                      {articles.some(a => a.filename && a.filename.toLowerCase().endsWith(".pdf"))
+                        ? "No matching newspaper editions found for active filters."
+                        : "No newspaper editions ingested yet."}
+                    </p>
                 </div>
             )
           ) : (
@@ -606,9 +707,22 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
       >
         <div className="flex justify-between items-center mb-10">
           <div className="flex flex-col gap-2">
-            <div className="flex gap-2.5">
+            <div className="flex gap-2.5 items-center">
               <span className="badge-pill badge-pill-primary">{article.category}</span>
               <span className="badge-pill">{article.gs_paper}</span>
+              {article.source?.includes(" — Page ") ? (
+                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/10 tracking-wider">
+                  Page Scanner
+                </span>
+              ) : article.filename?.toLowerCase().endsWith(".pdf") ? (
+                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-purple-500/10 text-purple-500 border border-purple-500/10 tracking-wider">
+                  Complete Summarizer
+                </span>
+              ) : article.url || article.filename?.includes(".") ? (
+                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/10 tracking-wider">
+                  Web Import
+                </span>
+              ) : null}
             </div>
             <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest pl-1">
               {article.ingested_at ? `Ingested ${new Date(article.ingested_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}` : "Recently Added"}

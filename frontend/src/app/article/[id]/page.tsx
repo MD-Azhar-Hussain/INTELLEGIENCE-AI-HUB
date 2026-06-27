@@ -59,6 +59,8 @@ export default function ArticleDetail() {
 
   if (!article) return <div className="min-h-screen bg-[var(--bg-primary)]" />;
 
+  const syllabusTags = article.keywords?.filter(k => k.toLowerCase().startsWith("syllabus:")).map(k => k.substring(9).trim()) || [];
+
   return (
     <div className="bg-[var(--bg-primary)] min-h-screen pb-20 selection:bg-blue-100 selection:text-blue-700">
       <Navbar />
@@ -114,6 +116,25 @@ export default function ArticleDetail() {
           <h1 className="text-3xl md:text-7xl font-extrabold mb-8 md:mb-12 tracking-tighter leading-[1.1] md:leading-[1] text-[var(--text-primary)]">
             {article.title}
           </h1>
+
+          {syllabusTags.length > 0 && (
+            <div className="mb-10 p-6 md:p-8 rounded-3xl bg-amber-500/[0.03] border border-amber-500/10 shadow-sm relative overflow-hidden group hover:border-amber-500/20 transition-all">
+              <div className="absolute top-0 right-0 p-6 opacity-[0.03] text-amber-500 pointer-events-none">
+                <Target size={120} />
+              </div>
+              <div className="flex items-center gap-2 mb-4 text-amber-600 dark:text-amber-400">
+                <Target size={16} />
+                <span className="text-[10px] font-black uppercase tracking-[0.25em]">UPSC Syllabus Alignment Map</span>
+              </div>
+              <div className="flex flex-wrap gap-2.5">
+                {syllabusTags.map((tag, i) => (
+                  <span key={i} className="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-amber-500/10 text-amber-800 dark:text-amber-300 border border-amber-500/10 shadow-sm leading-normal">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
           
           <div className="flex flex-wrap items-center gap-4 md:gap-6 text-[9px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest border-t border-gray-100 dark:border-white/5 pt-6 md:pt-8">
             <div className="flex items-center gap-2">

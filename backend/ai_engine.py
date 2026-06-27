@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import base64
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dotenv import load_dotenv
@@ -10,8 +11,23 @@ from google.genai import types
 
 load_dotenv()
 
+import sys
+import builtins
+def safe_print(*args, **kwargs):
+    encoding = sys.stdout.encoding or 'utf-8'
+    safe_args = []
+    for arg in args:
+        if isinstance(arg, str):
+            safe_args.append(arg.encode(encoding, errors='replace').decode(encoding))
+        else:
+            safe_args.append(arg)
+    builtins.print(*safe_args, **kwargs)
+
+print = safe_print
+
 # Per-model hard timeout (seconds) — 10s then move to next model
 MODEL_TIMEOUT_SECONDS = 10
+VISION_TIMEOUT_SECONDS = 25
 
 # ─────────────────────────────────────────────────────────────────────────────
 # GEMINI PROMPT  (returns a plain JSON array — Gemini handles this fine)
@@ -27,7 +43,13 @@ Return a JSON array [ {...} ] with EXACTLY these fields per article:
   "gs_paper": "ONE of: GS-I | GS-II | GS-III | GS-IV — assign based on actual subject matter",
   "relevance_score": <integer 0-95 — use 0 if the article has zero UPSC relevance (e.g. sports, entertainment, celebrity news); otherwise 50-95 based on actual UPSC importance>,
   "primary_keyword": "the single most important UPSC keyword from this article",
-  "keywords": ["keyword1", "keyword2", "keyword3", "keyword4", "keyword5"],
+  "keywords": [
+    "syllabus:GS-X — Exact sub-topic title mapped from the official UPSC syllabus",
+    "syllabus:GS-Y — another mapped sub-topic (if applicable)",
+    "keyword1",
+    "keyword2",
+    "keyword3"
+  ],
   "summary": [
     "Specific fact or event point 1 with actors/dates/numbers",
     "Specific fact or event point 2 with actors/dates/numbers",
@@ -251,12 +273,12 @@ def _clean_json_response(raw: str) -> str:
 
 def _get_efficient_models_primary(client) -> list:
     """Tier-1 Gemini: tried before Groq."""
-    return ["gemini-3.5-flash"]
+    return ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
 
 
 def _get_efficient_models_secondary(client) -> list:
     """Tier-2 Gemini: tried after Groq."""
-    return ["gemini-flash-latest", "gemini-2.0-flash"]
+    return ["gemini-flash-latest"]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -333,6 +355,48 @@ def _process_via_openrouter(prompt: str, is_critique: bool = False, model: str =
     print(f"⚡ TRYING OPENROUTER: {model}...", flush=True)
     # connect=4s hard cap, read=10s for streaming response body
     _timeout = httpx.Timeout(10.0, connect=4.0)
+    with httpx.Client(timeout=_timeout) as client:
+        response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
+        response.raise_for_status()
+        resp_data = response.json()
+        return resp_data["choices"][0]["message"]["content"]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OPENROUTER VISION FALLBACK
+# ─────────────────────────────────────────────────────────────────────────────
+def _process_vision_via_openrouter(prompt: str, image_bytes: bytes, model: str = "google/gemma-4-26b-a4b-it:free") -> str:
+    api_key = os.getenv("OPENROUTER_API_KEY")
+    if not api_key:
+        raise ValueError("OPENROUTER_API_KEY not configured")
+
+    headers = {
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "HTTP-Referer": "https://github.com/MD-Azhar-Hussain/INTELLEGIENCE-AI-HUB",
+        "X-Title": "UPSC Intelligence Hub"
+    }
+
+    base64_image = base64.b64encode(image_bytes).decode("utf-8")
+
+    # NOTE: No system message — many vision models on OpenRouter reject it.
+    # NOTE: No response_format — not supported by most vision models.
+    payload = {
+        "model": model,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {"type": "text", "text": prompt},
+                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                ]
+            }
+        ],
+        "temperature": 0.1
+    }
+
+    print(f"⚡ TRYING OPENROUTER VISION: {model}...", flush=True)
+    _timeout = httpx.Timeout(40.0, connect=8.0)
     with httpx.Client(timeout=_timeout) as client:
         response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
         response.raise_for_status()
@@ -426,8 +490,8 @@ def process_document(text: str = None, pdf_bytes: bytes = None) -> list | dict:
                     last_err = str(e)
                     print(f"⚠️ GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
 
-        # ── Phase 4: OpenRouter — Gemini model ────────────────────────────────
-        openrouter_gemini_model = os.getenv("OPENROUTER_GEMINI_MODEL", "google/gemini-2.0-flash-exp:free")
+        # ── Phase 4: OpenRouter — Gemini/Gemma free model fallback ────────────
+        openrouter_gemini_model = os.getenv("OPENROUTER_GEMINI_MODEL", "google/gemma-4-26b-a4b-it:free")
         if os.getenv("OPENROUTER_API_KEY") and non_gemini_prompt:
             try:
                 response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False, model=openrouter_gemini_model)
@@ -548,3 +612,230 @@ def critique_user_answer(question: str, user_answer: str, context: str) -> dict:
         print("⚠️ OPENROUTER_API_KEY missing, skipping OpenRouter critique.", flush=True)
 
     return {"error": "All critique engines failed", "details": last_err}
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# NEWSPAPER SCANNING — Phase 1: Cheap headline detection per page
+# ─────────────────────────────────────────────────────────────────────────────
+_HEADLINE_SCAN_PROMPT = """You are scanning a scanned newspaper page image.
+List EVERY distinct news article headline visible on this page.
+For each, provide a one-sentence excerpt of the article's opening content, along with an initial estimation of its UPSC relevance score and category.
+
+RULES:
+- Include ONLY actual news article headlines — ignore ads, page numbers, section headers, weather, crosswords, sports scores.
+- If you see multi-column articles, identify each as a separate story.
+- Keep headlines short and exact as they appear in the newspaper.
+- Relevance score must be an integer: 0 if unrelated to civil services, or 50-95 based on UPSC importance.
+- Category must be one of: Economy | Polity | Environment | International Relations | Science | Security | Society | History.
+
+Return ONLY a JSON array — no markdown, no explanation:
+[
+  {
+    "headline": "Exact headline text here",
+    "excerpt": "One sentence opening of the article...",
+    "relevance_score": 85,
+    "category": "Economy"
+  },
+  {
+    "headline": "Another headline",
+    "excerpt": "Its opening sentence...",
+    "relevance_score": 60,
+    "category": "Polity"
+  }
+]
+
+If no news articles are visible, return an empty array: []"""
+
+
+def scan_newspaper_page(page_bytes: bytes) -> list:
+    """Phase 1: Cheap, fast Gemini Vision call to detect article headlines on one newspaper page.
+    Returns a list of {headline, excerpt} dicts. Returns [] on failure (safe — caller skips empty pages)."""
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    client = genai.Client(api_key=gemini_api_key) if gemini_api_key else None
+
+    # --- Step A: Try Gemini Vision API first ---
+    if client:
+        contents = [
+            _HEADLINE_SCAN_PROMPT,
+            types.Part.from_bytes(data=page_bytes, mime_type="image/jpeg")
+        ]
+
+        for model_id in ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.0-flash"]:
+            try:
+                print(f"🔍 SCANNING PAGE WITH GEMINI: {model_id}...", flush=True)
+
+                def _call(mid=model_id):
+                    return client.models.generate_content(
+                        model=mid,
+                        contents=contents,
+                        config=types.GenerateContentConfig(
+                            temperature=0.1,
+                            response_mime_type="application/json"
+                        )
+                    )
+
+                with ThreadPoolExecutor(max_workers=1) as executor:
+                    future = executor.submit(_call)
+                    response = future.result(timeout=VISION_TIMEOUT_SECONDS)
+
+                if not response or not response.text:
+                    raise ValueError(f"Empty scan response from {model_id}")
+
+                cleaned = _clean_json_response(response.text)
+                parsed = json.loads(cleaned)
+                if isinstance(parsed, list):
+                    print(f"✅ PAGE SCAN GEMINI SUCCESS: found {len(parsed)} stories.", flush=True)
+                    return parsed
+                return []
+
+            except FuturesTimeoutError:
+                print(f"⏱️ SCAN GEMINI {model_id} TIMED OUT ({VISION_TIMEOUT_SECONDS}s), trying next...", flush=True)
+            except Exception as e:
+                print(f"⚠️ SCAN GEMINI {model_id} FAILED: {str(e)[:100]}", flush=True)
+
+    # --- Step B: Fallback to OpenRouter Vision models ---
+    # google/gemma-4-26b-a4b-it:free confirmed working (tested 2026-06-27):
+    # returns JSON headlines from newspaper page images correctly.
+    if os.getenv("OPENROUTER_API_KEY"):
+        for model_id in [
+            "google/gemma-4-26b-a4b-it:free",           # Confirmed working vision model
+            "qwen/qwen2-vl-7b-instruct:free",            # Backup vision model
+        ]:
+            try:
+                print(f"🔍 SCANNING PAGE WITH OPENROUTER VISION: {model_id}...", flush=True)
+                response_text = _process_vision_via_openrouter(
+                    prompt=_HEADLINE_SCAN_PROMPT,
+                    image_bytes=page_bytes,
+                    model=model_id
+                )
+                cleaned = _clean_json_response(response_text)
+                parsed = json.loads(cleaned)
+                if isinstance(parsed, list):
+                    print(f"✅ PAGE SCAN OPENROUTER SUCCESS ({model_id}): found {len(parsed)} stories.", flush=True)
+                    return parsed
+                elif isinstance(parsed, dict):
+                    # Some models wrap in {"stories": [...]} or {"articles": [...]}
+                    for key in ("stories", "articles", "headlines", "items"):
+                        if key in parsed and isinstance(parsed[key], list):
+                            print(f"✅ PAGE SCAN OPENROUTER SUCCESS ({model_id}, wrapped): found {len(parsed[key])} stories.", flush=True)
+                            return parsed[key]
+            except Exception as e:
+                print(f"⚠️ SCAN OPENROUTER {model_id} FAILED: {str(e)[:150]}", flush=True)
+
+    print("❌ All vision models exhausted. Returning empty page.", flush=True)
+    return []
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# NEWSPAPER INGESTION — Phase 2: Deep UPSC analysis for a single selected story
+# ─────────────────────────────────────────────────────────────────────────────
+_NEWSPAPER_FOCUS_PREFIX = """You are an elite UPSC mentor analyzing a scanned newspaper page.
+IMPORTANT: The page may contain MULTIPLE articles. Focus EXCLUSIVELY on the article with this headline:
+
+"{headline}"
+
+Ignore all other articles, advertisements, and unrelated content on the page.
+Analyze ONLY the article matching the headline above.
+
+"""
+
+
+def process_newspaper_article(page_bytes: bytes, headline: str) -> list | dict:
+    """Phase 2: Deep UPSC analysis of a single article on a newspaper page.
+    Uses the same Gemini → Groq → OpenRouter fallback chain as process_document.
+    The page image is sent to Gemini Vision; headline provides focus guidance."""
+
+    focus_prompt = _NEWSPAPER_FOCUS_PREFIX.format(headline=headline) + EDITORIAL_PROMPT
+    gemini_contents = [
+        focus_prompt,
+        types.Part.from_bytes(data=page_bytes, mime_type="image/png")
+    ]
+
+    # Text-mode fallback prompt for Groq/OpenRouter (vision not supported)
+    non_gemini_prompt = _build_ingestion_prompt(
+        f"[Article from scanned newspaper]\nHeadline: {headline}\n\n"
+        f"(This is a scanned page — please generate the UPSC analysis based on the headline and any context provided. "
+        f"Focus only on this article.)"
+    )
+
+    last_err = None
+    gemini_api_key = os.getenv("GEMINI_API_KEY")
+    gemini_client = genai.Client(api_key=gemini_api_key) if gemini_api_key else None
+
+    def _run_gemini_vision(model_id: str):
+        def _call(mid=model_id):
+            return gemini_client.models.generate_content(
+                model=mid,
+                contents=gemini_contents,
+                config=types.GenerateContentConfig(
+                    temperature=0.1,
+                    response_mime_type="application/json"
+                )
+            )
+        print(f"🚀 NEWSPAPER INGEST WITH GEMINI: {model_id}...", flush=True)
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            future = executor.submit(_call)
+            response = future.result(timeout=VISION_TIMEOUT_SECONDS)
+        if not response or not response.text:
+            raise ValueError(f"Empty response from {model_id}")
+        cleaned = _clean_json_response(response.text)
+        parsed = json.loads(cleaned)
+        return parsed if isinstance(parsed, list) else [parsed]
+
+    # Phase 1: Gemini 3.5 Flash (vision-capable)
+    if gemini_client:
+        for model_id in ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.0-flash"]:
+            try:
+                result = _run_gemini_vision(model_id)
+                print(f"✅ NEWSPAPER GEMINI SUCCESS: {model_id}", flush=True)
+                return result
+            except FuturesTimeoutError:
+                print(f"⏱️ NEWSPAPER GEMINI {model_id} TIMED OUT ({VISION_TIMEOUT_SECONDS}s), trying next...", flush=True)
+            except Exception as e:
+                last_err = str(e)
+                print(f"⚠️ NEWSPAPER GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
+    else:
+        print("⚠️ GEMINI_API_KEY missing, skipping vision phase.", flush=True)
+
+    # Phase 1.5: OpenRouter Vision Fallback
+    if os.getenv("OPENROUTER_API_KEY"):
+        for model_id in ["google/gemini-2.0-flash", "google/gemini-2.0-flash-exp:free"]:
+            try:
+                print(f"🚀 NEWSPAPER INGEST WITH OPENROUTER VISION: {model_id}...", flush=True)
+                response_text = _process_vision_via_openrouter(
+                    prompt=focus_prompt,
+                    image_bytes=page_bytes,
+                    model=model_id
+                )
+                cleaned = _clean_json_response(response_text)
+                parsed = json.loads(cleaned)
+                result = parsed if isinstance(parsed, list) else [parsed]
+                print(f"✅ NEWSPAPER OPENROUTER VISION SUCCESS: {model_id}", flush=True)
+                return result
+            except Exception as e:
+                last_err = str(e)
+                print(f"⚠️ NEWSPAPER OPENROUTER VISION FAILED ({model_id}): {last_err[:100]}", flush=True)
+
+    # Phase 2: Groq (text-mode fallback — uses headline as context)
+    if os.getenv("GROQ_API_KEY"):
+        try:
+            response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
+            result = _parse_non_gemini_response(response_text)
+            print("✅ NEWSPAPER GROQ FALLBACK SUCCESS!", flush=True)
+            return result
+        except Exception as groq_err:
+            last_err = str(groq_err)
+            print(f"⚠️ NEWSPAPER GROQ FAILED: {last_err[:100]}", flush=True)
+
+    # Phase 3: OpenRouter fallback (text-mode)
+    if os.getenv("OPENROUTER_API_KEY"):
+        try:
+            response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False)
+            result = _parse_non_gemini_response(response_text)
+            print("✅ NEWSPAPER OPENROUTER FALLBACK SUCCESS!", flush=True)
+            return result
+        except Exception as or_err:
+            last_err = str(or_err)
+            print(f"⚠️ NEWSPAPER OPENROUTER FAILED: {last_err[:100]}", flush=True)
+
+    return {"error": "All newspaper ingestion engines failed", "details": last_err}

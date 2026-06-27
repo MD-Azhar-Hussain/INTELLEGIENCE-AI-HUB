@@ -4,6 +4,20 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+import sys
+import builtins
+def safe_print(*args, **kwargs):
+    encoding = sys.stdout.encoding or 'utf-8'
+    safe_args = []
+    for arg in args:
+        if isinstance(arg, str):
+            safe_args.append(arg.encode(encoding, errors='replace').decode(encoding))
+        else:
+            safe_args.append(arg)
+    builtins.print(*safe_args, **kwargs)
+
+print = safe_print
+
 url: str = os.getenv("SUPABASE_URL")
 key: str = os.getenv("SUPABASE_KEY")
 
@@ -44,7 +58,7 @@ def save_article(article_data: dict):
         if val is not None and isinstance(val, str): article_data[field] = [val]
         elif val is None: article_data[field] = []
 
-    schema_fields = ["id", "title", "category", "gs_paper", "relevance_score", "primary_keyword", "keywords", "summary", "issue_overview", "background", "stakeholders", "arguments_for", "arguments_against", "challenges", "way_forward", "mcqs", "mains_questions", "source", "ingested_at"]
+    schema_fields = ["id", "title", "category", "gs_paper", "relevance_score", "primary_keyword", "keywords", "summary", "issue_overview", "background", "stakeholders", "arguments_for", "arguments_against", "challenges", "way_forward", "mcqs", "mains_questions", "source", "ingested_at", "filename"]
     clean_data = {k: v for k, v in article_data.items() if k in schema_fields}
     if "title" not in clean_data: clean_data["title"] = "Untitled Asset"
 
@@ -85,6 +99,27 @@ def get_articles():
         except Exception as e:
             print(f"❌ Cloud retrieval error: {e}")
     return []
+
+def check_duplicate(url: str = None, title: str = None):
+    """Check if an article with the same URL (filename) or title already exists in Supabase."""
+    if not supabase:
+        return None
+    try:
+        if url:
+            response = supabase.table("articles").select("*").eq("filename", url).execute()
+            if response.data:
+                print(f"🔗 DUPLICATE MATCH BY URL: {url}", flush=True)
+                return response.data[0]
+        
+        if title:
+            response = supabase.table("articles").select("*").ilike("title", title.strip()).execute()
+            if response.data:
+                print(f"📖 DUPLICATE MATCH BY TITLE: {title}", flush=True)
+                return response.data[0]
+    except Exception as e:
+        print(f"⚠️ Error checking duplicate article: {e}", flush=True)
+    return None
+
 
 def save_user(user_data: dict):
     if supabase:
