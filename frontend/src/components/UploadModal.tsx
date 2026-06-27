@@ -62,7 +62,7 @@ export default function UploadModal({ onUploadSuccess }: { onUploadSuccess: (dat
               className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
               accept=".pdf"
             />
-            <div className="border-2 border-dashed border-gray-100 dark:border-white/10 rounded-2xl md:rounded-3xl py-16 md:py-24 flex flex-col items-center justify-center gap-3 md:gap-4 hover:border-blue-600 hover:bg-blue-50 transition-all">
+            <div className="border-2 border-dashed border-gray-100 dark:border-white/10 rounded-2xl md:rounded-3xl py-16 md:py-24 flex flex-col items-center justify-center gap-3 md:gap-4 hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/20 transition-all">
               <Upload size={28} className="text-gray-300 group-hover:text-blue-600 transition-colors md:w-8 md:h-8" />
               <p className="font-bold text-gray-400 group-hover:text-blue-600 transition-colors text-sm md:text-base">Select Newspaper PDF</p>
             </div>
@@ -80,7 +80,7 @@ export default function UploadModal({ onUploadSuccess }: { onUploadSuccess: (dat
             </div>
             <button
               onClick={() => { setFile(null); setStatus("idle"); }}
-              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 hover:text-red-500 transition-colors"
+              className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-red-50 dark:hover:bg-red-950/30 hover:text-red-500 transition-colors"
             >
               <X size={18} />
             </button>

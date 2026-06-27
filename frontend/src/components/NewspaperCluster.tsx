@@ -17,11 +17,29 @@ interface NewspaperClusterProps {
 export default function NewspaperCluster({ filename, articles, onToggle, requestLogin, isLoggedIn, renderCard }: NewspaperClusterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Clean newspaper title (strips hash prefix and formats name)
+  // Helper to parse filename prefix
+  const parseFilename = () => {
+    // Matches prefixes like:
+    // hash:4ac5f9...__:
+    // duplicate_4ac5f9...__:
+    // hash:4ac5f9...:
+    // duplicate:4ac5f9...:
+    const match = filename.match(/^(hash|duplicate)[:_]([a-fA-F0-9]+)(?:__:)?[:_]?/i);
+    if (match) {
+      const type = match[1];
+      const hash = match[2];
+      // Strip prefix from filename
+      const titleWithoutPrefix = filename.substring(match[0].length);
+      return { hash, titleWithoutPrefix };
+    }
+    return { hash: null, titleWithoutPrefix: filename };
+  };
+
+  const { hash: fileHash, titleWithoutPrefix } = parseFilename();
+
+  // Clean newspaper title (formats name)
   const getCleanTitle = () => {
-    let cleaned = filename.replace(/^hash:[a-fA-F0-9]+__:*/i, "");
-    cleaned = cleaned.replace(/^duplicate_[a-fA-F0-9]+__:*/i, "");
-    return cleaned
+    return titleWithoutPrefix
       .replace(/\.pdf$/i, "")
       .replace(/[-_~]/g, " ")
       .replace(/\b\d{2}\s\d{2}\s\d{4}\b/g, "") // remove numeric date if standalone
@@ -103,9 +121,14 @@ export default function NewspaperCluster({ filename, articles, onToggle, request
           </p>
 
           <div className="flex items-center justify-between pt-6 border-t border-gray-100 dark:border-white/5">
-            <div className="flex items-center gap-2 text-xs font-bold text-gray-400">
+            <div className="flex items-center gap-3 text-xs font-bold text-gray-400">
               <BookOpen size={14} />
               <span>{sortedPages.length} Pages Ingested</span>
+              {fileHash && (
+                <span className="text-[8px] font-black uppercase bg-gray-50 dark:bg-white/5 text-gray-400 dark:text-white/40 px-2 py-0.5 rounded border border-gray-100 dark:border-white/5 tracking-wider font-mono">
+                  HASH #{fileHash.slice(0, 8)}
+                </span>
+              )}
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-blue-600 flex items-center gap-1">
               Read Edition <ChevronRight size={14} />
@@ -140,7 +163,19 @@ export default function NewspaperCluster({ filename, articles, onToggle, request
                     <span className="text-[10px] font-black uppercase tracking-[0.4em]">Newspaper Edition Cluster</span>
                   </div>
                   <h2 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight break-words">{newspaperTitle}</h2>
-                  <p className="text-gray-400 text-sm mt-1">{editionDate} · {articles.length} Ingested Articles</p>
+                  <p className="text-gray-400 text-sm mt-1 flex flex-wrap items-center gap-2">
+                    <span>{editionDate}</span>
+                    <span>·</span>
+                    <span>{articles.length} Ingested Articles</span>
+                    {fileHash && (
+                      <>
+                        <span>·</span>
+                        <span className="text-[9px] font-black bg-black/20 dark:bg-white/10 text-gray-500 dark:text-white/40 px-2 py-0.5 rounded tracking-wider font-mono select-all" title="Click to select hash">
+                          HASH: {fileHash}
+                        </span>
+                      </>
+                    )}
+                  </p>
                 </div>
                 <button 
                   onClick={() => setIsExpanded(false)}

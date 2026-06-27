@@ -1,49 +1,66 @@
 # UPSC Intelligence Hub (Volme)
-**Strategic Intelligence & Answer Methodology Platform**
+**Elite AI-Powered Knowledge Curation & Strategic Answer Methodology Platform**
 
-## 🛰️ Project Overview
-Volme is a high-performance, "Luxury Zen" preparation platform for UPSC aspirants. It uses advanced AI (Gemini Flash 2.0/3.5) to scrape, analyze, and categorize news intelligence, providing officers with automated summaries, MCQs, and Mains answer critiques.
-
-## 🏛️ Architecture: The Two-Tier Command
-The system is built on a "Resilient Hybrid" architecture:
-- **Frontend**: Next.js 16 (App Router) + Framer Motion (Luxury UI).
-- **Backend**: FastAPI (Python 3.10+) + AI Engine (Gemini).
-- **Database**: 
-  - **Cloud (Supabase)**: Primary source of truth for global synchronization.
-  - **Local (JSON Fallback)**: Persistent cache for zero-latency and offline functionality.
+Volme is a next-generation, high-yield preparation ecosystem designed specifically for UPSC Civil Services aspirants. It bridges the gap between daily news updates and the highly structured UPSC syllabus by automatically scraping, scanning, categorizing, and critiquing preparation materials.
 
 ---
 
-## ⚡ Core Directives (Current Features)
-1.  **AI Ingestion Engine**: Scrapes and deciphers complex news articles into GS-Paper-wise intelligence.
-2.  **Strategic Evaluation**: Evaluates Mains answers with precise feedback based on UPSC standards.
-3.  **Adaptive Filtering**: Search index by topic, date-range, and importance.
-4.  **Admin Power House**: 
-    - Full database authority at `/admin`.
-    - Duplicate detection engine to keep the feed clean.
-    - Global system stats monitoring.
+## 💎 The Premium Core Experience
+
+### 1. 📰 Multi-Modal Newspaper Page Scanner
+- **Live Page Scanning**: Renders PDF editions page-by-page into high-fidelity previews, performing instant, localized OCR scans.
+- **Visual Page Clippings**: Automatically crops the original newspaper column corresponding to a curated article and hosts it for inline preview, letting students trace any brief back to the physical source.
+- **Zero-Waste Scanning**: Features intelligent file-hash checking to immediately recognize and load previously scanned editions without redundant AI processing.
+
+### 2. 🏛️ Adaptive UPSC Syllabus Mapping
+- **Context-Aware Classification**: Categorizes incoming intelligence into core GS Papers (GS-I to GS-IV) and topics (e.g., Economy, International Relations, Security, Environment).
+- **Exact Sub-Topic Tagging**: Mappings correspond directly to the official UPSC syllabus clauses to ensure high-yield study alignment.
+- **Structured Knowledge Briefs**: Outputs primary keywords, stakeholders, arguments for/against, core challenges, and strategic way forwards.
+
+### 3. ✍️ UPSC Mains Critique Engine
+- **Instant Strategic Feedback**: Analyzes user answers against mock questions using official UPSC grading criteria.
+- **Syllabus and Context Match**: Critiques are contextualized with the latest ingested news databases to evaluate current-affairs integration.
+
+### 4. 🎨 "Luxury Zen" Design System
+- **State-of-the-Art Typography**: Styled using clean, premium sans-serif typography tailored for high-focus reading.
+- **Glassmorphic Theme Customization**: Completely responsive Light & Dark modes designed with harmonious color schemes to eliminate screen strain during long study sessions.
 
 ---
 
-## 🚀 Future Upgrades (The Roadmap)
-As per the "Final Strategic Review," the following modules are planned for future deployment:
-
-### 1. **The "Global Pulse" Ingestion (Priority)**
-- **System**: An Admin-only "Fetch Everything" trigger.
-- **Goal**: Automatically refresh the global feed for all users from predefined news hubs in one click.
-
-### 2. **Mock Evaluation Tiers**
-- **System**: Time-bound answer writing with a countdown clock and instant AI scoring.
-
-### 3. **Topic Clustering V2**
-- **System**: Advanced semantic grouping of articles to show "Issue Timelines" (e.g., tracking the evolution of a bill).
+## 🏗️ High-Level Technical Architecture
+- **Frontend**: React / Next.js (App Router) styled with Vanilla CSS and animated via Framer Motion.
+- **Backend**: FastAPI (Python 3.10+) serving high-performance endpoints.
+- **Database / Cloud Sync**: Supabase PostgreSQL for state syncing and Supabase Storage for secure hosting of visual page clippings.
 
 ---
 
-## 🛠️ Deployment Instructions
-1.  **Backend**: Deploy `backend/` to Railway/Render. Ensure `SUPABASE_URL`, `SUPABASE_KEY`, and `GEMINI_API_KEY` are in the ENV.
-2.  **Frontend**: Deploy `frontend/` to Vercel. Set `NEXT_PUBLIC_API_URL` to point to your live backend.
+## 🚀 Setting Up the Station
+
+### Backend setup
+1. Navigate to the backend folder:
+   ```bash
+   cd backend
+   ```
+2. Setup variables in a `.env` file:
+   - `SUPABASE_URL`
+   - `SUPABASE_KEY`
+   - `GEMINI_API_KEY`
+3. Run the development server:
+   ```bash
+   uvicorn main:app --reload --port 8005
+   ```
+
+### Frontend setup
+1. Navigate to the frontend folder:
+   ```bash
+   cd frontend
+   ```
+2. Configure `.env.local`:
+   - `NEXT_PUBLIC_API_URL=http://localhost:8005`
+3. Launch:
+   ```bash
+   npm run dev
+   ```
 
 ---
-**Status**: Production Ready.
-**Authority**: MD Azhar Hussain
+*Status: Production-Grade | Created by MD Azhar Hussain*

@@ -286,7 +286,7 @@ export default function ArticleDetail() {
                       initial={{ opacity: 0, x: -10 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: i * 0.1 }}
-                      className="p-6 md:p-8 luxury-card hover:bg-gray-50/50 transition-colors"
+                      className="p-6 md:p-8 luxury-card hover:bg-gray-50/50 dark:hover:bg-white/[0.02] transition-colors"
                     >
                       <p className="reading-text opacity-90">{point}</p>
                     </motion.div>
