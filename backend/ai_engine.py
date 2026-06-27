@@ -407,7 +407,7 @@ def _process_vision_via_openrouter(prompt: str, image_bytes: bytes, model: str =
 # ─────────────────────────────────────────────────────────────────────────────
 # MAIN INGESTION PIPELINE
 # ─────────────────────────────────────────────────────────────────────────────
-def process_document(text: str = None, pdf_bytes: bytes = None) -> list | dict:
+def process_document(text: str = None, pdf_bytes: bytes = None, web_import: bool = False) -> list | dict:
     try:
         if text:
             # Gemini prompt (returns plain JSON array)
@@ -449,7 +449,21 @@ def process_document(text: str = None, pdf_bytes: bytes = None) -> list | dict:
             parsed = json.loads(cleaned)
             return parsed if isinstance(parsed, list) else [parsed]
 
-        # ── Phase 1: gemini-3.5-flash ──────────────────────────────────────────
+        # ── Phase 0 (Web Import only): Groq first ─────────────────────────────
+        _groq_already_tried = False
+        if web_import and os.getenv("GROQ_API_KEY") and non_gemini_prompt:
+            _groq_already_tried = True
+            try:
+                print("⚡ WEB IMPORT: Trying Groq first...", flush=True)
+                response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
+                result = _parse_non_gemini_response(response_text)
+                print("✅ GROQ SUCCESS (web import fast-path)!", flush=True)
+                return result
+            except Exception as groq_err:
+                last_err = str(groq_err)
+                print(f"⚠️ GROQ FAILED (web import fast-path): {last_err[:100]}", flush=True)
+
+        # ── Phase 1: Gemini primary models ─────────────────────────────────────
         if gemini_client:
             for model_id in _get_efficient_models_primary(gemini_client):
                 try:
@@ -464,8 +478,8 @@ def process_document(text: str = None, pdf_bytes: bytes = None) -> list | dict:
         else:
             print("⚠️ GEMINI_API_KEY missing, skipping Gemini phase.", flush=True)
 
-        # ── Phase 2: Groq (llama-3.3-70b-versatile) ───────────────────────────
-        if os.getenv("GROQ_API_KEY") and non_gemini_prompt:
+        # ── Phase 2: Groq (skipped if already tried in Phase 0) ───────────────
+        if not _groq_already_tried and os.getenv("GROQ_API_KEY") and non_gemini_prompt:
             try:
                 response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
                 result = _parse_non_gemini_response(response_text)
@@ -474,7 +488,7 @@ def process_document(text: str = None, pdf_bytes: bytes = None) -> list | dict:
             except Exception as groq_err:
                 last_err = str(groq_err)
                 print(f"⚠️ GROQ FAILED: {last_err[:100]}", flush=True)
-        elif not os.getenv("GROQ_API_KEY"):
+        elif not _groq_already_tried and not os.getenv("GROQ_API_KEY"):
             print("⚠️ GROQ_API_KEY missing, skipping Groq phase.", flush=True)
 
         # ── Phase 3: gemini-flash-latest → gemini-2.0-flash ───────────────────

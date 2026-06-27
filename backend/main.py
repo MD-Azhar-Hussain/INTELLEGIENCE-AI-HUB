@@ -35,7 +35,7 @@ from fastapi import Header, Depends
 # Pages are raw PNG bytes per page, held for 10 minutes between Phase 1 and Phase 2.
 import time as _time
 _NEWSPAPER_SESSIONS: dict = {}
-_SESSION_TTL_SECONDS = 600  # 10 minutes
+_SESSION_TTL_SECONDS = 1800  # 30 minutes
 
 def _cleanup_sessions():
     """Remove expired newspaper sessions to free memory."""
@@ -205,8 +205,8 @@ async def import_news(payload: dict, officer: str = Depends(verify_officer)):
 
     try:
         print(f"🕵️  Analyzing content from {url}...", flush=True)
-        # Analysis can take 10s+
-        ai_result = await asyncio.to_thread(process_document, text=result["content"])
+        # Analysis can take 10s+; web_import=True promotes Groq to Phase 0
+        ai_result = await asyncio.to_thread(process_document, text=result["content"], web_import=True)
         
         if isinstance(ai_result, list) and len(ai_result) > 0:
             article = ai_result[0]
