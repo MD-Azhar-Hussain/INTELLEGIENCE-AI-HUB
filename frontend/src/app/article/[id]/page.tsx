@@ -9,7 +9,7 @@ import {
   MessageSquare, FastForward, CheckCircle2,
   BrainCircuit, Layout, HelpCircle, Sparkles,
   Command, Fingerprint, Layers, Loader2,
-  AlertCircle
+  AlertCircle, ZoomIn, X, Download
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
@@ -22,6 +22,7 @@ export default function ArticleDetail() {
   const [activeTab, setActiveTab] = useState<"analysis" | "mcqs" | "mains">("analysis");
   const [isImportant, setIsImportant] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const [showClipping, setShowClipping] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -186,6 +187,89 @@ export default function ArticleDetail() {
               exit={{ opacity: 0, y: -10 }}
               className="space-y-20"
             >
+              {/* Newspaper Clipping — only shown for Page Scanner articles */}
+              {article.clipping_url && (
+                <>
+                  <div
+                    onClick={() => setShowClipping(true)}
+                    className="cursor-zoom-in group relative rounded-2xl overflow-hidden border border-gray-100 dark:border-white/10 shadow-md mb-10 hover:shadow-xl transition-all duration-300"
+                    style={{ maxHeight: "180px" }}
+                  >
+                    {/* Dimmed thumbnail */}
+                    <img
+                      src={article.clipping_url}
+                      alt="Original newspaper clipping"
+                      className="w-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      style={{ maxHeight: "180px", filter: "brightness(0.75)" }}
+                    />
+                    {/* Overlay */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-black/20 group-hover:bg-black/10 transition-all">
+                      <div className="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+                        <ZoomIn size={18} className="text-gray-800" />
+                      </div>
+                      <span className="text-white text-[10px] font-black uppercase tracking-widest drop-shadow">View Original Clipping</span>
+                    </div>
+                    {/* Source badge */}
+                    <div className="absolute bottom-3 left-3">
+                      <span className="text-[9px] font-black uppercase tracking-wider bg-black/60 text-white px-2.5 py-1 rounded-full backdrop-blur-sm">
+                        📰 {article.source}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Lightbox */}
+                  <AnimatePresence>
+                    {showClipping && (
+                      <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[200] flex items-center justify-center p-4"
+                        onClick={() => setShowClipping(false)}
+                      >
+                        {/* Blurred backdrop */}
+                        <div className="absolute inset-0 bg-black/80 backdrop-blur-2xl" />
+
+                        {/* Image container */}
+                        <motion.div
+                          initial={{ scale: 0.92, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          exit={{ scale: 0.92, opacity: 0 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 28 }}
+                          className="relative z-10 max-w-4xl w-full max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl"
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <img
+                            src={article.clipping_url}
+                            alt="Original newspaper clipping — full view"
+                            className="w-full rounded-3xl"
+                          />
+                        </motion.div>
+
+                        {/* Controls */}
+                        <div className="absolute top-5 right-5 z-20 flex items-center gap-2">
+                          <a
+                            href={article.clipping_url}
+                            download
+                            onClick={(e) => e.stopPropagation()}
+                            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors border border-white/10"
+                            title="Download clipping"
+                          >
+                            <Download size={16} className="text-white" />
+                          </a>
+                          <button
+                            onClick={() => setShowClipping(false)}
+                            className="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors border border-white/10"
+                          >
+                            <X size={18} className="text-white" />
+                          </button>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              )}
+
               {/* Executive Insights */}
               <section>
                 <div className="flex items-center gap-3 mb-6 md:mb-10">

@@ -510,6 +510,27 @@ async def ingest_newspaper_article(payload: dict, officer: str = Depends(verify_
             article["ingested_at"] = datetime.now(timezone.utc).isoformat()
             if "id" not in article:
                 article["id"] = f"news_{int(time.time())}_{random.randint(100,999)}"
+
+            # ── Upload page clipping to Supabase Storage ─────────────────────
+            clipping_url = None
+            if database.supabase and page_bytes:
+                try:
+                    storage_key = f"{file_hash or article['id']}_p{page_index + 1}.jpg"
+                    # upsert=True so re-ingesting the same page doesn't duplicate
+                    database.supabase.storage.from_("newspaper-pages").upload(
+                        path=storage_key,
+                        file=page_bytes,
+                        file_options={"content-type": "image/jpeg", "upsert": "true"}
+                    )
+                    public_url = database.supabase.storage.from_("newspaper-pages").get_public_url(storage_key)
+                    clipping_url = public_url
+                    print(f"🖼️  Clipping uploaded: {storage_key}", flush=True)
+                except Exception as upload_err:
+                    print(f"⚠️  Clipping upload failed (non-fatal): {upload_err}", flush=True)
+
+            if clipping_url:
+                article["clipping_url"] = clipping_url
+
             await asyncio.to_thread(database.save_article, article)
             print(f"✅ Article saved: {article.get('title', headline)}", flush=True)
             return article

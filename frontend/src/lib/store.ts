@@ -48,6 +48,7 @@ export interface Article {
   mains_questions: MainsQuestion[];
   ingested_at: string;
   filename: string;
+  clipping_url?: string;
   isImportant?: boolean;
   isCompleted?: boolean;
 }

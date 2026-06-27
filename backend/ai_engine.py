@@ -273,7 +273,7 @@ def _clean_json_response(raw: str) -> str:
 
 def _get_efficient_models_primary(client) -> list:
     """Tier-1 Gemini: tried before Groq."""
-    return ["gemini-2.5-flash", "gemini-2.0-flash", "gemini-1.5-flash"]
+    return ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"]
 
 
 def _get_efficient_models_secondary(client) -> list:
@@ -282,126 +282,243 @@ def _get_efficient_models_secondary(client) -> list:
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# API KEY POOLS & ROTATION
+# ─────────────────────────────────────────────────────────────────────────────
+_ACTIVE_GEMINI_KEY_INDEX = 0
+_ACTIVE_GROQ_KEY_INDEX = 0
+_ACTIVE_OR_KEY_INDEX = 0
+
+def _get_gemini_keys() -> list:
+    keys = []
+    for suffix in ["", "_2", "_3"]:
+        k = os.getenv(f"GEMINI_API_KEY{suffix}")
+        if k and k.strip():
+            keys.append(k.strip())
+    seen = set()
+    return [x for x in keys if not (x in seen or seen.add(x))]
+
+def _get_groq_keys() -> list:
+    keys = []
+    for suffix in ["", "_2"]:
+        k = os.getenv(f"GROQ_API_KEY{suffix}")
+        if k and k.strip():
+            keys.append(k.strip())
+    seen = set()
+    return [x for x in keys if not (x in seen or seen.add(x))]
+
+def _get_openrouter_keys() -> list:
+    keys = []
+    for suffix in ["", "_2"]:
+        k = os.getenv(f"OPENROUTER_API_KEY{suffix}")
+        if k and k.strip():
+            keys.append(k.strip())
+    seen = set()
+    return [x for x in keys if not (x in seen or seen.add(x))]
+
+def _call_gemini_with_rotation(func):
+    global _ACTIVE_GEMINI_KEY_INDEX
+    keys = _get_gemini_keys()
+    if not keys:
+        raise ValueError("No Gemini API keys configured.")
+    num_keys = len(keys)
+    last_err = None
+    for i in range(num_keys):
+        idx = (_ACTIVE_GEMINI_KEY_INDEX + i) % num_keys
+        key = keys[idx]
+        try:
+            client = genai.Client(api_key=key)
+            res = func(client)
+            _ACTIVE_GEMINI_KEY_INDEX = idx
+            return res
+        except Exception as e:
+            err_str = str(e)
+            last_err = e
+            if any(term in err_str.lower() for term in ["429", "quota", "exhausted", "limit", "too many requests"]):
+                print(f"⚠️ Gemini Key {idx+1} rate-limited/exhausted. Rotating to next key...", flush=True)
+                continue
+            else:
+                print(f"⚠️ Gemini Key {idx+1} failed: {err_str[:150]}", flush=True)
+                continue
+    raise last_err
+
+def _call_groq_with_rotation(func):
+    global _ACTIVE_GROQ_KEY_INDEX
+    keys = _get_groq_keys()
+    if not keys:
+        raise ValueError("No Groq API keys configured.")
+    num_keys = len(keys)
+    last_err = None
+    for i in range(num_keys):
+        idx = (_ACTIVE_GROQ_KEY_INDEX + i) % num_keys
+        key = keys[idx]
+        try:
+            res = func(key)
+            _ACTIVE_GROQ_KEY_INDEX = idx
+            return res
+        except Exception as e:
+            err_str = str(e)
+            last_err = e
+            if any(term in err_str.lower() for term in ["429", "quota", "exhausted", "limit", "too many requests"]):
+                print(f"⚠️ Groq Key {idx+1} rate-limited/exhausted. Rotating to next key...", flush=True)
+                continue
+            else:
+                print(f"⚠️ Groq Key {idx+1} failed: {err_str[:150]}", flush=True)
+                continue
+    raise last_err
+
+def _call_or_with_rotation(func):
+    global _ACTIVE_OR_KEY_INDEX
+    keys = _get_openrouter_keys()
+    if not keys:
+        raise ValueError("No OpenRouter API keys configured.")
+    num_keys = len(keys)
+    last_err = None
+    for i in range(num_keys):
+        idx = (_ACTIVE_OR_KEY_INDEX + i) % num_keys
+        key = keys[idx]
+        try:
+            res = func(key)
+            _ACTIVE_OR_KEY_INDEX = idx
+            return res
+        except Exception as e:
+            err_str = str(e)
+            last_err = e
+            if any(term in err_str.lower() for term in ["429", "quota", "exhausted", "limit", "too many requests"]):
+                print(f"⚠️ OpenRouter Key {idx+1} rate-limited/exhausted. Rotating to next key...", flush=True)
+                continue
+            else:
+                print(f"⚠️ OpenRouter Key {idx+1} failed: {err_str[:150]}", flush=True)
+                continue
+    raise last_err
+
+# ─────────────────────────────────────────────────────────────────────────────
 # GROQ
 # ─────────────────────────────────────────────────────────────────────────────
 def _process_via_groq(prompt: str, is_critique: bool = False) -> str:
-    api_key = os.getenv("GROQ_API_KEY")
-    if not api_key:
-        raise ValueError("GROQ_API_KEY not configured")
-
-    model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json"
-    }
-
-    # Use critique-specific system msg to avoid confusing Groq with ingestion instructions
-    sys_msg = _CRITIQUE_SYSTEM_MSG if is_critique else _ANALYST_SYSTEM_MSG
-
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": sys_msg},
-            {"role": "user", "content": prompt}
-        ],
-        "temperature": 0.3 if is_critique else 0.15,
-        "response_format": {"type": "json_object"},
-        "max_tokens": 8000
-    }
-
-    print(f"⚡ TRYING GROQ: {model}...", flush=True)
-    # connect=4s hard cap, read=10s for streaming response body
-    _timeout = httpx.Timeout(10.0, connect=4.0)
-    with httpx.Client(timeout=_timeout) as client:
-        response = client.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers)
-        response.raise_for_status()
-        resp_data = response.json()
-        return resp_data["choices"][0]["message"]["content"]
-
+    def _call(api_key: str):
+        model = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        sys_msg = _CRITIQUE_SYSTEM_MSG if is_critique else _ANALYST_SYSTEM_MSG
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": sys_msg},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.3 if is_critique else 0.15,
+            "response_format": {"type": "json_object"},
+            "max_tokens": 8000
+        }
+        print(f"⚡ TRYING GROQ: {model}...", flush=True)
+        _timeout = httpx.Timeout(10.0, connect=4.0)
+        with httpx.Client(timeout=_timeout) as client:
+            response = client.post("https://api.groq.com/openai/v1/chat/completions", json=payload, headers=headers)
+            response.raise_for_status()
+            resp_data = response.json()
+            return resp_data["choices"][0]["message"]["content"]
+            
+    return _call_groq_with_rotation(_call)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # OPENROUTER
 # ─────────────────────────────────────────────────────────────────────────────
 def _process_via_openrouter(prompt: str, is_critique: bool = False, model: str = None) -> str:
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    if not api_key:
-        raise ValueError("OPENROUTER_API_KEY not configured")
+    def _call(api_key: str):
+        nonlocal model
+        if model is None:
+            model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com/MD-Azhar-Hussain/INTELLEGIENCE-AI-HUB",
+            "X-Title": "UPSC Intelligence Hub"
+        }
+        sys_msg = _CRITIQUE_SYSTEM_MSG if is_critique else _ANALYST_SYSTEM_MSG
+        payload = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": sys_msg},
+                {"role": "user", "content": prompt}
+            ],
+            "temperature": 0.3 if is_critique else 0.15,
+            "response_format": {"type": "json_object"},
+            "max_tokens": 8000
+        }
+        print(f"⚡ TRYING OPENROUTER: {model}...", flush=True)
+        _timeout = httpx.Timeout(10.0, connect=4.0)
+        with httpx.Client(timeout=_timeout) as client:
+            response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
+            response.raise_for_status()
+            resp_data = response.json()
+            return resp_data["choices"][0]["message"]["content"]
 
-    if model is None:
-        model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
-
-    headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://github.com/MD-Azhar-Hussain/INTELLEGIENCE-AI-HUB",
-        "X-Title": "UPSC Intelligence Hub"
-    }
-
-    # Use critique-specific system msg to avoid confusing OpenRouter with ingestion instructions
-    sys_msg = _CRITIQUE_SYSTEM_MSG if is_critique else _ANALYST_SYSTEM_MSG
-
-    payload = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": sys_msg},
-            {"role": "user", "content": prompt}
-        ],
-        "temperature": 0.3 if is_critique else 0.15,
-        "response_format": {"type": "json_object"},
-        "max_tokens": 8000
-    }
-
-    print(f"⚡ TRYING OPENROUTER: {model}...", flush=True)
-    # connect=4s hard cap, read=10s for streaming response body
-    _timeout = httpx.Timeout(10.0, connect=4.0)
-    with httpx.Client(timeout=_timeout) as client:
-        response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
-        response.raise_for_status()
-        resp_data = response.json()
-        return resp_data["choices"][0]["message"]["content"]
-
+    return _call_or_with_rotation(_call)
 
 # ─────────────────────────────────────────────────────────────────────────────
 # OPENROUTER VISION FALLBACK
 # ─────────────────────────────────────────────────────────────────────────────
 def _process_vision_via_openrouter(prompt: str, image_bytes: bytes, model: str = "google/gemma-4-26b-a4b-it:free") -> str:
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    if not api_key:
-        raise ValueError("OPENROUTER_API_KEY not configured")
+    def _call(api_key: str):
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json",
+            "HTTP-Referer": "https://github.com/MD-Azhar-Hussain/INTELLEGIENCE-AI-HUB",
+            "X-Title": "UPSC Intelligence Hub"
+        }
+        base64_image = base64.b64encode(image_bytes).decode("utf-8")
+        payload = {
+            "model": model,
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
+                    ]
+                }
+            ],
+            "temperature": 0.1
+        }
+        print(f"⚡ TRYING OPENROUTER VISION: {model}...", flush=True)
+        _timeout = httpx.Timeout(40.0, connect=8.0)
+        with httpx.Client(timeout=_timeout) as client:
+            response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
+            response.raise_for_status()
+            resp_data = response.json()
+            return resp_data["choices"][0]["message"]["content"]
 
+    return _call_or_with_rotation(_call)
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CEREBRAS
+# ─────────────────────────────────────────────────────────────────────────────
+def _process_via_cerebras(prompt: str) -> str:
+    key = os.getenv("CEREBRAS_API_KEY")
+    if not key:
+        raise ValueError("CEREBRAS_API_KEY not configured")
+    model = os.getenv("CEREBRAS_MODEL", "llama3.3-70b")
     headers = {
-        "Authorization": f"Bearer {api_key}",
-        "Content-Type": "application/json",
-        "HTTP-Referer": "https://github.com/MD-Azhar-Hussain/INTELLEGIENCE-AI-HUB",
-        "X-Title": "UPSC Intelligence Hub"
+        "Authorization": f"Bearer {key}",
+        "Content-Type": "application/json"
     }
-
-    base64_image = base64.b64encode(image_bytes).decode("utf-8")
-
-    # NOTE: No system message — many vision models on OpenRouter reject it.
-    # NOTE: No response_format — not supported by most vision models.
     payload = {
         "model": model,
         "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {"type": "image_url", "image_url": {"url": f"data:image/jpeg;base64,{base64_image}"}}
-                ]
-            }
+            {"role": "system", "content": _ANALYST_SYSTEM_MSG},
+            {"role": "user", "content": prompt}
         ],
-        "temperature": 0.1
+        "temperature": 0.15,
+        "response_format": {"type": "json_object"}
     }
-
-    print(f"⚡ TRYING OPENROUTER VISION: {model}...", flush=True)
-    _timeout = httpx.Timeout(40.0, connect=8.0)
+    print(f"⚡ TRYING CEREBRAS: {model}...", flush=True)
+    _timeout = httpx.Timeout(10.0, connect=4.0)
     with httpx.Client(timeout=_timeout) as client:
-        response = client.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
+        response = client.post("https://api.cerebras.ai/v1/chat/completions", json=payload, headers=headers)
         response.raise_for_status()
-        resp_data = response.json()
-        return resp_data["choices"][0]["message"]["content"]
+        return response.json()["choices"][0]["message"]["content"]
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -425,110 +542,161 @@ def process_document(text: str = None, pdf_bytes: bytes = None, web_import: bool
             return {"error": "No content provided"}
 
         last_err = None
-        gemini_api_key = os.getenv("GEMINI_API_KEY")
-        gemini_client = genai.Client(api_key=gemini_api_key) if gemini_api_key else None
+        has_gemini = len(_get_gemini_keys()) > 0
 
         def _run_gemini_model(model_id: str):
-            """Run a single Gemini model with timeout. Returns result list or raises."""
-            def _call(mid=model_id):
-                return gemini_client.models.generate_content(
-                    model=mid,
+            """Run a single Gemini model with timeout and key rotation."""
+            def _call(client):
+                print(f"🚀 INGESTING WITH GEMINI: {model_id}...", flush=True)
+                response = client.models.generate_content(
+                    model=model_id,
                     contents=gemini_contents,
                     config=types.GenerateContentConfig(
                         temperature=0.1,
                         response_mime_type="application/json"
                     )
                 )
-            print(f"🚀 INGESTING WITH GEMINI: {model_id}...", flush=True)
-            with ThreadPoolExecutor(max_workers=1) as executor:
-                future = executor.submit(_call)
-                response = future.result(timeout=MODEL_TIMEOUT_SECONDS)
-            if not response or not response.text:
-                raise ValueError(f"Empty response from {model_id}")
-            cleaned = _clean_json_response(response.text)
-            parsed = json.loads(cleaned)
-            return parsed if isinstance(parsed, list) else [parsed]
+                if not response or not response.text:
+                    raise ValueError(f"Empty response from {model_id}")
+                cleaned = _clean_json_response(response.text)
+                parsed = json.loads(cleaned)
+                return parsed if isinstance(parsed, list) else [parsed]
+            return _call_gemini_with_rotation(_call)
 
-        # ── Phase 0 (Web Import only): Groq first ─────────────────────────────
-        _groq_already_tried = False
-        if web_import and os.getenv("GROQ_API_KEY") and non_gemini_prompt:
-            _groq_already_tried = True
-            try:
-                print("⚡ WEB IMPORT: Trying Groq first...", flush=True)
-                response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
-                result = _parse_non_gemini_response(response_text)
-                print("✅ GROQ SUCCESS (web import fast-path)!", flush=True)
-                return result
-            except Exception as groq_err:
-                last_err = str(groq_err)
-                print(f"⚠️ GROQ FAILED (web import fast-path): {last_err[:100]}", flush=True)
-
-        # ── Phase 1: Gemini primary models ─────────────────────────────────────
-        if gemini_client:
-            for model_id in _get_efficient_models_primary(gemini_client):
+        # ── Dynamically determine Phase order based on input type ─────────────
+        # If pdf_bytes is present: we MUST use Gemini vision/multimodal first.
+        # If text is present: we use the text-optimized flow to save Gemini quota.
+        
+        # We define all fallback steps as helper functions:
+        def _try_gemini():
+            if not has_gemini:
+                return None
+            for model_id in ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"]:
                 try:
                     result = _run_gemini_model(model_id)
                     print(f"✅ GEMINI SUCCESS: {model_id}", flush=True)
                     return result
                 except FuturesTimeoutError:
-                    print(f"⏱️ GEMINI {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), moving on...", flush=True)
+                    print(f"⏱/ GEMINI {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), moving on...", flush=True)
                 except Exception as e:
-                    last_err = str(e)
-                    print(f"⚠️ GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
-        else:
-            print("⚠️ GEMINI_API_KEY missing, skipping Gemini phase.", flush=True)
+                    print(f"⚠️ GEMINI {model_id} FAILED: {str(e)[:100]}", flush=True)
+            return None
 
-        # ── Phase 2: Groq (skipped if already tried in Phase 0) ───────────────
-        if not _groq_already_tried and os.getenv("GROQ_API_KEY") and non_gemini_prompt:
+        def _try_cerebras():
+            if not os.getenv("CEREBRAS_API_KEY") or not non_gemini_prompt:
+                return None
+            try:
+                response_text = _process_via_cerebras(non_gemini_prompt)
+                result = _parse_non_gemini_response(response_text)
+                print("✅ CEREBRAS SUCCESS!", flush=True)
+                return result
+            except Exception as e:
+                print(f"⚠️ CEREBRAS FAILED: {str(e)[:100]}", flush=True)
+            return None
+
+        def _try_groq():
+            if len(_get_groq_keys()) == 0 or not non_gemini_prompt:
+                return None
             try:
                 response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
                 result = _parse_non_gemini_response(response_text)
                 print("✅ GROQ SUCCESS!", flush=True)
                 return result
-            except Exception as groq_err:
-                last_err = str(groq_err)
-                print(f"⚠️ GROQ FAILED: {last_err[:100]}", flush=True)
-        elif not _groq_already_tried and not os.getenv("GROQ_API_KEY"):
-            print("⚠️ GROQ_API_KEY missing, skipping Groq phase.", flush=True)
+            except Exception as e:
+                print(f"⚠️ GROQ FAILED: {str(e)[:100]}", flush=True)
+            return None
 
-        # ── Phase 3: gemini-flash-latest → gemini-2.0-flash ───────────────────
-        if gemini_client:
-            for model_id in _get_efficient_models_secondary(gemini_client):
+        def _try_gemini_secondary():
+            if not has_gemini:
+                return None
+            for model_id in ["gemini-flash-latest"]:
                 try:
                     result = _run_gemini_model(model_id)
-                    print(f"✅ GEMINI SUCCESS: {model_id}", flush=True)
+                    print(f"✅ GEMINI SECONDARY SUCCESS: {model_id}", flush=True)
                     return result
                 except FuturesTimeoutError:
-                    print(f"⏱️ GEMINI {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), moving on...", flush=True)
+                    print(f"⏱/ GEMINI {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), moving on...", flush=True)
                 except Exception as e:
-                    last_err = str(e)
-                    print(f"⚠️ GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
+                    print(f"⚠️ GEMINI {model_id} FAILED: {str(e)[:100]}", flush=True)
+            return None
 
-        # ── Phase 4: OpenRouter — Gemini/Gemma free model fallback ────────────
-        openrouter_gemini_model = os.getenv("OPENROUTER_GEMINI_MODEL", "google/gemma-4-26b-a4b-it:free")
-        if os.getenv("OPENROUTER_API_KEY") and non_gemini_prompt:
+        def _try_openrouter_primary():
+            if len(_get_openrouter_keys()) == 0 or not non_gemini_prompt:
+                return None
+            openrouter_gemini_model = os.getenv("OPENROUTER_GEMINI_MODEL", "google/gemma-4-26b-a4b-it:free")
             try:
                 response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False, model=openrouter_gemini_model)
                 result = _parse_non_gemini_response(response_text)
                 print(f"✅ OPENROUTER (Gemini) SUCCESS via {openrouter_gemini_model}!", flush=True)
                 return result
-            except Exception as or_err:
-                last_err = str(or_err)
-                print(f"⚠️ OPENROUTER (Gemini) FAILED: {last_err[:100]}", flush=True)
+            except Exception as e:
+                print(f"⚠️ OPENROUTER (Gemini) FAILED: {str(e)[:100]}", flush=True)
+            return None
 
-        # ── Phase 5: OpenRouter — llama fallback ──────────────────────────────
-        if os.getenv("OPENROUTER_API_KEY") and non_gemini_prompt:
+        def _try_openrouter_secondary():
+            if len(_get_openrouter_keys()) == 0 or not non_gemini_prompt:
+                return None
+            other_model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
             try:
-                other_model = os.getenv("OPENROUTER_MODEL", "meta-llama/llama-3.3-70b-instruct")
                 response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False, model=other_model)
                 result = _parse_non_gemini_response(response_text)
                 print(f"✅ OPENROUTER ({other_model}) SUCCESS!", flush=True)
                 return result
-            except Exception as or_err:
-                last_err = str(or_err)
-                print(f"⚠️ OPENROUTER ({other_model}) FAILED: {last_err[:100]}", flush=True)
-        elif not os.getenv("OPENROUTER_API_KEY"):
-            print("⚠️ OPENROUTER_API_KEY missing, skipping OpenRouter phases.", flush=True)
+            except Exception as e:
+                print(f"⚠️ OPENROUTER ({other_model}) FAILED: {str(e)[:100]}", flush=True)
+            return None
+
+        # Execute according to pipeline logic
+        if pdf_bytes:
+            # 1. Gemini
+            res = _try_gemini()
+            if res: return res
+            
+            # 2. Gemini Secondary
+            res = _try_gemini_secondary()
+            if res: return res
+
+            # PDF bytes cannot run on text-only APIs (Cerebras/Groq/OR text fallbacks)
+            last_err = "PDF bytes requires vision capability, which failed on all Gemini models."
+        else:
+            # Text Ingestion (Manual or Web Scraping)
+            
+            # Special case: web_import parameter overrides to try Groq first if preferred
+            if web_import:
+                # 1. Groq
+                res = _try_groq()
+                if res: return res
+                
+                # 2. Cerebras
+                res = _try_cerebras()
+                if res: return res
+            else:
+                # Standard text ingestion
+                # 1. Cerebras
+                res = _try_cerebras()
+                if res: return res
+                
+                # 2. Groq
+                res = _try_groq()
+                if res: return res
+            
+            # 3. Gemini Primary
+            res = _try_gemini()
+            if res: return res
+            
+            # 4. Gemini Secondary
+            res = _try_gemini_secondary()
+            if res: return res
+            
+            # 5. OpenRouter Primary
+            res = _try_openrouter_primary()
+            if res: return res
+            
+            # 6. OpenRouter Secondary
+            res = _try_openrouter_secondary()
+            if res: return res
+            
+            last_err = "All text ingestion fallback engines failed."
 
         return {"error": "All AI models and fallback engines failed", "details": last_err}
 
@@ -549,44 +717,40 @@ def critique_user_answer(question: str, user_answer: str, context: str) -> dict:
         f"Return a JSON object with: score (integer 0-10), strengths (list), weaknesses (list), "
         f"structure_feedback (string), value_addition (string), overall_evaluation (string)."
     )
-    last_err = None
+    has_gemini = len(_get_gemini_keys()) > 0
+    has_groq = len(_get_groq_keys()) > 0
+    has_or = len(_get_openrouter_keys()) > 0
 
-    # Phase 1: Try Gemini (gemini-3.5-flash → gemini-flash-latest → gemini-2.0-flash)
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
-    if gemini_api_key:
-        client = genai.Client(api_key=gemini_api_key)
-        for model_id in ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.0-flash"]:
+    # Phase 1: Try Gemini with key rotation
+    if has_gemini:
+        for model_id in ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-2.0-flash", "gemini-2.5-flash"]:
             try:
-                print(f"🚀 CRITIQUING WITH GEMINI: {model_id}...", flush=True)
-
-                def _call_critique(mid=model_id):
-                    return client.models.generate_content(
-                        model=mid,
+                def _run_critique(client):
+                    print(f"🚀 CRITIQUING WITH GEMINI: {model_id}...", flush=True)
+                    response = client.models.generate_content(
+                        model=model_id,
                         contents=[prompt],
                         config=types.GenerateContentConfig(temperature=0.2, response_mime_type="application/json")
                     )
+                    if not response or not response.text:
+                        raise ValueError(f"Empty scan response from {model_id}")
+                    cleaned = _clean_json_response(response.text)
+                    return json.loads(cleaned)
 
-                with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(_call_critique)
-                    try:
-                        response = future.result(timeout=MODEL_TIMEOUT_SECONDS)
-                    except FuturesTimeoutError:
-                        print(f"⏱️ GEMINI critique {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), trying next...", flush=True)
-                        continue
-
-                cleaned = _clean_json_response(response.text)
+                # Execute with key rotation
+                res_critique = _call_gemini_with_rotation(_run_critique)
                 print(f"✅ GEMINI CRITIQUE SUCCESS: {model_id}!", flush=True)
-                return json.loads(cleaned)
+                return res_critique
             except FuturesTimeoutError:
-                continue
+                print(f"⏱️ GEMINI critique {model_id} TIMED OUT ({MODEL_TIMEOUT_SECONDS}s), trying next...", flush=True)
             except Exception as e:
                 last_err = str(e)
                 print(f"⚠️ Gemini critique {model_id} failed: {last_err[:100]}", flush=True)
     else:
-        print("⚠️ GEMINI_API_KEY missing, skipping Gemini critique.", flush=True)
+        print("⚠️ Gemini keys missing, skipping Gemini critique.", flush=True)
 
-    # Phase 2: Try Groq
-    if os.getenv("GROQ_API_KEY"):
+    # Phase 2: Try Groq with key rotation
+    if has_groq:
         try:
             response_text = _process_via_groq(prompt, is_critique=True)
             cleaned = _clean_json_response(response_text)
@@ -603,10 +767,10 @@ def critique_user_answer(question: str, user_answer: str, context: str) -> dict:
             last_err = str(e)
             print(f"⚠️ Groq critique failed: {last_err[:100]}", flush=True)
     else:
-        print("⚠️ GROQ_API_KEY missing, skipping Groq critique.", flush=True)
+        print("⚠️ Groq keys missing, skipping Groq critique.", flush=True)
 
-    # Phase 3: Try OpenRouter
-    if os.getenv("OPENROUTER_API_KEY"):
+    # Phase 3: Try OpenRouter with key rotation
+    if has_or:
         try:
             response_text = _process_via_openrouter(prompt, is_critique=True)
             cleaned = _clean_json_response(response_text)
@@ -664,56 +828,51 @@ If no news articles are visible, return an empty array: []"""
 def scan_newspaper_page(page_bytes: bytes) -> list:
     """Phase 1: Cheap, fast Gemini Vision call to detect article headlines on one newspaper page.
     Returns a list of {headline, excerpt} dicts. Returns [] on failure (safe — caller skips empty pages)."""
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
-    client = genai.Client(api_key=gemini_api_key) if gemini_api_key else None
+    has_gemini = len(_get_gemini_keys()) > 0
 
     # --- Step A: Try Gemini Vision API first ---
-    if client:
+    if has_gemini:
         contents = [
             _HEADLINE_SCAN_PROMPT,
             types.Part.from_bytes(data=page_bytes, mime_type="image/jpeg")
         ]
 
-        for model_id in ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.0-flash"]:
+        # gemini-3.1-flash-lite has 500 RPD free quota, gemini-3.5-flash has 20 RPD free quota
+        for model_id in ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-2.0-flash", "gemini-2.5-flash"]:
             try:
-                print(f"🔍 SCANNING PAGE WITH GEMINI: {model_id}...", flush=True)
-
-                def _call(mid=model_id):
-                    return client.models.generate_content(
-                        model=mid,
+                def _run_with_key(client):
+                    print(f"🔍 SCANNING PAGE WITH GEMINI: {model_id}...", flush=True)
+                    response = client.models.generate_content(
+                        model=model_id,
                         contents=contents,
                         config=types.GenerateContentConfig(
                             temperature=0.1,
                             response_mime_type="application/json"
                         )
                     )
+                    if not response or not response.text:
+                        raise ValueError(f"Empty scan response from {model_id}")
+                    cleaned = _clean_json_response(response.text)
+                    parsed = json.loads(cleaned)
+                    if isinstance(parsed, list):
+                        print(f"✅ PAGE SCAN GEMINI SUCCESS: found {len(parsed)} stories.", flush=True)
+                        return parsed
+                    return []
 
-                with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(_call)
-                    response = future.result(timeout=VISION_TIMEOUT_SECONDS)
-
-                if not response or not response.text:
-                    raise ValueError(f"Empty scan response from {model_id}")
-
-                cleaned = _clean_json_response(response.text)
-                parsed = json.loads(cleaned)
-                if isinstance(parsed, list):
-                    print(f"✅ PAGE SCAN GEMINI SUCCESS: found {len(parsed)} stories.", flush=True)
-                    return parsed
-                return []
+                # Execute scan with rotated API keys
+                return _call_gemini_with_rotation(_run_with_key)
 
             except FuturesTimeoutError:
                 print(f"⏱️ SCAN GEMINI {model_id} TIMED OUT ({VISION_TIMEOUT_SECONDS}s), trying next...", flush=True)
             except Exception as e:
-                print(f"⚠️ SCAN GEMINI {model_id} FAILED: {str(e)[:100]}", flush=True)
+                print(f"⚠️ SCAN GEMINI {model_id} FAILED: {str(e)[:150]}", flush=True)
 
     # --- Step B: Fallback to OpenRouter Vision models ---
     # google/gemma-4-26b-a4b-it:free confirmed working (tested 2026-06-27):
     # returns JSON headlines from newspaper page images correctly.
-    if os.getenv("OPENROUTER_API_KEY"):
+    if len(_get_openrouter_keys()) > 0:
         for model_id in [
             "google/gemma-4-26b-a4b-it:free",           # Confirmed working vision model
-            "qwen/qwen2-vl-7b-instruct:free",            # Backup vision model
         ]:
             try:
                 print(f"🔍 SCANNING PAGE WITH OPENROUTER VISION: {model_id}...", flush=True)
@@ -773,32 +932,30 @@ def process_newspaper_article(page_bytes: bytes, headline: str) -> list | dict:
     )
 
     last_err = None
-    gemini_api_key = os.getenv("GEMINI_API_KEY")
-    gemini_client = genai.Client(api_key=gemini_api_key) if gemini_api_key else None
+    has_gemini = len(_get_gemini_keys()) > 0
 
     def _run_gemini_vision(model_id: str):
-        def _call(mid=model_id):
-            return gemini_client.models.generate_content(
-                model=mid,
+        def _call(client):
+            print(f"🚀 NEWSPAPER INGEST WITH GEMINI: {model_id}...", flush=True)
+            response = client.models.generate_content(
+                model=model_id,
                 contents=gemini_contents,
                 config=types.GenerateContentConfig(
                     temperature=0.1,
                     response_mime_type="application/json"
                 )
             )
-        print(f"🚀 NEWSPAPER INGEST WITH GEMINI: {model_id}...", flush=True)
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(_call)
-            response = future.result(timeout=VISION_TIMEOUT_SECONDS)
-        if not response or not response.text:
-            raise ValueError(f"Empty response from {model_id}")
-        cleaned = _clean_json_response(response.text)
-        parsed = json.loads(cleaned)
-        return parsed if isinstance(parsed, list) else [parsed]
+            if not response or not response.text:
+                raise ValueError(f"Empty response from {model_id}")
+            cleaned = _clean_json_response(response.text)
+            parsed = json.loads(cleaned)
+            return parsed if isinstance(parsed, list) else [parsed]
+        return _call_gemini_with_rotation(_call)
 
-    # Phase 1: Gemini 3.5 Flash (vision-capable)
-    if gemini_client:
-        for model_id in ["gemini-3.5-flash", "gemini-flash-latest", "gemini-2.0-flash"]:
+    # Phase 1: Gemini (vision-capable)
+    if has_gemini:
+        # We list gemini-3.1-flash-lite (500 RPD) first in fallback as it has high free quota
+        for model_id in ["gemini-3.5-flash", "gemini-3.1-flash-lite", "gemini-flash-latest", "gemini-2.0-flash", "gemini-2.5-flash"]:
             try:
                 result = _run_gemini_vision(model_id)
                 print(f"✅ NEWSPAPER GEMINI SUCCESS: {model_id}", flush=True)
@@ -809,11 +966,12 @@ def process_newspaper_article(page_bytes: bytes, headline: str) -> list | dict:
                 last_err = str(e)
                 print(f"⚠️ NEWSPAPER GEMINI {model_id} FAILED: {last_err[:100]}", flush=True)
     else:
-        print("⚠️ GEMINI_API_KEY missing, skipping vision phase.", flush=True)
+        print("⚠️ Gemini keys missing, skipping vision phase.", flush=True)
 
-    # Phase 1.5: OpenRouter Vision Fallback
-    if os.getenv("OPENROUTER_API_KEY"):
-        for model_id in ["google/gemini-2.0-flash", "google/gemini-2.0-flash-exp:free"]:
+    # Phase 1.3: OpenRouter Vision Fallback
+    # google/gemma-4-26b-a4b-it:free is confirmed working for vision (2026-06-27)
+    if len(_get_openrouter_keys()) > 0:
+        for model_id in ["google/gemma-4-26b-a4b-it:free"]:
             try:
                 print(f"🚀 NEWSPAPER INGEST WITH OPENROUTER VISION: {model_id}...", flush=True)
                 response_text = _process_vision_via_openrouter(
@@ -830,8 +988,19 @@ def process_newspaper_article(page_bytes: bytes, headline: str) -> list | dict:
                 last_err = str(e)
                 print(f"⚠️ NEWSPAPER OPENROUTER VISION FAILED ({model_id}): {last_err[:100]}", flush=True)
 
+    # Phase 1.5: Cerebras Fallback (High-speed Llama)
+    if os.getenv("CEREBRAS_API_KEY"):
+        try:
+            response_text = _process_via_cerebras(non_gemini_prompt)
+            result = _parse_non_gemini_response(response_text)
+            print("✅ NEWSPAPER CEREBRAS FALLBACK SUCCESS!", flush=True)
+            return result
+        except Exception as cerebras_err:
+            last_err = str(cerebras_err)
+            print(f"⚠️ NEWSPAPER CEREBRAS FAILED: {last_err[:100]}", flush=True)
+
     # Phase 2: Groq (text-mode fallback — uses headline as context)
-    if os.getenv("GROQ_API_KEY"):
+    if len(_get_groq_keys()) > 0:
         try:
             response_text = _process_via_groq(non_gemini_prompt, is_critique=False)
             result = _parse_non_gemini_response(response_text)
@@ -842,7 +1011,7 @@ def process_newspaper_article(page_bytes: bytes, headline: str) -> list | dict:
             print(f"⚠️ NEWSPAPER GROQ FAILED: {last_err[:100]}", flush=True)
 
     # Phase 3: OpenRouter fallback (text-mode)
-    if os.getenv("OPENROUTER_API_KEY"):
+    if len(_get_openrouter_keys()) > 0:
         try:
             response_text = _process_via_openrouter(non_gemini_prompt, is_critique=False)
             result = _parse_non_gemini_response(response_text)

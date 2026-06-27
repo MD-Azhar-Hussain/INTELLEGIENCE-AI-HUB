@@ -58,7 +58,7 @@ def save_article(article_data: dict):
         if val is not None and isinstance(val, str): article_data[field] = [val]
         elif val is None: article_data[field] = []
 
-    schema_fields = ["id", "title", "category", "gs_paper", "relevance_score", "primary_keyword", "keywords", "summary", "issue_overview", "background", "stakeholders", "arguments_for", "arguments_against", "challenges", "way_forward", "mcqs", "mains_questions", "source", "ingested_at", "filename"]
+    schema_fields = ["id", "title", "category", "gs_paper", "relevance_score", "primary_keyword", "keywords", "summary", "issue_overview", "background", "stakeholders", "arguments_for", "arguments_against", "challenges", "way_forward", "mcqs", "mains_questions", "source", "ingested_at", "filename", "clipping_url"]
     clean_data = {k: v for k, v in article_data.items() if k in schema_fields}
     if "title" not in clean_data: clean_data["title"] = "Untitled Asset"
 

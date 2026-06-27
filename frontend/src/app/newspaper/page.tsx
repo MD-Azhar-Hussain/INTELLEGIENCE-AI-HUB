@@ -131,6 +131,13 @@ export default function NewspaperPage() {
       const allPages: ScannedPage[] = [];
       for (let i = 0; i < total_pages; i++) {
         setScanProgress({ current: i + 1, total: total_pages });
+
+        // 2s gap between page requests keeps us within Gemini free-tier RPM limits.
+        // Skip the delay on the very first page so scanning feels responsive.
+        if (i > 0) {
+          await new Promise(resolve => setTimeout(resolve, 2000));
+        }
+
         try {
           const pageRes = await axios.post(`${apiUrl}/scan-page`, {
             session_id,
