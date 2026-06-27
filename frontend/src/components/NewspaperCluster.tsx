@@ -17,12 +17,18 @@ interface NewspaperClusterProps {
 export default function NewspaperCluster({ filename, articles, onToggle, requestLogin, isLoggedIn, renderCard }: NewspaperClusterProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Clean newspaper title (e.g., "THE HINDU UPSC IAS EDITION 25-06-2026.pdf" -> "The Hindu Upsc Ias Edition")
-  const newspaperTitle = filename
-    .replace(/\.pdf$/i, "")
-    .replace(/[-_~]/g, " ")
-    .replace(/\b\d{2}\s\d{2}\s\d{4}\b/g, "") // remove numeric date if standalone
-    .trim();
+  // Clean newspaper title (strips hash prefix and formats name)
+  const getCleanTitle = () => {
+    let cleaned = filename.replace(/^hash:[a-fA-F0-9]+__:*/i, "");
+    cleaned = cleaned.replace(/^duplicate_[a-fA-F0-9]+__:*/i, "");
+    return cleaned
+      .replace(/\.pdf$/i, "")
+      .replace(/[-_~]/g, " ")
+      .replace(/\b\d{2}\s\d{2}\s\d{4}\b/g, "") // remove numeric date if standalone
+      .trim();
+  };
+
+  const newspaperTitle = getCleanTitle();
 
   // Extract a date from the filename or fallback to ingestion date
   const extractDate = () => {
@@ -88,7 +94,7 @@ export default function NewspaperCluster({ filename, articles, onToggle, request
             </span>
           </div>
 
-          <h3 className="text-2xl font-extrabold mb-4 tracking-tight leading-tight group-hover:text-blue-600 transition-colors uppercase">
+          <h3 className="text-2xl font-extrabold mb-4 tracking-tight leading-tight group-hover:text-blue-600 transition-colors uppercase break-words">
             {newspaperTitle}
           </h3>
           
@@ -127,13 +133,13 @@ export default function NewspaperCluster({ filename, articles, onToggle, request
               className="relative z-[120] w-full max-w-6xl max-h-[90vh] bg-white/50 dark:bg-white/[0.02] border border-white/20 rounded-[40px] shadow-2xl flex flex-col"
             >
               {/* Header */}
-              <div className="p-8 md:p-12 flex items-center justify-between border-b border-white/10 bg-white/10 backdrop-blur-xl rounded-t-[40px]">
-                <div>
+              <div className="p-8 md:p-12 flex items-center justify-between border-b border-white/10 bg-white/10 backdrop-blur-xl rounded-t-[40px] gap-6">
+                <div className="max-w-[80%]">
                   <div className="flex items-center gap-3 mb-2 text-blue-600">
                     <Sparkles size={20} fill="currentColor" />
                     <span className="text-[10px] font-black uppercase tracking-[0.4em]">Newspaper Edition Cluster</span>
                   </div>
-                  <h2 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight">{newspaperTitle}</h2>
+                  <h2 className="text-3xl md:text-4xl font-extrabold uppercase tracking-tight break-words">{newspaperTitle}</h2>
                   <p className="text-gray-400 text-sm mt-1">{editionDate} · {articles.length} Ingested Articles</p>
                 </div>
                 <button 

@@ -705,21 +705,21 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
         transition={{ delay: index * 0.05 }}
         className="luxury-card p-12 flex flex-col h-full group"
       >
-        <div className="flex justify-between items-center mb-10">
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-2.5 items-center">
+        <div className="flex justify-between items-start gap-4 mb-10">
+          <div className="flex flex-col gap-2 min-w-0">
+            <div className="flex flex-wrap gap-2 items-center">
               <span className="badge-pill badge-pill-primary">{article.category}</span>
               <span className="badge-pill">{article.gs_paper}</span>
               {article.source?.includes(" — Page ") ? (
-                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/10 tracking-wider">
+                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-blue-500/10 text-blue-500 border border-blue-500/10 tracking-wider whitespace-nowrap">
                   Page Scanner
                 </span>
               ) : article.filename?.toLowerCase().endsWith(".pdf") ? (
-                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-purple-500/10 text-purple-500 border border-purple-500/10 tracking-wider">
+                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-purple-500/10 text-purple-500 border border-purple-500/10 tracking-wider whitespace-nowrap">
                   Complete Summarizer
                 </span>
               ) : article.url || article.filename?.includes(".") ? (
-                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/10 tracking-wider">
+                <span className="text-[8px] font-black uppercase px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-500 border border-emerald-500/10 tracking-wider whitespace-nowrap">
                   Web Import
                 </span>
               ) : null}
@@ -728,7 +728,7 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
               {article.ingested_at ? `Ingested ${new Date(article.ingested_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}` : "Recently Added"}
             </span>
           </div>
-          <div className="flex flex-col items-end gap-3">
+          <div className="flex flex-col items-end gap-3 shrink-0">
             {isLoggedIn && (
               <div className="flex items-center gap-2">
                 <button 
@@ -760,7 +760,7 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
           </div>
         </div>
         
-        <h3 className="text-3xl font-extrabold mb-8 group-hover:text-blue-600 transition-colors leading-[1.05] tracking-tight">
+        <h3 className="text-xl md:text-2xl lg:text-3xl font-extrabold mb-8 group-hover:text-blue-600 transition-colors leading-[1.05] tracking-tight break-words">
           {article.title}
         </h3>
         
