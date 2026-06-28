@@ -32,8 +32,8 @@ export default function Home() {
   useEffect(() => {
     // ONE-TIME AMNESTY: Clear old local caches to ensure sync with Pure Cloud
     if (!localStorage.getItem("upsc_hub_v2_synced")) {
-        clearArticles();
-        localStorage.setItem("upsc_hub_v2_synced", "true");
+      clearArticles();
+      localStorage.setItem("upsc_hub_v2_synced", "true");
     }
 
     // Check if redirecting from an already ingested newspaper view
@@ -48,22 +48,22 @@ export default function Home() {
     setIsMounted(true);
     // Cloud Sync on Mount
     const sync = async () => {
-        const cloudArticles = await import("@/lib/store").then(m => m.getArticlesFromCloud());
-        setArticles(cloudArticles);
+      const cloudArticles = await import("@/lib/store").then(m => m.getArticlesFromCloud());
+      setArticles(cloudArticles);
     };
     sync();
   }, []);
 
   const handleUploadSuccess = (response: any, filename: string) => {
     const rawList = Array.isArray(response) ? response : (response?.articles || []);
-    
+
     // Ensure we are only mapping over valid objects
     const validList = (Array.isArray(rawList) ? rawList : [rawList]).filter(a => a && typeof a === "object" && !a.error);
-    
+
     if (validList.length === 0 && !Array.isArray(rawList) && rawList?.error) {
-        alert("Strategic AI Error: " + rawList.error);
-        setShowUpload(false);
-        return;
+      alert("Strategic AI Error: " + rawList.error);
+      setShowUpload(false);
+      return;
     }
 
     const formattedArticles: Article[] = validList.map(a => ({
@@ -72,7 +72,7 @@ export default function Home() {
       ingested_at: a.ingested_at || new Date().toISOString(),
       filename: filename
     }));
-    
+
     const updated = addArticles(formattedArticles);
     setArticles(updated);
     setShowUpload(false);
@@ -125,7 +125,7 @@ export default function Home() {
     .sort((a, b) => {
       const dateA = a.ingested_at ? new Date(a.ingested_at).getTime() : 0;
       const dateB = b.ingested_at ? new Date(b.ingested_at).getTime() : 0;
-      
+
       if (sortBy === "date") {
         return dateB - dateA;
       }
@@ -136,13 +136,13 @@ export default function Home() {
   const groupArticlesByKeyword = (list: Article[]) => {
     const groups: Record<string, Article[]> = {};
     const seenArcIds = new Set<string>();
-    
+
     // First pass: De-duplicate exact ARC ID matches to prevent clutter
     const uniqueList = list.filter(a => {
-        const arcId = a.id?.split('-')[0] || a.title; // Use ID or Title as duplicate key
-        if (seenArcIds.has(arcId)) return false;
-        seenArcIds.add(arcId);
-        return true;
+      const arcId = a.id?.split('-')[0] || a.title; // Use ID or Title as duplicate key
+      if (seenArcIds.has(arcId)) return false;
+      seenArcIds.add(arcId);
+      return true;
     });
 
     uniqueList.forEach(article => {
@@ -156,19 +156,19 @@ export default function Home() {
 
       // Find if this article belongs to an existing cluster
       let assignedKey = "";
-      
+
       // We look for the most specific entity first (e.g. 'Israel' over 'International Relations')
       for (const key of potentialKeys) {
         // Find existing group that shares this keyword
-        const existingKey = Object.keys(groups).find(groupKey => 
-            groupKey.toLowerCase() === key || 
-            (key.length > 3 && groupKey.toLowerCase().includes(key)) ||
-            (groupKey.length > 3 && key.includes(groupKey.toLowerCase()))
+        const existingKey = Object.keys(groups).find(groupKey =>
+          groupKey.toLowerCase() === key ||
+          (key.length > 3 && groupKey.toLowerCase().includes(key)) ||
+          (groupKey.length > 3 && key.includes(groupKey.toLowerCase()))
         );
 
         if (existingKey) {
-            assignedKey = existingKey;
-            break;
+          assignedKey = existingKey;
+          break;
         }
       }
 
@@ -182,8 +182,8 @@ export default function Home() {
     });
 
     return Object.entries(groups).map(([keyword, articles]) => ({
-        keyword,
-        articles
+      keyword,
+      articles
     })).sort((a, b) => b.articles.length - a.articles.length);
   };
 
@@ -216,23 +216,25 @@ export default function Home() {
   return (
     <div className="min-h-screen pb-32 overflow-x-hidden">
       <Navbar onMethodologyClick={() => setShowMethodology(true)} />
-      
+
       <main className="max-w-6xl mx-auto px-6 md:px-8 pt-32 md:pt-48">
         {/* Zen Hero Section */}
         <section className="text-center mb-24 md:mb-40">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex items-center justify-center gap-4 mb-8 md:mb-12"
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="inline-flex items-center gap-2.5 px-4.5 py-2 bg-emerald-500/5 dark:bg-emerald-500/[0.03] text-emerald-600 dark:text-emerald-400 border border-emerald-500/10 dark:border-emerald-500/20 rounded-full text-[9px] font-black tracking-widest uppercase mb-8 md:mb-12 shadow-sm"
           >
-            <div className="h-px w-6 md:w-10 bg-gray-200 dark:bg-white/10" />
-            <span className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.4em] md:tracking-[0.5em] text-blue-600 dark:text-blue-400">
-              {user ? `Welcome, ${user.name.toUpperCase()}` : "Intelligence Unit"}
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
             </span>
-            <div className="h-px w-6 md:w-10 bg-gray-200 dark:bg-white/10" />
+            <span>
+              {user ? `OFFICER SESSION ACTIVE: ${user.name.toUpperCase()}` : "INTELLIGENCE UNIT ONLINE"}
+            </span>
           </motion.div>
 
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-5xl md:text-8xl font-extrabold mb-8 md:mb-12 tracking-tighter leading-[1] md:leading-[0.9] text-[var(--text-primary)]"
@@ -241,43 +243,69 @@ export default function Home() {
             <span className="opacity-20">{user ? "Intelligence." : "Complex."}</span>
           </motion.h1>
 
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
             onClick={() => setShowMethodology(true)}
             className="text-lg md:text-xl text-[var(--text-secondary)] max-w-2xl mx-auto mb-10 md:mb-16 leading-relaxed font-medium px-4 cursor-pointer hover:text-blue-600 transition-colors group"
           >
-            {user 
-              ? <span className="flex items-center justify-center gap-2">Strategic assets curated for your mission, {user.name.split(' ')[0]}. <span className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-sm font-black uppercase tracking-widest ml-2">View Methodology <ArrowRight size={14}/></span></span>
-              : <span className="flex items-center justify-center gap-2 underline decoration-blue-600/30 underline-offset-8">High-yield methodology for civil services. <span className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-sm font-black uppercase tracking-widest ml-2">Explainer <ArrowRight size={14}/></span></span>}
+            {user
+              ? <span className="flex items-center justify-center gap-2">Strategic assets curated for your mission, {user.name.split(' ')[0]}. <span className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-sm font-black uppercase tracking-widest ml-2">View Methodology <ArrowRight size={14} /></span></span>
+              : <span className="flex items-center justify-center gap-2 underline decoration-blue-600/30 underline-offset-8">High-yield methodology for civil services. <span className="text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1 text-sm font-black uppercase tracking-widest ml-2">Explainer <ArrowRight size={14} /></span></span>}
           </motion.p>
-          
-          <motion.div 
+
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="flex flex-col sm:flex-row items-center gap-6"
+            className="w-full max-w-2xl mx-auto"
           >
             {user ? (
-              <>
-                <button onClick={() => setShowUpload(true)} className="main-btn group w-full sm:w-auto">
+              <div className="backdrop-blur-md bg-white/60 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/10 rounded-3xl p-4 flex flex-col md:flex-row items-center gap-3 shadow-xl">
+                {/* Complete Summarizer */}
+                <button
+                  onClick={() => setShowUpload(true)}
+                  className="main-btn group shrink-0 w-full md:w-auto whitespace-nowrap text-sm px-6 py-3"
+                >
+                  <Fingerprint size={16} />
                   Complete Summarizer
-                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
                 </button>
-                <button onClick={handleLogout} className="text-xs md:text-sm font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors flex items-center gap-2">
-                  <LogOut size={16} />
-                  Terminate Session
+
+                {/* Divider */}
+                <div className="hidden md:block w-px h-10 bg-gray-200 dark:bg-white/10 shrink-0" />
+
+                {/* Page Scanner */}
+                <Link
+                  href="/newspaper"
+                  className="flex-1 flex items-center justify-center gap-2 px-5 py-3 bg-white/80 dark:bg-white/[0.03] border border-gray-200 dark:border-white/10 rounded-2xl text-sm font-bold text-gray-700 dark:text-white/70 hover:border-blue-600/40 hover:text-blue-600 dark:hover:text-blue-400 transition-all group w-full"
+                >
+                  <Sparkles size={15} className="text-blue-500 group-hover:scale-110 transition-transform" />
+                  Page Scanner
+                  <span className="text-[9px] font-black uppercase tracking-widest text-gray-400 group-hover:text-blue-500 transition-colors ml-1">Newspaper OCR</span>
+                </Link>
+
+                {/* Divider */}
+                <div className="hidden md:block w-px h-10 bg-gray-200 dark:bg-white/10 shrink-0" />
+
+                {/* Terminate Session */}
+                <button
+                  onClick={handleLogout}
+                  className="shrink-0 text-[10px] font-black uppercase tracking-widest text-gray-400 hover:text-red-500 transition-colors flex items-center gap-1.5 whitespace-nowrap"
+                >
+                  <LogOut size={14} />
+                  End Session
                 </button>
-              </>
+              </div>
             ) : (
-              <div className="flex flex-col sm:flex-row items-center gap-6">
-                <button onClick={() => setShowLogin(true)} className="main-btn group w-full sm:w-auto px-12">
-                  <LogIn size={20} />
-                  Access Profile to Ingest
+              <div className="backdrop-blur-md bg-white/60 dark:bg-white/[0.02] border border-gray-200/60 dark:border-white/10 rounded-3xl p-4 flex flex-col sm:flex-row items-center justify-center gap-4 shadow-xl">
+                <button onClick={() => setShowLogin(true)} className="main-btn group w-full sm:w-auto px-10 py-3 text-sm">
+                  <LogIn size={16} />
+                  Access Officer Profile
                 </button>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest max-w-[200px] text-center sm:text-left">
-                  Viewing global feed. Logistics restricted to officers.
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest text-center">
+                  Global feed is public · Ingestion restricted to officers
                 </p>
               </div>
             )}
@@ -303,7 +331,7 @@ export default function Home() {
             <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Search Feed</span>
             <div className="relative group max-w-xl">
               <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-600 transition-colors" size={18} />
-              <input 
+              <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -311,7 +339,7 @@ export default function Home() {
                 className="w-full pl-14 pr-12 py-4 bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/10 rounded-2xl text-sm font-semibold focus:outline-none focus:border-blue-600 focus:ring-4 focus:ring-blue-500/5 transition-all shadow-md dark:shadow-none placeholder-gray-400 dark:placeholder-white/30 text-gray-900 dark:text-white"
               />
               {searchQuery && (
-                <button 
+                <button
                   onClick={() => setSearchQuery("")}
                   className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors"
                 >
@@ -327,34 +355,34 @@ export default function Home() {
             <div className="flex flex-col gap-4">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Date Intelligence Window</span>
               <div className="flex flex-wrap items-center gap-4">
-                 <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
-                    <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">From</span>
-                    <input 
-                      type="date" 
-                      value={fromDate}
-                      onChange={(e) => setFromDate(e.target.value)}
-                      max={new Date().toISOString().split('T')[0]}
-                      className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
-                    />
-                 </div>
-                 <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
-                    <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">To</span>
-                    <input 
-                      type="date" 
-                      value={toDate}
-                      onChange={(e) => setToDate(e.target.value)}
-                      max={new Date().toISOString().split('T')[0]}
-                      className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
-                    />
-                 </div>
-                 {(fromDate || toDate) && (
-                   <button 
-                     onClick={() => { setFromDate(""); setToDate(""); }}
-                     className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
-                   >
-                     Reset Window
-                   </button>
-                 )}
+                <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
+                  <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">From</span>
+                  <input
+                    type="date"
+                    value={fromDate}
+                    onChange={(e) => setFromDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                  />
+                </div>
+                <div className="flex items-center gap-2 bg-white dark:bg-white/[0.05] border border-gray-100 dark:border-white/10 rounded-xl px-4 py-2">
+                  <span className="text-[10px] font-bold text-gray-900 dark:text-blue-400/90 uppercase">To</span>
+                  <input
+                    type="date"
+                    value={toDate}
+                    onChange={(e) => setToDate(e.target.value)}
+                    max={new Date().toISOString().split('T')[0]}
+                    className="bg-transparent text-xs font-bold focus:outline-none dark:text-white [color-scheme:light] dark:[color-scheme:dark]"
+                  />
+                </div>
+                {(fromDate || toDate) && (
+                  <button
+                    onClick={() => { setFromDate(""); setToDate(""); }}
+                    className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
+                  >
+                    Reset Window
+                  </button>
+                )}
               </div>
             </div>
 
@@ -365,7 +393,7 @@ export default function Home() {
                   Minimum Relevance: <span className="text-blue-600 dark:text-blue-400 font-extrabold">{minRelevance}%</span>
                 </span>
                 {minRelevance > 0 && (
-                  <button 
+                  <button
                     onClick={() => setMinRelevance(0)}
                     className="text-[10px] font-black text-blue-600 uppercase tracking-widest hover:underline"
                   >
@@ -392,9 +420,9 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-900 dark:text-white/60">Filter by Topic</span>
               {!user && (
-                 <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full">
-                    Read-Only Mode
-                 </span>
+                <span className="text-[9px] font-black text-amber-500 uppercase tracking-widest bg-amber-500/10 px-3 py-1 rounded-full">
+                  Read-Only Mode
+                </span>
               )}
             </div>
             <div className="flex flex-wrap gap-3">
@@ -402,36 +430,33 @@ export default function Home() {
                 <button
                   key={`cat-${cat || i}`}
                   onClick={() => setFilterCategory(cat)}
-                  className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border ${
-                    filterCategory === cat
+                  className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border ${filterCategory === cat
                       ? "bg-blue-600 text-white border-blue-600 shadow-lg shadow-blue-600/20"
                       : "bg-white dark:bg-white/[0.03] text-gray-900 dark:text-white/70 border-gray-100 dark:border-white/10 hover:border-blue-600/30 hover:text-blue-600"
-                  }`}
+                    }`}
                 >
                   {cat}
                 </button>
               ))}
-              
+
               <div className="w-px h-10 bg-gray-100 dark:bg-white/5 mx-2 hidden md:block" />
 
               <button
                 onClick={() => setFilterImportant(!filterImportant)}
-                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
-                  filterImportant
+                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${filterImportant
                     ? "bg-amber-500 text-white border-amber-500 shadow-lg shadow-amber-500/20"
                     : "bg-white dark:bg-white/[0.02] text-amber-500/60 border-amber-500/10 hover:border-amber-500/30"
-                }`}
+                  }`}
               >
                 Starred Only
               </button>
-              
+
               <button
                 onClick={() => setFilterCompleted(!filterCompleted)}
-                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${
-                  filterCompleted
+                className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all border flex items-center gap-2 ${filterCompleted
                     ? "bg-emerald-500 text-white border-emerald-500 shadow-lg shadow-emerald-500/20"
                     : "bg-white dark:bg-white/[0.02] text-emerald-500/60 border-emerald-500/10 hover:border-emerald-500/30"
-                }`}
+                  }`}
               >
                 Completed Only
               </button>
@@ -439,19 +464,19 @@ export default function Home() {
               <div className="w-px h-10 bg-gray-100 dark:bg-white/5 mx-2 hidden md:block" />
 
               <div className="flex items-center gap-1 p-1 bg-white dark:bg-white/[0.03] border border-gray-100 dark:border-white/10 rounded-2xl">
-                <button 
+                <button
                   onClick={() => setViewMode("feed")}
                   className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "feed" ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
                 >
                   Feed
                 </button>
-                <button 
+                <button
                   onClick={() => setViewMode("decks")}
                   className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "decks" ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
                 >
                   Decks
                 </button>
-                <button 
+                <button
                   onClick={() => setViewMode("newspapers")}
                   className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${viewMode === "newspapers" ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-gray-400 hover:text-blue-600'}`}
                 >
@@ -465,13 +490,13 @@ export default function Home() {
             <div className="flex items-center gap-8">
               <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Sort by</span>
               <div className="flex items-center gap-6">
-                <button 
+                <button
                   onClick={() => setSortBy("date")}
                   className={`text-xs font-bold uppercase tracking-widest transition-all pb-1 border-b-2 ${sortBy === "date" ? "text-blue-600 border-blue-600" : "text-gray-400 border-transparent hover:text-gray-600"}`}
                 >
                   Date Recency
                 </button>
-                <button 
+                <button
                   onClick={() => setSortBy("relevance")}
                   className={`text-xs font-bold uppercase tracking-widest transition-all pb-1 border-b-2 ${sortBy === "relevance" ? "text-blue-600 border-blue-600" : "text-gray-400 border-transparent hover:text-gray-600"}`}
                 >
@@ -479,7 +504,7 @@ export default function Home() {
                 </button>
               </div>
             </div>
-            
+
             <div className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">
               Showing {sortedArticles.length} of {articles.length} assets
             </div>
@@ -491,7 +516,7 @@ export default function Home() {
           {viewMode === "decks" ? (
             groupedDecks.length > 0 ? (
               groupedDecks.map((deck) => (
-                <ArticleStack 
+                <ArticleStack
                   key={deck.keyword}
                   keyword={deck.keyword}
                   articles={deck.articles}
@@ -499,10 +524,10 @@ export default function Home() {
                   requestLogin={() => setShowLogin(true)}
                   isLoggedIn={!!user}
                   renderCard={(article) => (
-                    <ArticleCard 
-                      key={article.id || generateId()} 
-                      article={article} 
-                      index={0} 
+                    <ArticleCard
+                      key={article.id || generateId()}
+                      article={article}
+                      index={0}
                       onToggle={(updated) => setArticles(updated)}
                       requestLogin={() => setShowLogin(true)}
                       isLoggedIn={!!user}
@@ -511,9 +536,9 @@ export default function Home() {
                 />
               ))
             ) : (
-                <div className="col-span-full py-40 text-center luxury-card bg-gray-50/10 border-dashed">
-                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Strategic vacuum detected. No decks available.</p>
-                </div>
+              <div className="col-span-full py-40 text-center luxury-card bg-gray-50/10 border-dashed">
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">Strategic vacuum detected. No decks available.</p>
+              </div>
             )
           ) : viewMode === "newspapers" ? (
             groupedNewspapers.length > 0 ? (
@@ -526,10 +551,10 @@ export default function Home() {
                   requestLogin={() => setShowLogin(true)}
                   isLoggedIn={!!user}
                   renderCard={(article) => (
-                    <ArticleCard 
-                      key={article.id || generateId()} 
-                      article={article} 
-                      index={0} 
+                    <ArticleCard
+                      key={article.id || generateId()}
+                      article={article}
+                      index={0}
                       onToggle={(updated) => setArticles(updated)}
                       requestLogin={() => setShowLogin(true)}
                       isLoggedIn={!!user}
@@ -538,21 +563,21 @@ export default function Home() {
                 />
               ))
             ) : (
-                <div className="col-span-full py-40 text-center luxury-card bg-gray-50/10 border-dashed">
-                    <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">
-                      {articles.some(a => a.filename && a.filename.toLowerCase().endsWith(".pdf"))
-                        ? "No matching newspaper editions found for active filters."
-                        : "No newspaper editions ingested yet."}
-                    </p>
-                </div>
+              <div className="col-span-full py-40 text-center luxury-card bg-gray-50/10 border-dashed">
+                <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px]">
+                  {articles.some(a => a.filename && a.filename.toLowerCase().endsWith(".pdf"))
+                    ? "No matching newspaper editions found for active filters."
+                    : "No newspaper editions ingested yet."}
+                </p>
+              </div>
             )
           ) : (
             sortedArticles.length > 0 ? (
               sortedArticles.map((article, idx) => (
-                <ArticleCard 
-                  key={article.id || idx} 
-                  article={article} 
-                  index={idx} 
+                <ArticleCard
+                  key={article.id || idx}
+                  article={article}
+                  index={idx}
                   onToggle={(updated) => setArticles(updated)}
                   requestLogin={() => setShowLogin(true)}
                   isLoggedIn={!!user}
@@ -560,7 +585,7 @@ export default function Home() {
               ))
             ) : (
               articles.length > 0 ? (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="md:col-span-2 text-center py-48 luxury-card border-dashed bg-gray-50/30 dark:bg-white/[0.01]"
@@ -571,7 +596,7 @@ export default function Home() {
                   <h3 className="text-xl font-bold mb-3">No Matching Intelligence</h3>
                   <p className="text-gray-400 font-medium text-sm mb-6">Adjust your search query or filters to scan other assets.</p>
                   {(searchQuery || filterCategory !== "All" || filterImportant || filterCompleted || fromDate || toDate) && (
-                    <button 
+                    <button
                       onClick={() => {
                         setSearchQuery("");
                         setFilterCategory("All");
@@ -587,7 +612,7 @@ export default function Home() {
                   )}
                 </motion.div>
               ) : (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   className="md:col-span-2 text-center py-48 luxury-card border-dashed bg-gray-50/30 dark:bg-white/[0.01]"
@@ -608,16 +633,16 @@ export default function Home() {
       <AnimatePresence>
         {showUpload && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-white/60 dark:bg-black/80 backdrop-blur-3xl"
               onClick={() => setShowUpload(false)}
             />
-            <motion.div 
-              initial={{ scale: 0.98, opacity: 0, y: 10 }} 
-              animate={{ scale: 1, opacity: 1, y: 0 }} 
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.98, opacity: 0, y: 10 }}
               className="relative z-10 w-full max-w-xl"
             >
@@ -628,41 +653,41 @@ export default function Home() {
 
         {showLogin && (
           <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               className="absolute inset-0 bg-white/60 dark:bg-black/80 backdrop-blur-3xl"
               onClick={() => setShowLogin(false)}
             />
-            <motion.div 
-              initial={{ scale: 0.98, opacity: 0, y: 10 }} 
-              animate={{ scale: 1, opacity: 1, y: 0 }} 
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.98, opacity: 0, y: 10 }}
               className="relative z-10 w-full max-w-xl flex justify-center"
             >
-              <LoginModal 
-                onSuccess={() => { setUser(getUser()); setShowLogin(false); }} 
-                onClose={() => setShowLogin(false)} 
+              <LoginModal
+                onSuccess={() => { setUser(getUser()); setShowLogin(false); }}
+                onClose={() => setShowLogin(false)}
               />
             </motion.div>
           </div>
         )}
 
         {showMethodology && (
-          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6">
-            <motion.div 
-              initial={{ opacity: 0 }} 
-              animate={{ opacity: 1 }} 
+          <div className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto py-6 px-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-white/60 dark:bg-black/80 backdrop-blur-3xl"
+              className="fixed inset-0 bg-white/60 dark:bg-black/80 backdrop-blur-3xl"
               onClick={() => setShowMethodology(false)}
             />
-            <motion.div 
-              initial={{ scale: 0.98, opacity: 0, y: 10 }} 
-              animate={{ scale: 1, opacity: 1, y: 0 }} 
+            <motion.div
+              initial={{ scale: 0.98, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.98, opacity: 0, y: 10 }}
-              className="relative z-10 w-full max-w-4xl"
+              className="relative z-10 w-full max-w-4xl my-auto"
             >
               <MethodologyModal onClose={() => setShowMethodology(false)} />
             </motion.div>
@@ -676,7 +701,7 @@ export default function Home() {
 function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { article: Article, index: number, onToggle: (articles: Article[]) => void, requestLogin: () => void, isLoggedIn: boolean }) {
   const [isImportant, setIsImportant] = useState(article.isImportant);
   const [isCompleted, setIsCompleted] = useState(article.isCompleted);
-  
+
   const handleToggleImportant = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
@@ -699,7 +724,7 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
 
   return (
     <Link href={`/article/${article.id}`}>
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.05 }}
@@ -731,13 +756,13 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
           <div className="flex flex-col items-end gap-3 shrink-0">
             {isLoggedIn && (
               <div className="flex items-center gap-2">
-                <button 
+                <button
                   onClick={handleToggleImportant}
                   className={`p-2 rounded-lg transition-all ${isImportant ? "text-amber-500 bg-amber-500/10" : "text-gray-300 hover:text-amber-400"}`}
                 >
                   <Sparkles size={16} fill={isImportant ? "currentColor" : "none"} />
                 </button>
-                <button 
+                <button
                   onClick={handleToggleCompleted}
                   className={`p-2 rounded-lg transition-all ${isCompleted ? "text-emerald-500 bg-emerald-500/10" : "text-gray-300 hover:text-emerald-400"}`}
                 >
@@ -759,17 +784,17 @@ function ArticleCard({ article, index, onToggle, requestLogin, isLoggedIn }: { a
             </div>
           </div>
         </div>
-        
+
         <h3 className="text-xl md:text-2xl lg:text-3xl font-extrabold mb-8 group-hover:text-blue-600 transition-colors leading-[1.05] tracking-tight break-words">
           {article.title}
         </h3>
-        
+
         <p className="reading-text text-[var(--text-secondary)] line-clamp-3 mb-12">
-          {Array.isArray(article.summary) && article.summary.length > 0 
-            ? article.summary[0] 
+          {Array.isArray(article.summary) && article.summary.length > 0
+            ? article.summary[0]
             : (typeof article.summary === 'string' ? article.summary : (article.content?.substring(0, 150) || "No summary available for this asset. Proceed to Insight for full details."))}
         </p>
-        
+
         <div className="mt-auto flex items-center justify-between pt-10 border-t border-gray-100 dark:border-white/5">
           <div className="flex items-center gap-3 text-gray-400">
             <Layers size={16} />
